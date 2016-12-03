@@ -14,7 +14,7 @@ namespace App4
 
         public ExpViewCode()
         {
-            this.Title = "Catioro Fofo";
+            this.Title = "catioro fofo";
 
             Content = ObterConteudo();
         }
@@ -23,27 +23,23 @@ namespace App4
         {
             posts = new ObservableCollection<PostViewModel>();
 
-            ListView lstView = new ListView { HasUnevenRows = true };
-            lstView.ItemTemplate = new DataTemplate(typeof(CustomPostCell));
+            ListView postsListView = new ListView { HasUnevenRows = true };
+            postsListView.ItemTemplate = new DataTemplate(typeof(CustomPostCell));
 
             posts.Add(new PostViewModel()
             {
                 FotoUrl = "http://lorempixel.com/250/250/",
                 Descricao = "dogs forever",
-                AvatarUrl = "http://lorempixel.com/40/40/",
-                Largura = 150,
-                Altura = 150
+                AvatarUrl = "http://lorempixel.com/40/40/"
             });
             posts.Add(new PostViewModel()
             {
                 FotoUrl = "http://lorempixel.com/250/200/",
                 Descricao = "cachorro passeando!",
-                AvatarUrl = "http://lorempixel.com/40/40/",
-                Largura = 150,
-                Altura = 150
+                AvatarUrl = "http://lorempixel.com/40/40/"
             });
 
-            lstView.ItemsSource = posts;
+            postsListView.ItemsSource = posts;
 
             return new StackLayout
             {
@@ -54,9 +50,9 @@ namespace App4
                         FontAttributes = FontAttributes.Bold,
                         HorizontalOptions = LayoutOptions.Center
                     },
-                    lstView
+                    postsListView
                 }
-            }; ;
+            };
         }
 
         public class CustomPostCell : ViewCell
