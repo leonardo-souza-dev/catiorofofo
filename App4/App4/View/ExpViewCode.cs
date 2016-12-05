@@ -1,4 +1,6 @@
-﻿using System;
+﻿using App4.Model;
+using App4.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -6,40 +8,27 @@ using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
-namespace App4
+namespace App4.View
 {
     public partial class ExpViewCode : ContentPage
     {
-        public ObservableCollection<PostViewModel> posts { get; set; }
+        PostViewModel postsVM;
 
         public ExpViewCode()
         {
             this.Title = "catioro fofo";
+
+            postsVM = new PostViewModel();
 
             Content = ObterConteudo();
         }
 
         private StackLayout ObterConteudo()
         {
-            posts = new ObservableCollection<PostViewModel>();
-
             ListView postsListView = new ListView { HasUnevenRows = true };
             postsListView.ItemTemplate = new DataTemplate(typeof(CustomPostCell));
 
-            posts.Add(new PostViewModel()
-            {
-                FotoUrl = "http://lorempixel.com/250/250/",
-                Descricao = "dogs forever",
-                AvatarUrl = "http://lorempixel.com/40/40/"
-            });
-            posts.Add(new PostViewModel()
-            {
-                FotoUrl = "http://lorempixel.com/250/200/",
-                Descricao = "cachorro passeando!",
-                AvatarUrl = "http://lorempixel.com/40/40/"
-            });
-
-            postsListView.ItemsSource = posts;
+            postsListView.ItemsSource = postsVM.Posts;
 
             return new StackLayout
             {
@@ -55,11 +44,21 @@ namespace App4
             };
         }
 
+        public class AspectRatioContainer : ContentView
+        {
+            protected override SizeRequest OnMeasure(double widthConstraint, double heightConstraint)
+            {
+                return new SizeRequest(new Size(widthConstraint, widthConstraint * this.AspectRatio));
+            }
+
+            public double AspectRatio { get; set; }
+        }
+
         public class CustomPostCell : ViewCell
         {
             public CustomPostCell()
             {
-                var foto = new Image { Margin = new Thickness(5, 15, 5, 5) };
+                var foto = new Image { Margin = new Thickness(5, 15, 5, 5), VerticalOptions = LayoutOptions.CenterAndExpand };
                 var avatar = new Image { Margin = new Thickness(5, 5, 5, 5) };
                 var descricao = new Label { FontSize = 14 };
                 var curtir = new Label { FontSize = 10, Text = "Curtir", Margin = new Thickness(5, 5, 5, 5) };
@@ -96,7 +95,7 @@ namespace App4
 
                 foto.SetBinding(Image.SourceProperty, new Binding("FotoUrl"));
                 avatar.SetBinding(Image.SourceProperty, new Binding("AvatarUrl"));
-                descricao.SetBinding(Label.TextProperty, new Binding("Descricao"));
+                descricao.SetBinding(Label.TextProperty, new Binding("Legenda"));
 
                 View = principalLayout;
             }
