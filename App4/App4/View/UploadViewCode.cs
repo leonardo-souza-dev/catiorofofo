@@ -5,6 +5,7 @@ using Plugin.Media.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,10 +18,11 @@ namespace App4.View
         public ObservableCollection<Post> posts { get; set; }
 
         Button acharButton = new Button();
-        Image fotoImage = new Image();
+        public Image fotoImage { get; set; }
         Button postarButton = new Button();
         Entry legendaEntry = new Entry();
-
+        private Stream stream;
+        MediaFile file;
         public string caminho = string.Empty;
 
         public UploadViewCode()
@@ -50,6 +52,7 @@ namespace App4.View
                 FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
                 VerticalOptions = LayoutOptions.CenterAndExpand
             };
+            fotoImage = new Image { WidthRequest = 100, HeightRequest = 100 };
 
             postarButton.IsEnabled = false;
             postarButton.IsVisible = false;
@@ -62,7 +65,7 @@ namespace App4.View
                     return;
                 }
 
-                var file = await CrossMedia.Current.PickPhotoAsync(new Plugin.Media.Abstractions.PickMediaOptions()
+                file = await CrossMedia.Current.PickPhotoAsync(new Plugin.Media.Abstractions.PickMediaOptions()
                 {
                     CompressionQuality = 50
                 });
@@ -77,21 +80,19 @@ namespace App4.View
                 fotoImage.Source = ImageSource.FromStream(() =>
                 {
                     caminho = file.AlbumPath;
-                    var stream = file.GetStream();
+                    Stream stream = file.GetStream();
                     file.Dispose();
                     return stream;
                 });
-                fotoImage.WidthRequest = 40;
-                fotoImage.HeightRequest = 40;
             };
 
             postarButton.Clicked += (sender, args) =>
             {
                 PostRepository.SalvarPost(new Post
                 {
-                    FotoUrl = "https://www.fillmurray.com/300/300",
-                    AvatarUrl = "http://lorempixel.com/40/40/",
-                    Legenda = legendaEntry.Text
+                    Foto = file,
+                    Legenda = legendaEntry.Text,
+                    UsuarioId = 1 //TODO: MUDAR PARA RECEBER O ID DO USUARIO LOGADO
                 });
                 //Navigation.PushAsync(new ExpViewCode(), true);
                 Navigation.PushAsync(new ExpViewCode());

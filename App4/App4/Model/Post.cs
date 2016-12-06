@@ -1,9 +1,12 @@
-﻿namespace App4.Model
+﻿using Plugin.Media.Abstractions;
+
+namespace App4.Model
 {
     public class Post
     {
-        public string FotoUrl { get; set; }
+        public int PostId { get; set; }
+        public MediaFile Foto { get; set; }
         public string Legenda { get; set; }
-        public string AvatarUrl { get; set; }
+        public int UsuarioId { get; set; }
     }
 }

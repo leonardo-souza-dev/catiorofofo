@@ -11,11 +11,8 @@ namespace App4.View
     {
         public MainPage()
         {
-            //var expView = new NavigationPage(new ExpViewCode());
-            //expView.Title = "exp";
-
             var upView = new NavigationPage(new UploadViewCode());
-            upView.Title = "up";
+            upView.Title = "upload";
 
             Children.Add(new ExpViewCode());
             Children.Add(upView);
