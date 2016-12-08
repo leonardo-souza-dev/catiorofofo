@@ -17,13 +17,13 @@ namespace App4.View
     {
         public ObservableCollection<Post> posts { get; set; }
 
-        Button acharButton = new Button();
-        public Image fotoImage { get; set; }
-        Button postarButton = new Button();
-        Entry legendaEntry = new Entry();
-        private Stream stream;
-        MediaFile file;
-        public string caminho = string.Empty;
+        Button _acharButton = new Button();
+        Image _fotoImage;
+        Button _postarButton = new Button();
+        Entry _legendaEntry = new Entry();
+        Stream _stream = null;
+        MediaFile _file;
+        public string _arquivo = string.Empty;
 
         public UploadViewCode()
         {
@@ -34,30 +34,30 @@ namespace App4.View
 
         private StackLayout ObterConteudo()
         {
-            acharButton = new Button
+            _acharButton = new Button
             {
                 Text = "achar catioro fofo",
                 FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
                 VerticalOptions = LayoutOptions.CenterAndExpand
             };
-            postarButton = new Button
+            _postarButton = new Button
             {
                 Text = "postar!",
                 FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
                 VerticalOptions = LayoutOptions.CenterAndExpand
             };
-            legendaEntry = new Entry
+            _legendaEntry = new Entry
             {
                 Placeholder = "entre com uma legenda",
                 FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
                 VerticalOptions = LayoutOptions.CenterAndExpand
             };
-            fotoImage = new Image { WidthRequest = 100, HeightRequest = 100 };
+            _fotoImage = new Image { WidthRequest = 100, HeightRequest = 100 };
 
-            postarButton.IsEnabled = false;
-            postarButton.IsVisible = false;
+            _postarButton.IsEnabled = false;
+            _postarButton.IsVisible = false;
 
-            acharButton.Clicked += async (sender, args) =>
+            _acharButton.Clicked += async (sender, args) =>
             {
                 if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsPickPhotoSupported)
                 {
@@ -65,35 +65,30 @@ namespace App4.View
                     return;
                 }
 
-                file = await CrossMedia.Current.PickPhotoAsync(new Plugin.Media.Abstractions.PickMediaOptions()
+                _file = await CrossMedia.Current.PickPhotoAsync(new Plugin.Media.Abstractions.PickMediaOptions()
                 {
                     CompressionQuality = 50
                 });
 
-                if (file == null)
+                if (_file == null)
                     return;
 
-                postarButton.IsEnabled = true;
-                postarButton.IsVisible = true;
-                acharButton.Text = "trocar catioro fofo";
+                _postarButton.IsEnabled = true;
+                _postarButton.IsVisible = true;
+                _acharButton.Text = "trocar catioro fofo";
 
-                fotoImage.Source = ImageSource.FromStream(() =>
-                {
-                    caminho = file.AlbumPath;
-                    Stream stream = file.GetStream();
-                    file.Dispose();
-                    return stream;
-                });
+                _fotoImage.Source = ImageSource.FromStream(ObterStream);
             };
 
-            postarButton.Clicked += (sender, args) =>
+            _postarButton.Clicked += (sender, args) =>
             {
-                PostRepository.SalvarPost(new Post
+                Post post = new Post(_stream)
                 {
-                    Foto = file,
-                    Legenda = legendaEntry.Text,
+                    //Foto = file,
+                    Legenda = _legendaEntry.Text,
                     UsuarioId = 1 //TODO: MUDAR PARA RECEBER O ID DO USUARIO LOGADO
-                });
+                };
+                PostRepository.SalvarPost(post);
                 //Navigation.PushAsync(new ExpViewCode(), true);
                 Navigation.PushAsync(new ExpViewCode());
 
@@ -105,12 +100,21 @@ namespace App4.View
                 Padding = new Thickness(0, 0, 0, 0),
                 Orientation = StackOrientation.Vertical,
                 Children = {
-                    acharButton,
-                    postarButton,
-                    fotoImage,
-                    legendaEntry
+                    _acharButton,
+                    _postarButton,
+                    _fotoImage,
+                    _legendaEntry
                 }
             };
+        }
+
+        private Stream ObterStream()
+        {
+            Stream stream = _file.GetStream();
+            _stream = _file.GetStream();
+            _file.Dispose();
+
+            return stream;
         }
     }
 }

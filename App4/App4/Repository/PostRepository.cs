@@ -7,6 +7,9 @@ using System.Net.Http.Headers;
 using System.Runtime.Serialization.Json;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+//using System.Net.Http.Formatting;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace App4.Repositoy
 {
@@ -26,19 +29,33 @@ namespace App4.Repositoy
             return listaPosts;
         }
 
+        public static void SalvarPostOld(Post post)
+        {
+            var httpRequest = new HttpClient();
+            var response = httpRequest.PostAsJsonAsync(
+                "https://cfwebapi.herokuapp.com/api/uploadfoto",
+                post.ObterByteArrayFoto());
+
+            //var moduloSerializer = new DataContractJsonSerializer(typeof(List<Post>));
+            //var staPosts = moduloSerializer.ReadObject(response);
+            int a = 1;
+            a++;
+        }
+
         public static List<Post> ObterPostsMock()
         {
             if (listaPosts == null)
             {
                 listaPosts = new List<Post>();
-
-                listaPosts.Add(new Post
+                //@"C:\Users\Leonardo\Pictures\Camera Roll\WIN_20161203_122140.JPG"
+                listaPosts.Add(new Post()
                 {
                     //FotoHash = "http://lorempixel.com/300/300/",
                     Legenda = "dogs forever"
                     //,AvatarUrl = "http://lorempixel.com/40/40/"
                 });
-                listaPosts.Add(new Post
+                //@"C:\Users\Leonardo\Pictures\Camera Roll\WIN_20161203_122147.JPG"
+                listaPosts.Add(new Post()
                 {
                     //FotoHash = "http://lorempixel.com/300/300/",
                     Legenda = "cachorro passeando!"
@@ -51,22 +68,30 @@ namespace App4.Repositoy
 
         public static async void SalvarPost(Post post)
         {
-            var url = "http://cfwebapi.herokuapp.com/api/novopost";
-            byte[] byteArray = new byte[post.Foto.GetStream().Length];
-            using (var memoryStream = new MemoryStream())
-            {
-                post.Foto.GetStream().CopyTo(memoryStream);
-                byteArray = memoryStream.ToArray();
-            }
+            bool usarCloud = false;
+            string endereco = usarCloud ? "https://cfwebapi.herokuapp.com/" : "http://localhost:8084/";
+
+            var urlUpload = endereco + "api/uploadfoto";
+            byte[] byteArray = post.ObterByteArrayFoto();
 
             var requestContent = new MultipartFormDataContent();
-            //http://stackoverflow.com/questions/16416601/c-sharp-httpclient-4-5-multipart-form-data-upload
-            //    here you can specify boundary if you need---^
             var imageContent = new ByteArrayContent(byteArray);
             imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
-            requestContent.Add(imageContent, "image", "image.jpg");
+            requestContent.Add(imageContent, "foto_de_catioro", "image.jpg");
 
-            await new HttpClient().PostAsync(url, requestContent);
+            var client = new HttpClient();
+            var response = await client.PostAsync(urlUpload, requestContent);
+
+
+
+            var urlSalvarPost = endereco + "api/salvarpost";
+
+            HttpClient clientt = new HttpClient();
+            var json = JsonConvert.SerializeObject((new Post() { Legenda = post.Legenda }));
+            HttpContent contentPost = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var res2 = await clientt.PostAsync(new Uri(urlSalvarPost), contentPost).ContinueWith((postTask) => postTask.Result.EnsureSuccessStatusCode());
+
         }
     }
 }
