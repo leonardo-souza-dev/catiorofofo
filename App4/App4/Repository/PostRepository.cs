@@ -71,6 +71,7 @@ namespace App4.Repositoy
             bool usarCloud = false;
             string endereco = usarCloud ? "https://cfwebapi.herokuapp.com/" : "http://localhost:8084/";
 
+            //upload da foto
             var urlUpload = endereco + "api/uploadfoto";
             byte[] byteArray = post.ObterByteArrayFoto();
 
@@ -81,16 +82,22 @@ namespace App4.Repositoy
 
             var client = new HttpClient();
             var response = await client.PostAsync(urlUpload, requestContent);
+            var stream = await response.Content.ReadAsStreamAsync();
+            var ser = new DataContractJsonSerializer(typeof(RespostaUpload));
+            stream.Position = 0;
+            var resposta = (RespostaUpload)ser.ReadObject(stream);
 
 
-
+            //salva post
             var urlSalvarPost = endereco + "api/salvarpost";
-
             HttpClient clientt = new HttpClient();
-            var json = JsonConvert.SerializeObject((new Post() { Legenda = post.Legenda }));
+            var json = JsonConvert.SerializeObject((new Post() { Legenda = post.Legenda, NomeArquivo = resposta.nomeArquivo, UsuarioId = 1 }));
             HttpContent contentPost = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var res2 = await clientt.PostAsync(new Uri(urlSalvarPost), contentPost).ContinueWith((postTask) => postTask.Result.EnsureSuccessStatusCode());
+            var response3 = await client.PostAsync(urlSalvarPost, contentPost);
+            var stream3 = await response3.Content.ReadAsStreamAsync();
+            var ser3 = new DataContractJsonSerializer(typeof(RespostaSalvarPost));
+            stream3.Position = 0;
+            var resposta3 = (RespostaSalvarPost)ser3.ReadObject(stream3);
 
         }
     }

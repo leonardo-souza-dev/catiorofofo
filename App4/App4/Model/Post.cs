@@ -6,10 +6,12 @@ namespace App4.Model
 {
     public class Post
     {
-        public int PostId { get; set; }
         private Stream FotoStream { get; set; }
+
+        public int PostId { get; set; }
         public string Legenda { get; set; }
         public int UsuarioId { get; set; }
+        public string NomeArquivo { get; set; }
 
         public Post(Stream stream)
         {
