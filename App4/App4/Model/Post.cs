@@ -1,5 +1,6 @@
 ﻿using Plugin.Media.Abstractions;
 using System.IO;
+using System.Runtime.Serialization;
 using Xamarin.Forms;
 
 namespace App4.Model
@@ -9,9 +10,20 @@ namespace App4.Model
         private Stream FotoStream { get; set; }
 
         public int PostId { get; set; }
+
         public string Legenda { get; set; }
+
         public int UsuarioId { get; set; }
+
         public string NomeArquivo { get; set; }
+
+        public string FotoUrl
+        {
+            get
+            {
+                return "http://localhost:8084/api/foto?na=" + NomeArquivo;
+            }
+        }
 
         public Post(Stream stream)
         {

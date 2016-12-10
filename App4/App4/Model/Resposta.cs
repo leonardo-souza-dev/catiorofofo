@@ -33,4 +33,27 @@ namespace App4.Model
         [DataMember]
         internal int postId;
     }
+
+    [DataContract]
+    public class RespostaObterPost : Resposta
+    {
+        [DataMember]
+        internal RespostaPost posts;
+    }
+
+    [DataContract]
+    public class RespostaPost
+    {
+        [DataMember]
+        internal int postId;
+
+        [DataMember]
+        internal string legenda;
+
+        [DataMember]
+        internal int usuarioId;
+
+        [DataMember]
+        internal string nomeArquivo;
+    }
 }

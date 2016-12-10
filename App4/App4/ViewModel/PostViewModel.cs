@@ -17,8 +17,8 @@ namespace App4.ViewModel
         public async void CarregarPosts()
         {
             var lstModulos = new List<Post>();
-            //lstModulos = await PostRepository.ObterPostsNuvem();
-            lstModulos = PostRepository.ObterPostsMock();
+
+            lstModulos = await PostRepository.ObterPostsNuvem();
             for (int index = 0; index < lstModulos.Count; index++)
             {
                 var item = lstModulos[index];
@@ -26,6 +26,10 @@ namespace App4.ViewModel
                     Posts.Insert(index, item);
             }
         }
-        
+
+        public void InserirPost(Post post)
+        {
+            Posts.Insert(Posts.Count + 1, post);
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using App4.Model;
 using App4.Repositoy;
+using App4.ViewModel;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
 using System;
@@ -84,13 +85,13 @@ namespace App4.View
             {
                 Post post = new Post(_stream)
                 {
-                    //Foto = file,
                     Legenda = _legendaEntry.Text,
-                    UsuarioId = 1 //TODO: MUDAR PARA RECEBER O ID DO USUARIO LOGADO
+                    UsuarioId = 1 // TODO: MUDAR PARA RECEBER O ID DO USUARIO LOGADO
                 };
                 PostRepository.SalvarPost(post);
-                //Navigation.PushAsync(new ExpViewCode(), true);
-                Navigation.PushAsync(new ExpViewCode());
+                PostViewModel pvm = new PostViewModel();
+                pvm.InserirPost(post);
+                Navigation.PushAsync(new ExpViewCode(), true);
 
                 return;
             };

@@ -19,51 +19,39 @@ namespace App4.Repositoy
 
         public static async Task<List<Post>> ObterPostsNuvem()
         {
-            var httpRequest = new HttpClient();
-            var stream = await httpRequest.GetStreamAsync(
-                "http://aaaaamobapiwsrest20161109074638.azurewebsites.net/api/moduloes");
+            bool usarCloud = false;
+            string endereco = usarCloud ? "https://cfwebapi.herokuapp.com/" : "http://localhost:8084/";
 
-            var moduloSerializer = new DataContractJsonSerializer(typeof(List<Post>));
-            listaPosts = (List<Post>)moduloSerializer.ReadObject(stream);
+            var clientt = new HttpClient();
+            var json = JsonConvert.SerializeObject((new { usuarioId = 1 }));
+            var contentPost = new StringContent(json, Encoding.UTF8, "application/json");
 
-            return listaPosts;
-        }
+            var response3 = await clientt.PostAsync(endereco + "api/obterposts", contentPost);
+            var stream3 = await response3.Content.ReadAsStreamAsync();
 
-        public static void SalvarPostOld(Post post)
-        {
-            var httpRequest = new HttpClient();
-            var response = httpRequest.PostAsJsonAsync(
-                "https://cfwebapi.herokuapp.com/api/uploadfoto",
-                post.ObterByteArrayFoto());
-
-            //var moduloSerializer = new DataContractJsonSerializer(typeof(List<Post>));
-            //var staPosts = moduloSerializer.ReadObject(response);
-            int a = 1;
-            a++;
-        }
-
-        public static List<Post> ObterPostsMock()
-        {
-            if (listaPosts == null)
+            var ser3 = new DataContractJsonSerializer(typeof(List<RespostaPost>));
+            stream3.Position = 0;
+            var listaRespPosts = (List<RespostaPost>)ser3.ReadObject(stream3);
+            listaPosts = new List<Post>();
+            foreach (var item in listaRespPosts)
             {
-                listaPosts = new List<Post>();
-                //@"C:\Users\Leonardo\Pictures\Camera Roll\WIN_20161203_122140.JPG"
-                listaPosts.Add(new Post()
-                {
-                    //FotoHash = "http://lorempixel.com/300/300/",
-                    Legenda = "dogs forever"
-                    //,AvatarUrl = "http://lorempixel.com/40/40/"
-                });
-                //@"C:\Users\Leonardo\Pictures\Camera Roll\WIN_20161203_122147.JPG"
-                listaPosts.Add(new Post()
-                {
-                    //FotoHash = "http://lorempixel.com/300/300/",
-                    Legenda = "cachorro passeando!"
-                    //,AvatarUrl = "http://lorempixel.com/40/40/"
-                });
-            }
-            return listaPosts;
+                var clientt4 = new HttpClient();
+                var json4 = JsonConvert.SerializeObject((new { nomeArquivo = item.nomeArquivo }));
+                var contentPost4 = new StringContent(json4, Encoding.UTF8, "application/json");
 
+                var response4 = await clientt.PostAsync(endereco + "api/downloadfoto", contentPost4);
+                var stream4 = await response4.Content.ReadAsStreamAsync();
+
+                listaPosts.Add(
+                    new Post() {    
+                        PostId = item.postId,
+                        Legenda = item.legenda,
+                        UsuarioId = item.usuarioId,
+                        NomeArquivo = item.nomeArquivo
+                    });
+            }
+
+            return listaPosts;
         }
 
         public static async void SalvarPost(Post post)
@@ -89,15 +77,40 @@ namespace App4.Repositoy
 
 
             //salva post
-            var urlSalvarPost = endereco + "api/salvarpost";
-            HttpClient clientt = new HttpClient();
+            var clientt = new HttpClient();
             var json = JsonConvert.SerializeObject((new Post() { Legenda = post.Legenda, NomeArquivo = resposta.nomeArquivo, UsuarioId = 1 }));
-            HttpContent contentPost = new StringContent(json, Encoding.UTF8, "application/json");
-            var response3 = await client.PostAsync(urlSalvarPost, contentPost);
+            var contentPost = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response3 = await client.PostAsync(endereco + "api/salvarpost", contentPost);
             var stream3 = await response3.Content.ReadAsStreamAsync();
+
             var ser3 = new DataContractJsonSerializer(typeof(RespostaSalvarPost));
             stream3.Position = 0;
             var resposta3 = (RespostaSalvarPost)ser3.ReadObject(stream3);
+
+        }
+
+        public static List<Post> ObterPostsMock()
+        {
+            if (listaPosts == null)
+            {
+                listaPosts = new List<Post>();
+                //@"C:\Users\Leonardo\Pictures\Camera Roll\WIN_20161203_122140.JPG"
+                listaPosts.Add(new Post()
+                {
+                    //FotoHash = "http://lorempixel.com/300/300/",
+                    Legenda = "dogs forever"
+                    //,AvatarUrl = "http://lorempixel.com/40/40/"
+                });
+                //@"C:\Users\Leonardo\Pictures\Camera Roll\WIN_20161203_122147.JPG"
+                listaPosts.Add(new Post()
+                {
+                    //FotoHash = "http://lorempixel.com/300/300/",
+                    Legenda = "cachorro passeando!"
+                    //,AvatarUrl = "http://lorempixel.com/40/40/"
+                });
+            }
+            return listaPosts;
 
         }
     }
