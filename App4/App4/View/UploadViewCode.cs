@@ -16,6 +16,7 @@ namespace App4.View
 {
     public partial class UploadViewCode : ContentPage
     {
+        private PostViewModel _postViewModel;
         public ObservableCollection<Post> posts { get; set; }
 
         Button _acharButton = new Button();
@@ -26,8 +27,9 @@ namespace App4.View
         MediaFile _file;
         public string _arquivo = string.Empty;
 
-        public UploadViewCode()
+        public UploadViewCode(PostViewModel postViewModel)
         {
+            _postViewModel = postViewModel;
             this.Title = "enviar catioro fofo";
             CrossMedia.Current.Initialize();
             Content = ObterConteudo();
@@ -66,7 +68,7 @@ namespace App4.View
                     return;
                 }
 
-                _file = await CrossMedia.Current.PickPhotoAsync(new Plugin.Media.Abstractions.PickMediaOptions()
+                _file = await CrossMedia.Current.PickPhotoAsync(new PickMediaOptions()
                 {
                     CompressionQuality = 50
                 });
@@ -81,17 +83,17 @@ namespace App4.View
                 _fotoImage.Source = ImageSource.FromStream(ObterStream);
             };
 
-            _postarButton.Clicked += (sender, args) =>
+            _postarButton.Clicked += async (sender, args) =>
             {
                 Post post = new Post(_stream)
                 {
                     Legenda = _legendaEntry.Text,
                     UsuarioId = 1 // TODO: MUDAR PARA RECEBER O ID DO USUARIO LOGADO
                 };
-                PostRepository.SalvarPost(post);
-                PostViewModel pvm = new PostViewModel();
-                pvm.InserirPost(post);
-                Navigation.PushAsync(new ExpViewCode(), true);
+                var postFinal = new Post();
+                postFinal = await PostRepository.SalvarPost(post);
+                _postViewModel.InserirPost(postFinal);
+                await Navigation.PushAsync(new ExpViewCode(_postViewModel), true);
 
                 return;
             };

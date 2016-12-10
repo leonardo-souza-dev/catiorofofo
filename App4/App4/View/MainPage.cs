@@ -1,4 +1,5 @@
-﻿using System;
+﻿using App4.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,11 +12,10 @@ namespace App4.View
     {
         public MainPage()
         {
-            var upView = new NavigationPage(new UploadViewCode());
-            upView.Title = "upload";
 
-            Children.Add(new ExpViewCode());
-            Children.Add(upView);
+            PostViewModel postViewModel = new PostViewModel();
+            Children.Add(new ExpViewCode(postViewModel));
+            Children.Add(new NavigationPage(new UploadViewCode(postViewModel) { Title = "uploadd" }));
         }
     }
 }

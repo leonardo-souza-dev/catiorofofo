@@ -29,7 +29,7 @@ namespace App4.ViewModel
 
         public void InserirPost(Post post)
         {
-            Posts.Insert(Posts.Count + 1, post);
+            Posts.Insert(Posts.Count, post);
         }
     }
 }

@@ -12,13 +12,13 @@ namespace App4.View
 {
     public partial class ExpViewCode : ContentPage
     {
-        PostViewModel postsVM;
+        private PostViewModel _postsVM;
 
-        public ExpViewCode()
+        public ExpViewCode(PostViewModel postsVM)
         {
             this.Title = "catioro fofo";
 
-            postsVM = new PostViewModel();
+            _postsVM = postsVM;
 
             Content = ObterConteudo();
         }
@@ -28,7 +28,7 @@ namespace App4.View
             ListView postsListView = new ListView { HasUnevenRows = true };
             postsListView.ItemTemplate = new DataTemplate(typeof(CustomPostCell));
 
-            postsListView.ItemsSource = postsVM.Posts;
+            postsListView.ItemsSource = _postsVM.Posts;
 
             return new StackLayout
             {

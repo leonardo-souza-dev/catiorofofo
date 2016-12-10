@@ -54,7 +54,7 @@ namespace App4.Repositoy
             return listaPosts;
         }
 
-        public static async void SalvarPost(Post post)
+        public static async Task<Post> SalvarPost(Post post)
         {
             bool usarCloud = false;
             string endereco = usarCloud ? "https://cfwebapi.herokuapp.com/" : "http://localhost:8084/";
@@ -75,10 +75,11 @@ namespace App4.Repositoy
             stream.Position = 0;
             var resposta = (RespostaUpload)ser.ReadObject(stream);
 
+            Post postFinal = new Post() { Legenda = post.Legenda, NomeArquivo = resposta.nomeArquivo, UsuarioId = 1 };
 
             //salva post
             var clientt = new HttpClient();
-            var json = JsonConvert.SerializeObject((new Post() { Legenda = post.Legenda, NomeArquivo = resposta.nomeArquivo, UsuarioId = 1 }));
+            var json = JsonConvert.SerializeObject(postFinal);
             var contentPost = new StringContent(json, Encoding.UTF8, "application/json");
 
             var response3 = await client.PostAsync(endereco + "api/salvarpost", contentPost);
@@ -88,6 +89,7 @@ namespace App4.Repositoy
             stream3.Position = 0;
             var resposta3 = (RespostaSalvarPost)ser3.ReadObject(stream3);
 
+            return postFinal;
         }
 
         public static List<Post> ObterPostsMock()
