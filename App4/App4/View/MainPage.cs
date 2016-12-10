@@ -1,9 +1,4 @@
 ﻿using App4.ViewModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace App4.View
@@ -12,10 +7,12 @@ namespace App4.View
     {
         public MainPage()
         {
-
-            PostViewModel postViewModel = new PostViewModel();
+            var postViewModel = new PostViewModel();
             Children.Add(new ExpViewCode(postViewModel));
-            Children.Add(new NavigationPage(new UploadViewCode(postViewModel) { Title = "uploadd" }));
+
+            var uploadView = new NavigationPage(new UploadViewCode(postViewModel));
+            uploadView.Title = "upload";
+            Children.Add(uploadView);
         }
     }
 }

@@ -1,13 +1,9 @@
 ﻿using App4.Model;
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Runtime.Serialization.Json;
 using System.Threading.Tasks;
-using Xamarin.Forms;
-//using System.Net.Http.Formatting;
 using Newtonsoft.Json;
 using System.Text;
 
@@ -90,30 +86,6 @@ namespace App4.Repositoy
             var resposta3 = (RespostaSalvarPost)ser3.ReadObject(stream3);
 
             return postFinal;
-        }
-
-        public static List<Post> ObterPostsMock()
-        {
-            if (listaPosts == null)
-            {
-                listaPosts = new List<Post>();
-                //@"C:\Users\Leonardo\Pictures\Camera Roll\WIN_20161203_122140.JPG"
-                listaPosts.Add(new Post()
-                {
-                    //FotoHash = "http://lorempixel.com/300/300/",
-                    Legenda = "dogs forever"
-                    //,AvatarUrl = "http://lorempixel.com/40/40/"
-                });
-                //@"C:\Users\Leonardo\Pictures\Camera Roll\WIN_20161203_122147.JPG"
-                listaPosts.Add(new Post()
-                {
-                    //FotoHash = "http://lorempixel.com/300/300/",
-                    Legenda = "cachorro passeando!"
-                    //,AvatarUrl = "http://lorempixel.com/40/40/"
-                });
-            }
-            return listaPosts;
-
         }
     }
 }
