@@ -27,8 +27,12 @@ namespace App4.View
         MediaFile _file;
         public string _arquivo = string.Empty;
 
-        public UploadViewCode(PostViewModel postViewModel)
+        Button _criarPerfil = new Button();
+        TabbedPage _mainPage;
+
+        public UploadViewCode(PostViewModel postViewModel, TabbedPage mainPage)
         {
+            _mainPage = mainPage;
             _postViewModel = postViewModel;
             this.Title = "enviar catioro fofo";
             CrossMedia.Current.Initialize();
@@ -93,7 +97,8 @@ namespace App4.View
                 var postFinal = new Post();
                 postFinal = await PostRepository.SalvarPost(post);
                 _postViewModel.InserirPost(postFinal);
-                await Navigation.PushAsync(new ExpViewCode(_postViewModel), true);
+                var expViewCode = new ExpViewCode(_postViewModel);
+                _mainPage.CurrentPage = _mainPage.Children[0];
 
                 return;
             };
@@ -103,6 +108,7 @@ namespace App4.View
                 Padding = new Thickness(0, 0, 0, 0),
                 Orientation = StackOrientation.Vertical,
                 Children = {
+                    _criarPerfil,
                     _acharButton,
                     _postarButton,
                     _fotoImage,

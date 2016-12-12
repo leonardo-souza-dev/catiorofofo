@@ -10,7 +10,8 @@ namespace App4.View
             var postViewModel = new PostViewModel();
             Children.Add(new ExpViewCode(postViewModel));
 
-            var uploadView = new NavigationPage(new UploadViewCode(postViewModel));
+            //var uploadView = new NavigationPage(new UploadViewCode(postViewModel));
+            var uploadView = new UploadViewCode(postViewModel, this);
             uploadView.Title = "upload";
             Children.Add(uploadView);
         }
