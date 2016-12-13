@@ -1,7 +1,4 @@
-﻿using Plugin.Media.Abstractions;
-using System.IO;
-using System.Runtime.Serialization;
-using Xamarin.Forms;
+﻿using System.IO;
 
 namespace App4.Model
 {
@@ -21,8 +18,29 @@ namespace App4.Model
         {
             get
             {
-                return "http://localhost:8084/api/foto?na=" + NomeArquivo;
+                return ObterUrlBaseWebApi() + "api/foto?na=" + NomeArquivo;
             }
+        }
+
+        private static string ObterUrlBaseWebApi()
+        {
+            bool usarCloud = false;
+            bool debugarAndroid = false;
+
+            string enderecoBase = string.Empty;
+
+            if (usarCloud)
+                enderecoBase = "https://cfwebapi.herokuapp.com/";
+            else
+            {
+                enderecoBase += "http://";
+                if (debugarAndroid)
+                    enderecoBase += "10.0.2.2";
+                else
+                    enderecoBase += "localhost";
+                enderecoBase += ":8084/";
+            }
+            return enderecoBase;
         }
 
         public Post(Stream stream)

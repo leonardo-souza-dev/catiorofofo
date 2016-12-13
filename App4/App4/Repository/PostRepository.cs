@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Text;
 
-namespace App4.Repositoy
+namespace App4.Repository
 {
     public static class PostRepository
     {
@@ -15,48 +15,58 @@ namespace App4.Repositoy
 
         public static async Task<List<Post>> ObterPostsNuvem()
         {
-            bool usarCloud = false;
-            string endereco = usarCloud ? "https://cfwebapi.herokuapp.com/" : "http://localhost:8084/";
+            var listaRespPosts = await Resposta<List<RespostaPost>>(new { usuarioId = 1});
 
-            var clientt = new HttpClient();
-            var json = JsonConvert.SerializeObject((new { usuarioId = 1 }));
-            var contentPost = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var response3 = await clientt.PostAsync(endereco + "api/obterposts", contentPost);
-            var stream3 = await response3.Content.ReadAsStreamAsync();
-
-            var ser3 = new DataContractJsonSerializer(typeof(List<RespostaPost>));
-            stream3.Position = 0;
-            var listaRespPosts = (List<RespostaPost>)ser3.ReadObject(stream3);
             listaPosts = new List<Post>();
             foreach (var item in listaRespPosts)
             {
-                var clientt4 = new HttpClient();
-                var json4 = JsonConvert.SerializeObject((new { nomeArquivo = item.nomeArquivo }));
-                var contentPost4 = new StringContent(json4, Encoding.UTF8, "application/json");
+                //var client4 = new HttpClient();
+                //var json4 = JsonConvert.SerializeObject((new { nomeArquivo = item.nomeArquivo }));
+                //var contentPost4 = new StringContent(json4, Encoding.UTF8, "application/json");
+                //var response4 = await client4.PostAsync(ObterUrlBaseWebApi() + "api/downloadfoto", contentPost4);
+                //var stream4 = await response4.Content.ReadAsStreamAsync();
 
-                var response4 = await clientt.PostAsync(endereco + "api/downloadfoto", contentPost4);
-                var stream4 = await response4.Content.ReadAsStreamAsync();
-
-                listaPosts.Add(
-                    new Post() {    
-                        PostId = item.postId,
-                        Legenda = item.legenda,
-                        UsuarioId = item.usuarioId,
-                        NomeArquivo = item.nomeArquivo
-                    });
+                listaPosts.Add( new Post() { PostId = item.postId, Legenda = item.legenda, UsuarioId = item.usuarioId, NomeArquivo = item.nomeArquivo });
             }
-
             return listaPosts;
         }
 
-        public static async Task<Post> SalvarPost(Post post)
+        private static async Task<T> Resposta<T>(object conteudo, bool ehDownload = false)
+        {
+            var httpClient = new HttpClient();
+            var json = JsonConvert.SerializeObject(conteudo);
+            var contentPost = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await httpClient.PostAsync(ObterUrlBaseWebApi() + "api/obterposts", contentPost);
+            var stream = await response.Content.ReadAsStreamAsync();
+            var ser = new DataContractJsonSerializer(typeof(T));
+            stream.Position = 0;
+            return (T)ser.ReadObject(stream);
+        }
+
+        private static string ObterUrlBaseWebApi()
         {
             bool usarCloud = false;
-            string endereco = usarCloud ? "https://cfwebapi.herokuapp.com/" : "http://localhost:8084/";
+            bool debugarAndroid = false;
 
-            //upload da foto
-            var urlUpload = endereco + "api/uploadfoto";
+            string enderecoBase = string.Empty;
+
+            if (usarCloud)
+                enderecoBase = "https://cfwebapi.herokuapp.com/";
+            else
+            {
+                enderecoBase += "http://";
+                if (debugarAndroid)
+                    enderecoBase += "10.0.2.2";
+                else
+                    enderecoBase += "localhost";
+                enderecoBase += ":8084/";
+            }
+            return enderecoBase;
+        }
+
+        public static async Task<Post> SalvarPost(Post post)
+        {   //upload da foto
+            var urlUpload = ObterUrlBaseWebApi() + "api/uploadfoto";
             byte[] byteArray = post.ObterByteArrayFoto();
 
             var requestContent = new MultipartFormDataContent();
@@ -78,7 +88,7 @@ namespace App4.Repositoy
             var json = JsonConvert.SerializeObject(postFinal);
             var contentPost = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response3 = await client.PostAsync(endereco + "api/salvarpost", contentPost);
+            var response3 = await client.PostAsync(ObterUrlBaseWebApi() + "api/salvarpost", contentPost);
             var stream3 = await response3.Content.ReadAsStreamAsync();
 
             var ser3 = new DataContractJsonSerializer(typeof(RespostaSalvarPost));

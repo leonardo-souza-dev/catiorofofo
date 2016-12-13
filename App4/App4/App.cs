@@ -1,9 +1,4 @@
-﻿using App4.Repositoy;
-using App4.View;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using App4.View;
 
 using Xamarin.Forms;
 

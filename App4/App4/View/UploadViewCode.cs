@@ -1,15 +1,13 @@
 ﻿using App4.Model;
-using App4.Repositoy;
+using App4.Repository;
 using App4.ViewModel;
+
 using Plugin.Media;
 using Plugin.Media.Abstractions;
-using System;
-using System.Collections.Generic;
+
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using Xamarin.Forms;
 
 namespace App4.View
