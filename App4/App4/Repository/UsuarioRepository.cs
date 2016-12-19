@@ -16,32 +16,31 @@ namespace App4.Repository
 
         public static async Task<Usuario> Login(string senhaDigitada)
         {
-            var respostaLogin = await Resposta<RespostaLogin>(new { senha = senhaDigitada });
+            var resposta = await Resposta<RespostaLogin>(new { senha = senhaDigitada }, "login");
             usuario = new Usuario();
-            usuario.UsuarioId = respostaLogin.usuarioId;
+            usuario.UsuarioId = resposta.usuarioId;
 
             return usuario;
         }
 
-        private static async Task<T> Resposta<T>(object conteudo, bool ehDownload = false)
+        public static async Task<RespostaEsqueciSenha> EsqueciSenha(string emailDigitado)
         {
-            Debug.WriteLine("UsuarioRepository > Login > Resposta > 0. INICIO");
+            var resposta = await Resposta<RespostaEsqueciSenha>(new { email = emailDigitado }, "esquecisenha");
+
+            return resposta;
+        }
+
+        private static async Task<T> Resposta<T>(object conteudo, string metodo, bool ehDownload = false)
+        {
             var httpClient = new HttpClient();
-            Debug.WriteLine("UsuarioRepository > Login > Resposta > 1. httpClient ");
             var json = JsonConvert.SerializeObject(conteudo);
-            Debug.WriteLine("UsuarioRepository > Login > Resposta > 2. json ");
             var contentPost = new StringContent(json, Encoding.UTF8, "application/json");
-            Debug.WriteLine("UsuarioRepository > Login > Resposta > 3. StringContent ");
-            var response = await httpClient.PostAsync(ObterUrlBaseWebApi() + "api/login", contentPost);
-            Debug.WriteLine("UsuarioRepository > Login > Resposta > 4. response ");
+            var response = await httpClient.PostAsync(ObterUrlBaseWebApi() + "api/" + metodo, contentPost);
             var stream = await response.Content.ReadAsStreamAsync();
-            Debug.WriteLine("UsuarioRepository > Login > Resposta > 5. stream ");
             var ser = new DataContractJsonSerializer(typeof(T));
-            Debug.WriteLine("UsuarioRepository > Login > Resposta > 6. ser ");
             stream.Position = 0;
-            Debug.WriteLine("UsuarioRepository > Login > Resposta > 7. stream.Position = 0; ");
             T t = (T)ser.ReadObject(stream);
-            Debug.WriteLine("UsuarioRepository > Login > Resposta > 8. t ");
+
             return t;
         }
 

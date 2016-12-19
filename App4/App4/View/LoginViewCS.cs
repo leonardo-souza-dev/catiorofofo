@@ -12,24 +12,56 @@ namespace App4.View
 {
     public partial class LoginViewCS : ContentPage
     {
+        UsuarioViewModel UsuarioViewModel;
+
+        Entry EmailEntry;
+        Button LoginButton;
+        Entry SenhaEntry;
+        Button EsqueciButton;
+
         public LoginViewCS()
         {
+            UsuarioViewModel = new UsuarioViewModel();
             this.Title = "login";
 
-            Content = ObterConteudo();
+            var scroll = new ScrollView();
+            scroll.Content = ObterConteudo();
+            Content = scroll;
         }
 
         private StackLayout ObterConteudo()
         {
-            Button loginBotao = new Button
+            EmailEntry = new Entry
             {
-                Text = "Login",
-                FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 Margin = new Thickness(5, 5, 5, 5)
             };
+            LoginButton = new Button
+            {
+                Text = "login",
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                Margin = new Thickness(5, 5, 5, 5)
+            };
+            SenhaEntry = new Entry
+            {
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                Margin = new Thickness(5, 5, 5, 5),
+                IsPassword = true
+            };
+            EsqueciButton = new Button
+            {
+                Text = "esqueci a senha",
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                Margin = new Thickness(5, 5, 5, 5)                
+            };
 
-            loginBotao.Clicked += LoginBotao_Clicked;
+
+            LoginButton.Clicked += LoginBotao_Clicked;
+            EsqueciButton.Clicked += EsqueciButton_Clicked;
 
             return new StackLayout
             {
@@ -37,7 +69,7 @@ namespace App4.View
                 Children = {
                     new Label {
                         Text = "catioro fofo",
-                        FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
+                        FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
                         VerticalOptions = LayoutOptions.CenterAndExpand,
                         Margin = new Thickness (5, 5, 5, 5)
                     },
@@ -47,51 +79,75 @@ namespace App4.View
                         Margin = new Thickness (5, 5, 5, 5)
                     },
                     new Label {
-                        Text = "login",
-                        FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
+                        Text = "email",
+                        FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
                         VerticalOptions = LayoutOptions.CenterAndExpand,
                         Margin = new Thickness (5, 5, 5, 5)
                     },
-                    new Entry {
-                        FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
-                        VerticalOptions = LayoutOptions.CenterAndExpand,
-                        Margin = new Thickness (5, 5, 5, 5)
-                    },
+                    EmailEntry,
                     new Label {
                         Text = "senha",
-                        FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
+                        FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
                         VerticalOptions = LayoutOptions.CenterAndExpand,
                         Margin = new Thickness (5, 5, 5, 5)
                     },
-                    new Entry {
-                        FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
-                        VerticalOptions = LayoutOptions.CenterAndExpand,
-                        Margin = new Thickness (5, 5, 5, 5)
-                    },
-                    loginBotao,
+                    SenhaEntry,
+                    LoginButton,
                     new Button {
                         Text = "Cadastro",
-                        FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
+                        FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
                         VerticalOptions = LayoutOptions.CenterAndExpand,
                         Margin = new Thickness (5, 5, 5, 5)
-                    }
-
+                    },
+                    EsqueciButton
                 }
             };
         }
 
-        private int usuarioId;
-
         async void LoginBotao_Clicked(object sender, EventArgs e)
         {
-            string senha = "123";
-            UsuarioViewModel uvm = new UsuarioViewModel();
-            Usuario usuario = await uvm.Login(senha);
+            if (SenhaEntry == null || string.IsNullOrEmpty(SenhaEntry.Text))
+            {
+                if (EmailEntry == null || string.IsNullOrEmpty(EmailEntry.Text))
+                {
+                    await DisplayAlert("ops", "tem que colocar um email e senha, migx", "volta lá");
+                    EmailEntry.Focus();
+                    return;
+                }
+                await DisplayAlert("ops", "tem que colocar uma senha, migx", "volta lá");
+                EmailEntry.Focus();
+                return;
+            }
+
+            string senha = SenhaEntry.Text;
+            Usuario usuario = await UsuarioViewModel.Login(senha);
 
             if (usuario.UsuarioId > 0)
             {
                 var mainPage = new MainPage(usuario.UsuarioId);
                 await Navigation.PushModalAsync(mainPage);
+            }
+        }
+
+        async void EsqueciButton_Clicked(object sender, EventArgs e)
+        {
+            if (EmailEntry == null || string.IsNullOrEmpty(EmailEntry.Text))
+            {
+                await DisplayAlert("ops", "tem que colocar um email, migx", "volta lá");
+                EmailEntry.Focus();
+                return;
+            }
+
+            string email = EmailEntry.Text;
+            bool resultado = await UsuarioViewModel.EsqueciSenha(email);
+
+            if (resultado)
+            {
+                await DisplayAlert("oi", "mandei um email, ve lá", "volta lá");
+            }
+            else
+            {
+                await DisplayAlert("ih", "deu um erro, mals", "volta lá");
             }
         }
     }
