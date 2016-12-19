@@ -84,16 +84,15 @@ namespace App4.View
 
         async void LoginBotao_Clicked(object sender, EventArgs e)
         {
-            string senha = "";
+            string senha = "123";
             UsuarioViewModel uvm = new UsuarioViewModel();
-            uvm.Login(senha);
-            //TODO: Implementar login
+            Usuario usuario = await uvm.Login(senha);
 
-            usuarioId = 1;
-            //var mainPage = new NavigationPage(new MainPage(usuarioId));
-            var mainPage = new MainPage(usuarioId);
-            //var mainPage = new ExpViewCS(new PostViewModel());
-            await Navigation.PushModalAsync(mainPage);
+            if (usuario.UsuarioId > 0)
+            {
+                var mainPage = new MainPage(usuario.UsuarioId);
+                await Navigation.PushModalAsync(mainPage);
+            }
         }
     }
 }

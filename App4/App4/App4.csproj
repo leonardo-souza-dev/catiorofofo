@@ -36,8 +36,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
-    <Compile Include="Model\Resposta.cs" />
+    <Compile Include="Model\Resposta\RespostaObterPost.cs" />
+    <Compile Include="Model\Resposta\RespostaPost.cs" />
+    <Compile Include="Model\Resposta\RespostaSalvarPost.cs" />
+    <Compile Include="Model\Resposta\RespostaUpload.cs" />
+    <Compile Include="Model\Resposta\RespostaLogin.cs" />
     <Compile Include="Model\Usuario.cs" />
+    <Compile Include="Repository\UsuarioRepository.cs" />
     <Compile Include="Repository\PostRepository.cs" />
     <Compile Include="ViewModel\UsuarioViewModel.cs" />
     <Compile Include="ViewModel\PostViewModel.cs" />

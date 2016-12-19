@@ -1,17 +1,30 @@
 ﻿using App4.Model;
+using App4.Repository;
+using System.Threading.Tasks;
 
 namespace App4.ViewModel
 {
     public class UsuarioViewModel
     {
-        public Usuario Posts { get; set; } = new Usuario();
+        //public Usuario Usuario { get; set; } = new Usuario();
+
+        public bool LoginSucesso;
 
         public UsuarioViewModel()
         {
+
         }
 
-        public async void Login(string senha)
+        public async Task<Usuario> Login(string senha)
         {
+            Usuario usuario = new Usuario();
+
+            usuario = await UsuarioRepository.Login(senha);
+
+            //Usuario.AvatarHash = respostaLogin.avatar;
+            //Usuario.Email = respostaLogin.email;
+
+            return usuario;
         }
     }
 }
