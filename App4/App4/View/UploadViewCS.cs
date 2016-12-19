@@ -12,7 +12,7 @@ using Xamarin.Forms;
 
 namespace App4.View
 {
-    public partial class UploadViewCode : ContentPage
+    public partial class UploadViewCS : ContentPage
     {
         private PostViewModel _postViewModel;
         public ObservableCollection<Post> posts { get; set; }
@@ -28,7 +28,7 @@ namespace App4.View
         Button _criarPerfil = new Button();
         TabbedPage _mainPage;
 
-        public UploadViewCode(PostViewModel postViewModel, TabbedPage mainPage)
+        public UploadViewCS(PostViewModel postViewModel, TabbedPage mainPage)
         {
             _mainPage = mainPage;
             _postViewModel = postViewModel;
@@ -95,7 +95,7 @@ namespace App4.View
                 var postFinal = new Post();
                 postFinal = await PostRepository.SalvarPost(post);
                 _postViewModel.InserirPost(postFinal);
-                var expViewCode = new ExpViewCode(_postViewModel);
+                var expViewCode = new ExpViewCS(_postViewModel);
                 _mainPage.CurrentPage = _mainPage.Children[0];
 
                 return;

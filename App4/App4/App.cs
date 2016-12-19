@@ -8,7 +8,7 @@ namespace App4
     {
         public App()
         {
-            MainPage = new MainPage();
+            MainPage = new LoginViewCS();
         }
     }
 }

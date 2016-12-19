@@ -10,11 +10,11 @@ using Xamarin.Forms;
 
 namespace App4.View
 {
-    public partial class ExpViewCode : ContentPage
+    public partial class ExpViewCS : ContentPage
     {
         private PostViewModel _postsVM;
 
-        public ExpViewCode(PostViewModel postsVM)
+        public ExpViewCS(PostViewModel postsVM)
         {
             this.Title = "catioro fofo";
 
