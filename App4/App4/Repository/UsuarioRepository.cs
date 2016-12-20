@@ -14,6 +14,16 @@ namespace App4.Repository
     {
         private static Usuario usuario;
 
+        public static async Task<Usuario> Cadastro(string emailDigitado, string senhaDigitada)
+        {
+            var resposta = await Resposta<RespostaCadastro>(new { email = emailDigitado, senha = senhaDigitada }, "cadastro");
+            usuario = new Usuario();
+            usuario.Email = resposta.usuario.email;
+            usuario.UsuarioId = resposta.usuario.usuarioId;
+
+            return usuario;
+        }
+
         public static async Task<Usuario> Login(string senhaDigitada)
         {
             var resposta = await Resposta<RespostaLogin>(new { senha = senhaDigitada }, "login");

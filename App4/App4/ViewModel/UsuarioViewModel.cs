@@ -15,14 +15,18 @@ namespace App4.ViewModel
 
         }
 
+        public async Task<Usuario> Cadastro(string email, string senha)
+        {
+            Usuario usuario = new Usuario();
+            usuario = await UsuarioRepository.Cadastro(email, senha);
+
+            return usuario;
+        }
+
         public async Task<Usuario> Login(string senha)
         {
             Usuario usuario = new Usuario();
-
             usuario = await UsuarioRepository.Login(senha);
-
-            //Usuario.AvatarHash = respostaLogin.avatar;
-            //Usuario.Email = respostaLogin.email;
 
             return usuario;
         }

@@ -37,6 +37,7 @@
   <ItemGroup>
     <Compile Include="App.cs" />
     <Compile Include="Model\Erro.cs" />
+    <Compile Include="Model\Resposta\RespostaCadastro.cs" />
     <Compile Include="Model\Resposta\RespostaObterPost.cs" />
     <Compile Include="Model\Resposta\RespostaEsqueciSenha.cs" />
     <Compile Include="Model\Resposta\RespostaPost.cs" />

@@ -14,9 +14,12 @@ namespace App4.View
     {
         UsuarioViewModel UsuarioViewModel;
 
+        Label CatioroFofoLabel;
+        Image LogoImage;
         Entry EmailEntry;
         Button LoginButton;
         Entry SenhaEntry;
+        Button CadastroButton;
         Button EsqueciButton;
 
         public LoginViewCS()
@@ -31,6 +34,19 @@ namespace App4.View
 
         private StackLayout ObterConteudo()
         {
+            CatioroFofoLabel = new Label
+            {
+                Text = "catioro fofo",
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                Margin = new Thickness(5, 5, 5, 5)
+            };
+            LogoImage = new Image
+            {
+                Source = ImageSource.FromResource("puppy150.png"),// FromUri(new Uri(@"http://download.seaicons.com/download/i34286/wackypixel/dogs-n-puppies/wackypixel-dogs-n-puppies-puppy-10.ico")),
+                HorizontalOptions = LayoutOptions.Center,
+                Margin = new Thickness(5, 5, 5, 5)
+            };
             EmailEntry = new Entry
             {
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
@@ -51,33 +67,32 @@ namespace App4.View
                 Margin = new Thickness(5, 5, 5, 5),
                 IsPassword = true
             };
+            CadastroButton = new Button
+            {
+                Text = "cadastro",
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                Margin = new Thickness(5, 5, 5, 5)
+            };
             EsqueciButton = new Button
             {
                 Text = "esqueci a senha",
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
                 VerticalOptions = LayoutOptions.CenterAndExpand,
-                Margin = new Thickness(5, 5, 5, 5)                
+                Margin = new Thickness(5, 5, 5, 5)
             };
 
 
             LoginButton.Clicked += LoginBotao_Clicked;
+            CadastroButton.Clicked += CadastroButton_Clicked;
             EsqueciButton.Clicked += EsqueciButton_Clicked;
 
             return new StackLayout
             {
                 Padding = new Thickness(0, 20, 0, 0),
                 Children = {
-                    new Label {
-                        Text = "catioro fofo",
-                        FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
-                        VerticalOptions = LayoutOptions.CenterAndExpand,
-                        Margin = new Thickness (5, 5, 5, 5)
-                    },
-                    new Image {
-                        Source = ImageSource.FromResource("puppy150.png"),// FromUri(new Uri(@"http://download.seaicons.com/download/i34286/wackypixel/dogs-n-puppies/wackypixel-dogs-n-puppies-puppy-10.ico")),
-                        HorizontalOptions = LayoutOptions.Center,
-                        Margin = new Thickness (5, 5, 5, 5)
-                    },
+                    CatioroFofoLabel,
+                    LogoImage,
                     new Label {
                         Text = "email",
                         FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
@@ -93,18 +108,29 @@ namespace App4.View
                     },
                     SenhaEntry,
                     LoginButton,
-                    new Button {
-                        Text = "Cadastro",
-                        FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
-                        VerticalOptions = LayoutOptions.CenterAndExpand,
-                        Margin = new Thickness (5, 5, 5, 5)
-                    },
+                    CadastroButton,
                     EsqueciButton
                 }
             };
         }
 
-        async void LoginBotao_Clicked(object sender, EventArgs e)
+        async void CadastroButton_Clicked(object sender, EventArgs e)
+        {
+            ValidaEntradas();
+
+            string email = EmailEntry.Text;
+            string senha = SenhaEntry.Text;
+
+            Usuario usuario = await UsuarioViewModel.Cadastro(email, senha);
+
+            if (usuario.UsuarioId > 0)
+            {
+                var mainPage = new MainPage(usuario.UsuarioId);
+                await Navigation.PushModalAsync(mainPage);
+            }
+        }
+
+        async void ValidaEntradas()
         {
             if (SenhaEntry == null || string.IsNullOrEmpty(SenhaEntry.Text))
             {
@@ -118,6 +144,11 @@ namespace App4.View
                 EmailEntry.Focus();
                 return;
             }
+        }
+
+        async void LoginBotao_Clicked(object sender, EventArgs e)
+        {
+            ValidaEntradas();
 
             string senha = SenhaEntry.Text;
             Usuario usuario = await UsuarioViewModel.Login(senha);
@@ -154,7 +185,7 @@ namespace App4.View
                     break;
                 default:
                     break;
-            }                
+            }
         }
     }
 }

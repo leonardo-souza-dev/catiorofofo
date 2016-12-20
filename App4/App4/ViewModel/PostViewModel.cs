@@ -9,16 +9,16 @@ namespace App4.ViewModel
     {
         public ObservableCollection<Post> Posts { get; set; } = new ObservableCollection<Post>();
 
-        public PostViewModel()
+        public PostViewModel(int usuarioId)
         {
-            CarregarPosts();
+            CarregarPosts(usuarioId);
         }
 
-        public async void CarregarPosts()
+        public async void CarregarPosts(int usuarioId)
         {
             var listaPosts = new List<Post>();
 
-            listaPosts = await PostRepository.ObterPostsNuvem();
+            listaPosts = await PostRepository.ObterPostsNuvem(usuarioId);
             for (int index = 0; index < listaPosts.Count; index++)
             {
                 var item = listaPosts[index];

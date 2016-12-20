@@ -13,19 +13,13 @@ namespace App4.Repository
     {
         private static List<Post> listaPosts;
 
-        public static async Task<List<Post>> ObterPostsNuvem()
+        public static async Task<List<Post>> ObterPostsNuvem(int usuarioIdPassado)
         {
-            var listaRespPosts = await Resposta<List<RespostaPost>>(new { usuarioId = 1});
+            var listaRespPosts = await Resposta<List<RespostaPost>>(new { usuarioId = usuarioIdPassado });
 
             listaPosts = new List<Post>();
             foreach (var item in listaRespPosts)
             {
-                //var client4 = new HttpClient();
-                //var json4 = JsonConvert.SerializeObject((new { nomeArquivo = item.nomeArquivo }));
-                //var contentPost4 = new StringContent(json4, Encoding.UTF8, "application/json");
-                //var response4 = await client4.PostAsync(ObterUrlBaseWebApi() + "api/downloadfoto", contentPost4);
-                //var stream4 = await response4.Content.ReadAsStreamAsync();
-
                 listaPosts.Add( new Post() { PostId = item.postId, Legenda = item.legenda, UsuarioId = item.usuarioId, NomeArquivo = item.nomeArquivo });
             }
             return listaPosts;

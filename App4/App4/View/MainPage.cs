@@ -7,10 +7,9 @@ namespace App4.View
     {
         public MainPage(int usuarioId)
         {
-            var postViewModel = new PostViewModel();
+            var postViewModel = new PostViewModel(usuarioId);
             Children.Add(new ExpViewCS(postViewModel));
-
-            //var uploadView = new NavigationPage(new UploadViewCode(postViewModel));
+            
             var uploadView = new UploadViewCS(postViewModel, this);
             uploadView.Title = "upload";
             Children.Add(uploadView);
