@@ -13,14 +13,21 @@ namespace App4.Repository
     {
         private static List<Post> listaPosts;
 
-        public static async Task<List<Post>> ObterPostsNuvem(int usuarioIdPassado)
+        public static async Task<List<Post>> ObterPosts(int usuarioIdPassado)
         {
             var listaRespPosts = await Resposta<List<RespostaPost>>(new { usuarioId = usuarioIdPassado });
 
             listaPosts = new List<Post>();
+
             foreach (var item in listaRespPosts)
             {
-                listaPosts.Add( new Post() { PostId = item.postId, Legenda = item.legenda, UsuarioId = item.usuarioId, NomeArquivo = item.nomeArquivo });
+                listaPosts.Add( 
+                    new Post() {
+                        PostId = item.postId,
+                        Legenda = item.legenda,
+                        UsuarioId = item.usuarioId,
+                        NomeArquivo = item.nomeArquivo
+                    });
             }
             return listaPosts;
         }
@@ -59,14 +66,16 @@ namespace App4.Repository
         }
 
         public static async Task<Post> SalvarPost(Post post)
-        {   //upload da foto
+        {   
+            //upload da foto
             var urlUpload = ObterUrlBaseWebApi() + "api/uploadfoto";
             byte[] byteArray = post.ObterByteArrayFoto();
 
             var requestContent = new MultipartFormDataContent();
             var imageContent = new ByteArrayContent(byteArray);
             imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
-            requestContent.Add(imageContent, "foto_de_catioro", "image.jpg");
+            requestContent.Add(imageContent, "cf", post.UsuarioId.ToString().PadLeft(6,'0') + ".jpg");
+            requestContent.Add(new StringContent(post.UsuarioId.ToString()), "usuarioId");
 
             var client = new HttpClient();
             var response = await client.PostAsync(urlUpload, requestContent);
@@ -75,7 +84,7 @@ namespace App4.Repository
             stream.Position = 0;
             var resposta = (RespostaUpload)ser.ReadObject(stream);
 
-            Post postFinal = new Post() { Legenda = post.Legenda, NomeArquivo = resposta.nomeArquivo, UsuarioId = 1 };
+            Post postFinal = new Post() { Legenda = post.Legenda, NomeArquivo = resposta.nomeArquivo, UsuarioId = post.UsuarioId };
 
             //salva post
             var clientt = new HttpClient();

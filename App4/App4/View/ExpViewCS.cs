@@ -59,10 +59,28 @@ namespace App4.View
             public CustomPostCell()
             {
                 var fotoImage = new Image { Margin = new Thickness(5, 15, 5, 5), VerticalOptions = LayoutOptions.CenterAndExpand };
+
                 var avatarImage = new Image { Margin = new Thickness(5, 5, 5, 5) };
                 var descricaoLabel = new Label { FontSize = 14 };
-                var curtirButton = new Button { FontSize = 10, Text = "Curtir", Margin = new Thickness(5, 5, 5, 5) };
+                var avatarDescricaoStackLayout = new StackLayout
+                {
+                    Padding = new Thickness(0, 0, 0, 0),
+                    Orientation = StackOrientation.Horizontal,
+                    Margin = 0,
+                    Children = { avatarImage, descricaoLabel }
+                };
+
+                var curtirButton = new Button { FontSize = 10, Text = "curtir", Margin = new Thickness(5, 5, 5, 5) };
                 var numCurtidasLabel = new Label { FontSize = 10, Text = "22", Margin = new Thickness(5, 5, 5, 5) };
+                var compartilharButton = new Button { FontSize = 10, Text = "comprartilhar", Margin = new Thickness(5, 5, 5, 5) };
+                var curtirNumCurtidasStackLayout = new StackLayout()
+                {
+                    Padding = new Thickness(0, 0, 0, 0),
+                    Orientation = StackOrientation.Horizontal,
+                    Margin = 0,
+                    Children = { curtirButton, numCurtidasLabel, compartilharButton }
+                };
+
 
                 var principalLayout = new StackLayout()
                 {
@@ -73,20 +91,8 @@ namespace App4.View
                     Children =
                         {
                             fotoImage,
-                            new StackLayout()
-                            {
-                                Padding = new Thickness(0, 0, 0, 0),
-                                Orientation = StackOrientation.Horizontal,
-                                Margin = 0,
-                                Children = { avatarImage, descricaoLabel }
-                            },
-                            new StackLayout()
-                            {
-                                Padding = new Thickness(0, 0, 0, 0),
-                                Orientation = StackOrientation.Horizontal,
-                                Margin = 0,
-                                Children = { curtirButton, numCurtidasLabel }
-                            }
+                            avatarDescricaoStackLayout,
+                            curtirNumCurtidasStackLayout
                         }
                 };
 

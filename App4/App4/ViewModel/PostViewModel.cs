@@ -8,9 +8,11 @@ namespace App4.ViewModel
     public class PostViewModel
     {
         public ObservableCollection<Post> Posts { get; set; } = new ObservableCollection<Post>();
+        public int UsuarioId;
 
         public PostViewModel(int usuarioId)
         {
+            UsuarioId = usuarioId;
             CarregarPosts(usuarioId);
         }
 
@@ -18,7 +20,7 @@ namespace App4.ViewModel
         {
             var listaPosts = new List<Post>();
 
-            listaPosts = await PostRepository.ObterPostsNuvem(usuarioId);
+            listaPosts = await PostRepository.ObterPosts(usuarioId);
             for (int index = 0; index < listaPosts.Count; index++)
             {
                 var item = listaPosts[index];

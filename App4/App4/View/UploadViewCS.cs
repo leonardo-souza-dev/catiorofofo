@@ -14,24 +14,24 @@ namespace App4.View
 {
     public partial class UploadViewCS : ContentPage
     {
-        private PostViewModel _postViewModel;
+        private PostViewModel PostViewModel;
         public ObservableCollection<Post> posts { get; set; }
 
-        Button _acharButton = new Button();
-        Image _fotoImage;
-        Button _postarButton = new Button();
-        Entry _legendaEntry = new Entry();
-        Stream _stream = null;
-        MediaFile _file;
-        public string _arquivo = string.Empty;
+        Button AcharButton = new Button();
+        Image FotoImage;
+        Button PostarButton = new Button();
+        Entry LegendaEntry = new Entry();
+        Stream Stream = null;
+        MediaFile File;
+        public string Arquivo = string.Empty;
 
-        Button _criarPerfil = new Button();
-        TabbedPage _mainPage;
+        Button CriarPerfil = new Button();
+        TabbedPage MainPage;
 
         public UploadViewCS(PostViewModel postViewModel, TabbedPage mainPage)
         {
-            _mainPage = mainPage;
-            _postViewModel = postViewModel;
+            MainPage = mainPage;
+            PostViewModel = postViewModel;
             this.Title = "enviar catioro fofo";
             CrossMedia.Current.Initialize();
             Content = ObterConteudo();
@@ -39,30 +39,30 @@ namespace App4.View
 
         private StackLayout ObterConteudo()
         {
-            _acharButton = new Button
+            AcharButton = new Button
             {
                 Text = "achar catioro fofo",
                 FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
                 VerticalOptions = LayoutOptions.CenterAndExpand
             };
-            _postarButton = new Button
+            PostarButton = new Button
             {
                 Text = "postar!",
                 FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
                 VerticalOptions = LayoutOptions.CenterAndExpand
             };
-            _legendaEntry = new Entry
+            LegendaEntry = new Entry
             {
                 Placeholder = "entre com uma legenda",
                 FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
                 VerticalOptions = LayoutOptions.CenterAndExpand
             };
-            _fotoImage = new Image { WidthRequest = 100, HeightRequest = 100 };
+            FotoImage = new Image { WidthRequest = 100, HeightRequest = 100 };
 
-            _postarButton.IsEnabled = false;
-            _postarButton.IsVisible = false;
+            PostarButton.IsEnabled = false;
+            PostarButton.IsVisible = false;
 
-            _acharButton.Clicked += async (sender, args) =>
+            AcharButton.Clicked += async (sender, args) =>
             {
                 if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsPickPhotoSupported)
                 {
@@ -70,33 +70,33 @@ namespace App4.View
                     return;
                 }
 
-                _file = await CrossMedia.Current.PickPhotoAsync(new PickMediaOptions()
+                File = await CrossMedia.Current.PickPhotoAsync(new PickMediaOptions()
                 {
                     CompressionQuality = 50
                 });
 
-                if (_file == null)
+                if (File == null)
                     return;
 
-                _postarButton.IsEnabled = true;
-                _postarButton.IsVisible = true;
-                _acharButton.Text = "trocar catioro fofo";
+                PostarButton.IsEnabled = true;
+                PostarButton.IsVisible = true;
+                AcharButton.Text = "trocar catioro fofo";
 
-                _fotoImage.Source = ImageSource.FromStream(ObterStream);
+                FotoImage.Source = ImageSource.FromStream(ObterStream);
             };
 
-            _postarButton.Clicked += async (sender, args) =>
+            PostarButton.Clicked += async (sender, args) =>
             {
-                Post post = new Post(_stream)
+                Post post = new Post(Stream)
                 {
-                    Legenda = _legendaEntry.Text,
-                    UsuarioId = 1 // TODO: MUDAR PARA RECEBER O ID DO USUARIO LOGADO
+                    Legenda = LegendaEntry.Text,
+                    UsuarioId = PostViewModel.UsuarioId
                 };
                 var postFinal = new Post();
                 postFinal = await PostRepository.SalvarPost(post);
-                _postViewModel.InserirPost(postFinal);
-                var expViewCode = new ExpViewCS(_postViewModel);
-                _mainPage.CurrentPage = _mainPage.Children[0];
+                PostViewModel.InserirPost(postFinal);
+                var expViewCode = new ExpViewCS(PostViewModel);
+                MainPage.CurrentPage = MainPage.Children[0];
 
                 return;
             };
@@ -106,20 +106,20 @@ namespace App4.View
                 Padding = new Thickness(0, 0, 0, 0),
                 Orientation = StackOrientation.Vertical,
                 Children = {
-                    _criarPerfil,
-                    _acharButton,
-                    _postarButton,
-                    _fotoImage,
-                    _legendaEntry
+                    CriarPerfil,
+                    AcharButton,
+                    PostarButton,
+                    FotoImage,
+                    LegendaEntry
                 }
             };
         }
 
         private Stream ObterStream()
         {
-            Stream stream = _file.GetStream();
-            _stream = _file.GetStream();
-            _file.Dispose();
+            Stream stream = File.GetStream();
+            Stream = File.GetStream();
+            File.Dispose();
 
             return stream;
         }

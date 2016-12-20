@@ -12,11 +12,11 @@ namespace App4.Model
         internal string mensagem;
 
         [DataMember]
-        internal RespostaUsuario usuario;
+        internal RespostaCadastroUsuario usuario;
     }
 
     [DataContract]
-    public class RespostaUsuario
+    public class RespostaCadastroUsuario
     {
         [DataMember]
         internal int usuarioId;
