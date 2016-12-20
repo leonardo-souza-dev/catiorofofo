@@ -3,7 +3,7 @@
 namespace App4.Model
 {
     [DataContract]
-    public class RespostaObterPost //: Resposta
+    public class RespostaObterPost 
     {
         [DataMember]
         internal RespostaPost posts;

@@ -24,13 +24,11 @@ namespace App4.Repository
             return usuario;
         }
 
-        public static async Task<Usuario> Login(string senhaDigitada)
+        public static async Task<RespostaLogin> Login(string senhaDigitada)
         {
             var resposta = await Resposta<RespostaLogin>(new { senha = senhaDigitada }, "login");
-            usuario = new Usuario();
-            usuario.UsuarioId = resposta.usuarioId;
 
-            return usuario;
+            return resposta;
         }
 
         public static async Task<RespostaEsqueciSenha> EsqueciSenha(string emailDigitado)

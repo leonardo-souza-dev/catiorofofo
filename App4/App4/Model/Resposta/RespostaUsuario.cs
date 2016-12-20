@@ -3,12 +3,12 @@
 namespace App4.Model
 {
     [DataContract]
-    public class RespostaLogin
+    public class RespostaUsuario
     {
         [DataMember]
-        internal RespostaUsuario usuario;
+        internal int usuarioId;
 
         [DataMember]
-        internal string mensagem;
+        internal string email;
     }
 }

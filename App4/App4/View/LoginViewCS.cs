@@ -151,12 +151,22 @@ namespace App4.View
             ValidaEntradas();
 
             string senha = SenhaEntry.Text;
-            Usuario usuario = await UsuarioViewModel.Login(senha);
+            var resultado = await UsuarioViewModel.Login(senha);
 
-            if (usuario.UsuarioId > 0)
+            switch(resultado.Item1)
             {
-                var mainPage = new MainPage(usuario.UsuarioId);
-                await Navigation.PushModalAsync(mainPage);
+                case RespostaStatus.Sucesso:
+                    var mainPage = new MainPage(resultado.Item2.UsuarioId);
+                    await Navigation.PushModalAsync(mainPage);
+                    break;
+                case RespostaStatus.Inexistente:
+                    await DisplayAlert("ops", "não tem esse email", "volta lá");
+                    EmailEntry.Focus();
+                    break;
+                case RespostaStatus.ErroGenerico:
+                   await DisplayAlert("ops", "ziquizera. espera um pouco", "volta lá");
+                    EmailEntry.Focus();
+                    break;
             }
         }
 
@@ -170,14 +180,14 @@ namespace App4.View
             }
 
             string email = EmailEntry.Text;
-            RespostaStatus resultado = await UsuarioViewModel.EsqueciSenha(email);
+            var resultado = await UsuarioViewModel.EsqueciSenha(email);
 
             switch (resultado)
             {
                 case RespostaStatus.Sucesso:
                     await DisplayAlert("oi", "mandei um email, ve lá", "volta lá");
                     break;
-                case RespostaStatus.EmailInexistente:
+                case RespostaStatus.Inexistente:
                     await DisplayAlert("ih", "nao existe usuario com esse email manolx", "volta lá");
                     break;
                 case RespostaStatus.ErroGenerico:

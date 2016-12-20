@@ -5,7 +5,7 @@ namespace App4.Model
     public enum RespostaStatus
     {
         Sucesso,
-        EmailInexistente,
+        Inexistente,
         ErroGenerico
     }
 }

@@ -12,16 +12,6 @@ namespace App4.Model
         internal string mensagem;
 
         [DataMember]
-        internal RespostaCadastroUsuario usuario;
-    }
-
-    [DataContract]
-    public class RespostaCadastroUsuario
-    {
-        [DataMember]
-        internal int usuarioId;
-
-        [DataMember]
-        internal string email;
+        internal RespostaUsuario usuario;
     }
 }

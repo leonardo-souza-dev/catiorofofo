@@ -1,5 +1,6 @@
 ﻿using App4.Model;
 using App4.Repository;
+using System;
 using System.Threading.Tasks;
 
 namespace App4.ViewModel
@@ -23,24 +24,37 @@ namespace App4.ViewModel
             return usuario;
         }
 
-        public async Task<Usuario> Login(string senha)
+        public async Task<Tuple<RespostaStatus,Usuario>> Login(string senha)
         {
-            Usuario usuario = new Usuario();
-            usuario = await UsuarioRepository.Login(senha);
+            var resposta = await UsuarioRepository.Login(senha);
 
-            return usuario;
+            if (resposta.mensagem == "email nao encontrado")
+            {
+                return new Tuple<RespostaStatus,Usuario>(RespostaStatus.Inexistente, null);
+            }
+
+            if (resposta.mensagem == "usuario encontrado")
+            {
+                Usuario usuario = new Usuario();
+                usuario.UsuarioId = resposta.usuario.usuarioId;
+                usuario.Email = resposta.usuario.email;
+
+                return new Tuple<RespostaStatus, Usuario>(RespostaStatus.Sucesso, usuario);
+            }
+
+            return null;
         }
 
         public async Task<RespostaStatus> EsqueciSenha(string email)
         {
-            RespostaEsqueciSenha asd = await UsuarioRepository.EsqueciSenha(email);
+            var resposta = await UsuarioRepository.EsqueciSenha(email);
 
-            if (asd.sucesso==false && asd.mensagem == "nao foi encontrado usuario com esse email")
+            if (resposta.sucesso == false && resposta.mensagem == "nao foi encontrado usuario com esse email")
             {
-                return RespostaStatus.EmailInexistente;
+                return RespostaStatus.Inexistente;
             }
 
-            if (asd.sucesso)
+            if (resposta.sucesso)
             {
                 return RespostaStatus.Sucesso;
             }
