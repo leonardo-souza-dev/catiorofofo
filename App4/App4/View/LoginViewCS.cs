@@ -139,16 +139,22 @@ namespace App4.View
             }
 
             string email = EmailEntry.Text;
-            bool resultado = await UsuarioViewModel.EsqueciSenha(email);
+            RespostaStatus resultado = await UsuarioViewModel.EsqueciSenha(email);
 
-            if (resultado)
+            switch (resultado)
             {
-                await DisplayAlert("oi", "mandei um email, ve lá", "volta lá");
-            }
-            else
-            {
-                await DisplayAlert("ih", "deu um erro, mals", "volta lá");
-            }
+                case RespostaStatus.Sucesso:
+                    await DisplayAlert("oi", "mandei um email, ve lá", "volta lá");
+                    break;
+                case RespostaStatus.EmailInexistente:
+                    await DisplayAlert("ih", "nao existe usuario com esse email manolx", "volta lá");
+                    break;
+                case RespostaStatus.ErroGenerico:
+                    await DisplayAlert("ih", "deu um erro, mals", "volta lá");
+                    break;
+                default:
+                    break;
+            }                
         }
     }
 }

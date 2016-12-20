@@ -27,16 +27,21 @@ namespace App4.ViewModel
             return usuario;
         }
 
-        public async Task<bool> EsqueciSenha(string email)
+        public async Task<RespostaStatus> EsqueciSenha(string email)
         {
             RespostaEsqueciSenha asd = await UsuarioRepository.EsqueciSenha(email);
 
-            if (asd.sucesso)
+            if (asd.sucesso==false && asd.mensagem == "nao foi encontrado usuario com esse email")
             {
-                return true;
+                return RespostaStatus.EmailInexistente;
             }
 
-            return false;
+            if (asd.sucesso)
+            {
+                return RespostaStatus.Sucesso;
+            }
+
+            return RespostaStatus.ErroGenerico;
         }
     }
 }

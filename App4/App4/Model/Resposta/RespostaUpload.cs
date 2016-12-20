@@ -6,6 +6,12 @@ namespace App4.Model
     public class RespostaUpload
     {
         [DataMember]
+        internal bool sucesso;
+
+        [DataMember]
+        internal string mensagem;
+
+        [DataMember]
         internal string nomeArquivo;
     }
 }
