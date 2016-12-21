@@ -24,16 +24,16 @@ namespace App4.ViewModel
             return usuario;
         }
 
-        public async Task<Tuple<RespostaStatus,Usuario>> Login(string senha)
+        public async Task<Tuple<RespostaStatus,Usuario>> Login(string email, string senha)
         {
-            var resposta = await UsuarioRepository.Login(senha);
+            var resposta = await UsuarioRepository.Login(email, senha);
 
-            if (resposta.mensagem == "email nao encontrado")
+            if (resposta.mensagem.ToUpper() == "INEXISTENTE")
             {
                 return new Tuple<RespostaStatus,Usuario>(RespostaStatus.Inexistente, null);
             }
 
-            if (resposta.mensagem == "usuario encontrado")
+            if (resposta.mensagem.ToUpper() == "SUCESSO")
             {
                 Usuario usuario = new Usuario();
                 usuario.UsuarioId = resposta.usuario.usuarioId;

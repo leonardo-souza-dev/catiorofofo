@@ -16,9 +16,14 @@ namespace App4.View
 
         Label CatioroFofoLabel;
         Image LogoImage;
+
+        Label EmailLabel;
         Entry EmailEntry;
-        Button LoginButton;
+
+        Label SenhaLabel;
         Entry SenhaEntry;
+
+        Button LoginButton;
         Button CadastroButton;
         Button EsqueciButton;
 
@@ -47,15 +52,24 @@ namespace App4.View
                 HorizontalOptions = LayoutOptions.Center,
                 Margin = new Thickness(5, 5, 5, 5)
             };
+
+            EmailLabel = new Label
+            {
+                Text = "email",
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                Margin = new Thickness(5, 5, 5, 5)
+            };
             EmailEntry = new Entry
             {
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 Margin = new Thickness(5, 5, 5, 5)
             };
-            LoginButton = new Button
+
+            SenhaLabel = new Label
             {
-                Text = "login",
+                Text = "senha",
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 Margin = new Thickness(5, 5, 5, 5)
@@ -66,6 +80,14 @@ namespace App4.View
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 Margin = new Thickness(5, 5, 5, 5),
                 IsPassword = true
+            };
+
+            LoginButton = new Button
+            {
+                Text = "login",
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                Margin = new Thickness(5, 5, 5, 5)
             };
             CadastroButton = new Button
             {
@@ -93,20 +115,13 @@ namespace App4.View
                 Children = {
                     CatioroFofoLabel,
                     LogoImage,
-                    new Label {
-                        Text = "email",
-                        FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
-                        VerticalOptions = LayoutOptions.CenterAndExpand,
-                        Margin = new Thickness (5, 5, 5, 5)
-                    },
+
+                    EmailLabel,
                     EmailEntry,
-                    new Label {
-                        Text = "senha",
-                        FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
-                        VerticalOptions = LayoutOptions.CenterAndExpand,
-                        Margin = new Thickness (5, 5, 5, 5)
-                    },
+
+                    SenhaLabel,
                     SenhaEntry,
+
                     LoginButton,
                     CadastroButton,
                     EsqueciButton
@@ -150,8 +165,9 @@ namespace App4.View
         {
             ValidaEntradas();
 
+            string email = EmailEntry.Text;
             string senha = SenhaEntry.Text;
-            var resultado = await UsuarioViewModel.Login(senha);
+            var resultado = await UsuarioViewModel.Login(email, senha);
 
             switch(resultado.Item1)
             {
