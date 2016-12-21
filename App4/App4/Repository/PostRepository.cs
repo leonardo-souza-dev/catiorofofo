@@ -15,7 +15,7 @@ namespace App4.Repository
 
         public static async Task<List<Post>> ObterPosts(int usuarioIdPassado)
         {
-            var listaRespPosts = await Resposta<List<RespostaPost>>(new { usuarioId = usuarioIdPassado });
+            var listaRespPosts = await Resposta<List<RespostaPost>>(new { usuarioId = usuarioIdPassado }, "obterposts");
 
             listaPosts = new List<Post>();
 
@@ -32,16 +32,31 @@ namespace App4.Repository
             return listaPosts;
         }
 
-        private static async Task<T> Resposta<T>(object conteudo, bool ehDownload = false)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="usuarioIdPassado">Id do usuário que está curtindo</param>
+        /// <param name="postIdPassado"></param>
+        /// <returns></returns>
+        public static async Task<RespostaCurtir> Curtir(int usuarioIdPassado, int postIdPassado)
+        {
+            var resposta = await Resposta<RespostaCurtir>(new { usuarioId = usuarioIdPassado, postId = postIdPassado }, "curtir");
+
+            return resposta;
+        }
+
+        private static async Task<T> Resposta<T>(object conteudo, string metodo, bool ehDownload = false)
         {
             var httpClient = new HttpClient();
             var json = JsonConvert.SerializeObject(conteudo);
             var contentPost = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await httpClient.PostAsync(ObterUrlBaseWebApi() + "api/obterposts", contentPost);
+            var response = await httpClient.PostAsync(ObterUrlBaseWebApi() + "api/" + metodo, contentPost);
             var stream = await response.Content.ReadAsStreamAsync();
             var ser = new DataContractJsonSerializer(typeof(T));
             stream.Position = 0;
-            return (T)ser.ReadObject(stream);
+            T t = (T)ser.ReadObject(stream);
+
+            return t;
         }
 
         private static string ObterUrlBaseWebApi()

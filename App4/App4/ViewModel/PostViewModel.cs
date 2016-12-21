@@ -2,6 +2,7 @@
 using App4.Repository;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace App4.ViewModel
 {
@@ -10,6 +11,10 @@ namespace App4.ViewModel
         public ObservableCollection<Post> Posts { get; set; } = new ObservableCollection<Post>();
         public int UsuarioId;
 
+        /// <summary>
+        /// Construtor que recebe o id do usuário logado ou recém-cadastrado
+        /// </summary>
+        /// <param name="usuarioId">Id do usuário logado ou recém-cadastrado</param>
         public PostViewModel(int usuarioId)
         {
             UsuarioId = usuarioId;
@@ -31,10 +36,18 @@ namespace App4.ViewModel
             }
         }
 
-        /// <summary>
-        /// Insere o post recém-uploadado em primeiro na página de explorar
-        /// </summary>
-        /// <param name="post">Post recém uploadado</param>
+        public async Task<RespostaStatus> Curtir(Post post)
+        {
+            var resposta = await PostRepository.Curtir(UsuarioId, post.PostId);
+
+            if (resposta.mensagem == "SUCESSO")
+            {
+                return RespostaStatus.Sucesso;
+            }
+
+            return RespostaStatus.ErroGenerico;
+        }
+
         public void InserirPost(Post post)
         {
             Posts.Insert(0, post);

@@ -27,7 +27,9 @@ namespace App4.View
         {
             ListView postsListView = new ListView { HasUnevenRows = true };
 
-            postsListView.ItemTemplate = new DataTemplate(()=> {
+            postsListView.ItemTemplate = new DataTemplate(() => {
+
+                int numCurtidas = 0;
                 var fotoImage = new Image { Margin = new Thickness(5, 15, 5, 5), VerticalOptions = LayoutOptions.CenterAndExpand };
 
                 var avatarImage = new Image { Margin = new Thickness(5, 5, 5, 5) };
@@ -41,7 +43,7 @@ namespace App4.View
                 };
 
                 var curtirButton = new Button { FontSize = 10, Text = "curtir", Margin = new Thickness(5, 5, 5, 5) };
-                var numCurtidasLabel = new Label { FontSize = 10, Text = "22", Margin = new Thickness(5, 5, 5, 5) };
+                var numCurtidasLabel = new Label { FontSize = 10, Text = numCurtidas.ToString(), Margin = new Thickness(5, 5, 5, 5) };
                 var compartilharButton = new Button { FontSize = 10, Text = "compartilhar", Margin = new Thickness(5, 5, 5, 5) };
                 var curtirNumCurtidasStackLayout = new StackLayout()
                 {
@@ -70,9 +72,17 @@ namespace App4.View
                 avatarImage.SetBinding(Image.SourceProperty, new Binding("AvatarUrl"));
                 descricaoLabel.SetBinding(Label.TextProperty, new Binding("Legenda"));
 
-                //curtirButton.Clicked += CurtirButton_Clicked;
+                curtirButton.Clicked += async (object sender, EventArgs e) =>
+                {
+                    numCurtidas++;
+                    numCurtidasLabel.Text = numCurtidas.ToString();
+                    Button botao = (Button)sender;
+                    Post post = (Post)botao.BindingContext;
 
+                    var resultado = await PostViewModel.Curtir(post);
 
+                    return;
+                };
 
                 return new ViewCell { View = principalLayout };
             });
@@ -92,6 +102,16 @@ namespace App4.View
                 }
             };
         }
+
+        //private async void CurtirButton_Clicked (object sender, EventArgs e)
+        //{
+        //    Button botao = (Button)sender;
+        //    Post post = (Post)botao.BindingContext;
+
+        //    var resultado = await PostViewModel.Curtir(post);
+
+        //    return;
+        //}
 
         public class AspectRatioContainer : ContentView
         {
