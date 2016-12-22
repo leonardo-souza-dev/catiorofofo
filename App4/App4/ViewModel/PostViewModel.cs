@@ -40,6 +40,19 @@ namespace App4.ViewModel
         {
             var resposta = await PostRepository.Curtir(UsuarioId, post.PostId);
 
+            int posicao = -1;
+            for (int i = 0; i < Posts.Count; i++)
+            {
+                if (Posts[i].PostId == post.PostId)
+                {
+                    posicao = i;
+                    break;
+                }
+            }
+            //TODO: Implementacao temporaria pois o post é removido depois inserido, quando o ideal é atualizar apenas o numero de curtidas
+            post.Curtidas.Add(new Curtida { UsuarioId = UsuarioId, PostId = post.PostId });
+            Posts.RemoveAt(posicao);
+            Posts.Insert(posicao, post);
             if (resposta.mensagem == "SUCESSO")
             {
                 return RespostaStatus.Sucesso;

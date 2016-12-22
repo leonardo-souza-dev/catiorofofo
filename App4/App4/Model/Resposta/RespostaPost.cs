@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace App4.Model
 {
@@ -16,5 +17,8 @@ namespace App4.Model
 
         [DataMember]
         internal string nomeArquivo;
-    }
+
+        [DataMember]
+        internal List<RespostaCurtida> curtidas;
+    }    
 }

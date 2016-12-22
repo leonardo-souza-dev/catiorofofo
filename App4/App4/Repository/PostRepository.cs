@@ -21,13 +21,20 @@ namespace App4.Repository
 
             foreach (var item in listaRespPosts)
             {
-                listaPosts.Add( 
-                    new Post() {
-                        PostId = item.postId,
-                        Legenda = item.legenda,
-                        UsuarioId = item.usuarioId,
-                        NomeArquivo = item.nomeArquivo
-                    });
+                List<Curtida> curtidas = new List<Curtida>();
+                Post post = new Post()
+                {
+                    PostId = item.postId,
+                    Legenda = item.legenda,
+                    UsuarioId = item.usuarioId,
+                    NomeArquivo = item.nomeArquivo,
+                    Curtidas = curtidas
+                };
+                foreach (var c in item.curtidas )
+                {
+                    curtidas.Add(new Curtida { UsuarioId = c.usuarioId, PostId = c.postId });
+                }
+                listaPosts.Add(post);
             }
             return listaPosts;
         }

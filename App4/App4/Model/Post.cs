@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 
 namespace App4.Model
 {
@@ -13,6 +14,10 @@ namespace App4.Model
         public int UsuarioId { get; set; }
 
         public string NomeArquivo { get; set; }
+
+        public int NumCurtidas { get { return Curtidas.Count; } }
+
+        public List<Curtida> Curtidas { get; set; }
 
         public string FotoUrl
         {
@@ -50,7 +55,7 @@ namespace App4.Model
 
         public Post()
         {
-
+            Curtidas = new List<Curtida>();
         }
 
         public byte[] ObterByteArrayFoto()
@@ -61,5 +66,11 @@ namespace App4.Model
                 return ms.ToArray();
             }
         }
+    }
+
+    public class Curtida
+    {
+        public int PostId { get; set; }
+        public int UsuarioId { get; set; }
     }
 }
