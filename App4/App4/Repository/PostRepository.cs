@@ -39,12 +39,13 @@ namespace App4.Repository
             return listaPosts;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="usuarioIdPassado">Id do usuário que está curtindo</param>
-        /// <param name="postIdPassado"></param>
-        /// <returns></returns>
+        public static async Task<RespostaCurtir> Descurtir(int usuarioIdPassado, int postIdPassado)
+        {
+            var resposta = await Resposta<RespostaCurtir>(new { usuarioId = usuarioIdPassado, postId = postIdPassado }, "descurtir");
+
+            return resposta;
+        }
+
         public static async Task<RespostaCurtir> Curtir(int usuarioIdPassado, int postIdPassado)
         {
             var resposta = await Resposta<RespostaCurtir>(new { usuarioId = usuarioIdPassado, postId = postIdPassado }, "curtir");

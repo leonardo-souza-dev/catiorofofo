@@ -15,6 +15,10 @@ namespace App4.Model
 
         public string NomeArquivo { get; set; }
 
+        public bool CurtidaHabilitada { get; set; } = true;
+
+        public string CurtidaTexto { get { return CurtidaHabilitada ? "curtir" : "descurtir"; } }
+
         public int NumCurtidas { get { return Curtidas.Count; } }
 
         public List<Curtida> Curtidas { get; set; }

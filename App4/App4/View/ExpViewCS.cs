@@ -42,7 +42,7 @@ namespace App4.View
                     Children = { avatarImage, descricaoLabel }
                 };
 
-                var curtirButton = new Button { FontSize = 10, Text = "curtir", Margin = new Thickness(5, 5, 5, 5) };
+                var curtirButton = new Button { FontSize = 10, Text = "asd123", Margin = new Thickness(5, 5, 5, 5) };
                 var numCurtidasLabel = new Label { FontSize = 10, Text = "0", Margin = new Thickness(5, 5, 5, 5) };
                 var compartilharButton = new Button { FontSize = 10, Text = "compartilhar", Margin = new Thickness(5, 5, 5, 5) };
                 var curtirNumCurtidasStackLayout = new StackLayout()
@@ -72,15 +72,22 @@ namespace App4.View
                 avatarImage.SetBinding(Image.SourceProperty, new Binding("AvatarUrl"));
                 descricaoLabel.SetBinding(Label.TextProperty, new Binding("Legenda"));
                 numCurtidasLabel.SetBinding(Label.TextProperty, new Binding("NumCurtidas"));
+                curtirButton.SetBinding(Button.TextProperty, new Binding("CurtidaTexto"));
 
                 curtirButton.Clicked += async (object sender, EventArgs e) =>
                 {
-                    //numCurtidas++;
-                    //numCurtidasLabel.Text = numCurtidas.ToString();
                     Button botao = (Button)sender;
                     Post post = (Post)botao.BindingContext;
 
-                    var resultado = await PostViewModel.Curtir(post);
+                    if (post.CurtidaHabilitada)
+                    {
+                        var resultado = await PostViewModel.Curtir(post);
+                    }
+                    else
+                    {
+                        var resultado = await PostViewModel.Descurtir(post);
+                    }
+                    
 
                     return;
                 };

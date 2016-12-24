@@ -3,6 +3,7 @@ using App4.Repository;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace App4.ViewModel
 {
@@ -18,10 +19,10 @@ namespace App4.ViewModel
         public PostViewModel(int usuarioId)
         {
             UsuarioId = usuarioId;
-            CarregarPosts(usuarioId);
+            ObterPosts(usuarioId);
         }
 
-        public async void CarregarPosts(int usuarioId)
+        public async void ObterPosts(int usuarioId)
         {
             var listaPosts = new List<Post>();
 
@@ -31,15 +32,73 @@ namespace App4.ViewModel
                 var item = listaPosts[index];
                 if (index + 1 > Posts.Count || Posts[index].Equals(item))
                 {
+                    foreach (var curtida in item.Curtidas)
+                    {
+                        if (curtida.UsuarioId == usuarioId)
+                        {
+                            item.CurtidaHabilitada = false;
+                        }
+                    }
                     Posts.Insert(index, item);
                 }
             }
         }
 
+
         public async Task<RespostaStatus> Curtir(Post post)
         {
             var resposta = await PostRepository.Curtir(UsuarioId, post.PostId);
 
+            int posicao = ObterPosicao(post);
+
+            AdicionaCurtidaNoPost(post, posicao, false);
+
+            if (resposta.mensagem == "SUCESSO")
+            {
+                return RespostaStatus.Sucesso;
+            }
+
+            return RespostaStatus.ErroGenerico;
+        }
+
+
+        public async Task<RespostaStatus> Descurtir(Post post)
+        {
+            var resposta = await PostRepository.Descurtir(UsuarioId, post.PostId);
+
+            int posicao = ObterPosicao(post);
+
+            AdicionaCurtidaNoPost(post, posicao, true);
+
+            if (resposta.mensagem == "SUCESSO")
+            {
+                return RespostaStatus.Sucesso;
+            }
+
+            return RespostaStatus.ErroGenerico;
+        }
+
+
+        private void AdicionaCurtidaNoPost(Post post, int posicao, bool curtidaHabilitada)
+        {
+            if (curtidaHabilitada)
+            {
+                post.Curtidas.Remove(post.Curtidas.FirstOrDefault(x => x.UsuarioId == UsuarioId));
+            }
+            else
+            {
+                post.Curtidas.Add(new Curtida { UsuarioId = UsuarioId, PostId = post.PostId });
+            }
+            
+            post.CurtidaHabilitada = curtidaHabilitada;
+
+            Posts.RemoveAt(posicao);
+            Posts.Insert(posicao, post);
+        }
+
+
+        private int ObterPosicao(Post post)
+        {
             int posicao = -1;
             for (int i = 0; i < Posts.Count; i++)
             {
@@ -49,16 +108,8 @@ namespace App4.ViewModel
                     break;
                 }
             }
-            //TODO: Implementacao temporaria pois o post é removido depois inserido, quando o ideal é atualizar apenas o numero de curtidas
-            post.Curtidas.Add(new Curtida { UsuarioId = UsuarioId, PostId = post.PostId });
-            Posts.RemoveAt(posicao);
-            Posts.Insert(posicao, post);
-            if (resposta.mensagem == "SUCESSO")
-            {
-                return RespostaStatus.Sucesso;
-            }
 
-            return RespostaStatus.ErroGenerico;
+            return posicao;
         }
 
         public void InserirPost(Post post)
