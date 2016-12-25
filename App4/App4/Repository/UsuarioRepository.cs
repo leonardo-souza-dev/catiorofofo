@@ -13,6 +13,14 @@ namespace App4.Repository
     public static class UsuarioRepository
     {
         private static Usuario usuario;
+        private static ConfiguracaoApp Config;
+        private static string UrlBaseWebApi;
+
+        public static void SetarConfiguracao(ConfiguracaoApp config)
+        {
+            Config = config;
+            UrlBaseWebApi = Config.ObterUrlBaseWebApi();
+        }
 
         public static async Task<Usuario> Cadastro(string emailDigitado, string senhaDigitada)
         {
@@ -43,7 +51,7 @@ namespace App4.Repository
             var httpClient = new HttpClient();
             var json = JsonConvert.SerializeObject(conteudo);
             var contentPost = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await httpClient.PostAsync(ObterUrlBaseWebApi() + "api/" + metodo, contentPost);
+            var response = await httpClient.PostAsync(UrlBaseWebApi + "api/" + metodo, contentPost);
             var stream = await response.Content.ReadAsStreamAsync();
             var ser = new DataContractJsonSerializer(typeof(T));
             stream.Position = 0;
@@ -52,26 +60,26 @@ namespace App4.Repository
             return t;
         }
 
-        private static string ObterUrlBaseWebApi()
-        {
-            bool usarCloud = false;
-            bool debugarAndroid = false;
+        //private static string ObterUrlBaseWebApi()
+        //{
+        //    bool usarCloud = false;
+        //    bool debugarAndroid = true;
 
-            string enderecoBase = string.Empty;
+        //    string enderecoBase = string.Empty;
 
-            if (usarCloud)
-                enderecoBase = "https://cfwebapi.herokuapp.com/";
-            else
-            {
-                enderecoBase += "http://";
-                if (debugarAndroid)
-                    enderecoBase += "10.0.2.2";
-                else
-                    enderecoBase += "localhost";
-                enderecoBase += ":8084/";
-            }
-            return enderecoBase;
-        }
+        //    if (usarCloud)
+        //        enderecoBase = "https://cfwebapi.herokuapp.com/";
+        //    else
+        //    {
+        //        enderecoBase += "http://";
+        //        if (debugarAndroid)
+        //            enderecoBase += "10.0.2.2";
+        //        else
+        //            enderecoBase += "localhost";
+        //        enderecoBase += ":8084/";
+        //    }
+        //    return enderecoBase;
+        //}
         
     }
 }

@@ -6,17 +6,19 @@ namespace App4.View
     public class MainPage : TabbedPage
     {
         /// <summary>
-        /// Construtor que recebe o id do usuário logado ou recém-cadastrado
+        /// Construtor que recebe o id do usuário logado
         /// </summary>
-        /// <param name="usuarioId">Id do usuário logado ou recém-cadastrado</param>
-        public MainPage(int usuarioId)
+        /// <param name="usuarioId">Id do usuário logado</param>
+        public MainPage(int usuarioId, ConfiguracaoApp config)
         {
-            var postViewModel = new PostViewModel(usuarioId);
+            var postViewModel = new PostViewModel(usuarioId, config);
             Children.Add(new ExpViewCS(postViewModel));
             
             var uploadView = new UploadViewCS(postViewModel, this);
             uploadView.Title = "upload";
             Children.Add(uploadView);
+
+            Children.Add(new PerfilViewCS(postViewModel));
         }
     }
 }

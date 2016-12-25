@@ -11,13 +11,21 @@ namespace App4.Repository
 {
     public static class PostRepository
     {
-        private static List<Post> listaPosts;
+        private static List<Post> ListaPosts;
+        private static ConfiguracaoApp Config;
+        private static string UrlBaseWebApi;
+
+        public static void SetarConfiguracao(ConfiguracaoApp config)
+        {
+            Config = config;
+            UrlBaseWebApi = Config.ObterUrlBaseWebApi();
+        }
 
         public static async Task<List<Post>> ObterPosts(int usuarioIdPassado)
         {
             var listaRespPosts = await Resposta<List<RespostaPost>>(new { usuarioId = usuarioIdPassado }, "obterposts");
 
-            listaPosts = new List<Post>();
+            ListaPosts = new List<Post>();
 
             foreach (var item in listaRespPosts)
             {
@@ -34,9 +42,9 @@ namespace App4.Repository
                 {
                     curtidas.Add(new Curtida { UsuarioId = c.usuarioId, PostId = c.postId });
                 }
-                listaPosts.Add(post);
+                ListaPosts.Add(post);
             }
-            return listaPosts;
+            return ListaPosts;
         }
 
         public static async Task<RespostaCurtir> Descurtir(int usuarioIdPassado, int postIdPassado)
@@ -58,7 +66,7 @@ namespace App4.Repository
             var httpClient = new HttpClient();
             var json = JsonConvert.SerializeObject(conteudo);
             var contentPost = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await httpClient.PostAsync(ObterUrlBaseWebApi() + "api/" + metodo, contentPost);
+            var response = await httpClient.PostAsync(UrlBaseWebApi + "api/" + metodo, contentPost);
             var stream = await response.Content.ReadAsStreamAsync();
             var ser = new DataContractJsonSerializer(typeof(T));
             stream.Position = 0;
@@ -67,31 +75,31 @@ namespace App4.Repository
             return t;
         }
 
-        private static string ObterUrlBaseWebApi()
-        {
-            bool usarCloud = false;
-            bool debugarAndroid = false;
+        //private static string ObterUrlBaseWebApi()
+        //{
+        //    bool usarCloud = false;
+        //    bool debugarAndroid = true;
 
-            string enderecoBase = string.Empty;
+        //    string enderecoBase = string.Empty;
 
-            if (usarCloud)
-                enderecoBase = "https://cfwebapi.herokuapp.com/";
-            else
-            {
-                enderecoBase += "http://";
-                if (debugarAndroid)
-                    enderecoBase += "10.0.2.2";
-                else
-                    enderecoBase += "localhost";
-                enderecoBase += ":8084/";
-            }
-            return enderecoBase;
-        }
+        //    if (usarCloud)
+        //        enderecoBase = "https://cfwebapi.herokuapp.com/";
+        //    else
+        //    {
+        //        enderecoBase += "http://";
+        //        if (debugarAndroid)
+        //            enderecoBase += "10.0.2.2";
+        //        else
+        //            enderecoBase += "localhost";
+        //        enderecoBase += ":8084/";
+        //    }
+        //    return enderecoBase;
+        //}
 
         public static async Task<Post> SalvarPost(Post post)
         {   
             //upload da foto
-            var urlUpload = ObterUrlBaseWebApi() + "api/uploadfoto";
+            var urlUpload = UrlBaseWebApi + "api/uploadfoto";
             byte[] byteArray = post.ObterByteArrayFoto();
 
             var requestContent = new MultipartFormDataContent();
@@ -114,7 +122,7 @@ namespace App4.Repository
             var json = JsonConvert.SerializeObject(postFinal);
             var contentPost = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response3 = await client.PostAsync(ObterUrlBaseWebApi() + "api/salvarpost", contentPost);
+            var response3 = await client.PostAsync(UrlBaseWebApi + "api/salvarpost", contentPost);
             var stream3 = await response3.Content.ReadAsStreamAsync();
 
             var ser3 = new DataContractJsonSerializer(typeof(RespostaSalvarPost));

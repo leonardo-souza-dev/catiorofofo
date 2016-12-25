@@ -11,12 +11,12 @@ namespace App4.ViewModel
 
         public bool LoginSucesso;
 
-        public UsuarioViewModel()
+        public UsuarioViewModel(ConfiguracaoApp config)
         {
-
+            UsuarioRepository.SetarConfiguracao(config);
         }
 
-        public async Task<Usuario> Cadastro(string email, string senha)
+        public async Task<Usuario> CadastrarELogar(string email, string senha)
         {
             Usuario usuario = new Usuario();
             usuario = await UsuarioRepository.Cadastro(email, senha);

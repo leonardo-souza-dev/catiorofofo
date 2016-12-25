@@ -8,7 +8,33 @@ namespace App4
     {
         public App()
         {
-            MainPage = new LoginViewCS();
+            ConfiguracaoApp config = new ConfiguracaoApp();
+            MainPage = new LoginViewCS(config);
+        }
+    }
+
+    public class ConfiguracaoApp
+    {
+        bool DebugarAndroid = false;
+        bool UsarCloud = false;
+
+        public string ObterUrlBaseWebApi()
+        {
+
+            string enderecoBase = string.Empty;
+
+            if (UsarCloud)
+                enderecoBase = "https://cfwebapi.herokuapp.com/";
+            else
+            {
+                enderecoBase += "http://";
+                if (DebugarAndroid)
+                    enderecoBase += "10.0.2.2";
+                else
+                    enderecoBase += "localhost";
+                enderecoBase += ":8084/";
+            }
+            return enderecoBase;
         }
     }
 }

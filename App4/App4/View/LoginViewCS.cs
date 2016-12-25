@@ -12,6 +12,7 @@ namespace App4.View
 {
     public partial class LoginViewCS : ContentPage
     {
+        ConfiguracaoApp Config;
         UsuarioViewModel UsuarioViewModel;
 
         Label CatioroFofoLabel;
@@ -27,9 +28,11 @@ namespace App4.View
         Button CadastroButton;
         Button EsqueciButton;
 
-        public LoginViewCS()
+        public LoginViewCS(ConfiguracaoApp config)
         {
-            UsuarioViewModel = new UsuarioViewModel();
+            Config = config;
+
+            UsuarioViewModel = new UsuarioViewModel(config);
             this.Title = "login";
 
             var scroll = new ScrollView();
@@ -136,11 +139,11 @@ namespace App4.View
             string email = EmailEntry.Text;
             string senha = SenhaEntry.Text;
 
-            Usuario usuario = await UsuarioViewModel.Cadastro(email, senha);
+            Usuario usuario = await UsuarioViewModel.CadastrarELogar(email, senha);
 
             if (usuario.UsuarioId > 0)
             {
-                var mainPage = new MainPage(usuario.UsuarioId);
+                var mainPage = new MainPage(usuario.UsuarioId, Config);
                 await Navigation.PushModalAsync(mainPage);
             }
         }
@@ -172,7 +175,7 @@ namespace App4.View
             switch(resultado.Item1)
             {
                 case RespostaStatus.Sucesso:
-                    var mainPage = new MainPage(resultado.Item2.UsuarioId);
+                    var mainPage = new MainPage(resultado.Item2.UsuarioId, Config);
                     await Navigation.PushModalAsync(mainPage);
                     break;
                 case RespostaStatus.Inexistente:

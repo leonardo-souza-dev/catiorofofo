@@ -52,6 +52,7 @@
     <Compile Include="ViewModel\UsuarioViewModel.cs" />
     <Compile Include="ViewModel\PostViewModel.cs" />
     <Compile Include="View\LoginViewCS.cs" />
+    <Compile Include="View\PerfilViewCS.cs" />
     <Compile Include="View\UploadViewCS.cs" />
     <Compile Include="View\ExpViewCS.cs" />
     <Compile Include="View\MainPage.cs" />
