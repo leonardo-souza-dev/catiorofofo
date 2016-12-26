@@ -6,6 +6,7 @@ namespace App4.Model
     {
         Sucesso,
         Inexistente,
-        ErroGenerico
+        ErroGenerico,
+        JaExiste
     }
 }

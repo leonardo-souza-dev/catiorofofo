@@ -16,6 +16,30 @@ namespace App4.ViewModel
             UsuarioRepository.SetarConfiguracao(config);
         }
 
+        public async Task<RespostaStatus> AtualizarCadastro(Usuario usuario)
+        {
+            var resposta2 = await UsuarioRepository.Atualizar(usuario);
+            var status = RespostaStatus.Sucesso;
+
+            switch (resposta2.mensagem.ToUpper())
+            {
+                case "SUCESSO":
+                    status = RespostaStatus.Sucesso;
+                    break;
+                case "INEXISTENTE":
+                    status = RespostaStatus.Inexistente;
+                    break;
+                case "JAEXISTE":
+                    status = RespostaStatus.JaExiste;
+                    break;
+                default:
+                    status = RespostaStatus.ErroGenerico;
+                    break;
+            }
+
+            return status;
+        }
+
         public async Task<Usuario> CadastrarELogar(string email, string senha)
         {
             Usuario usuario = new Usuario();

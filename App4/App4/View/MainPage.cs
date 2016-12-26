@@ -18,7 +18,7 @@ namespace App4.View
             uploadView.Title = "upload";
             Children.Add(uploadView);
 
-            Children.Add(new PerfilViewCS(postViewModel));
+            Children.Add(new PerfilViewCS(postViewModel, config));
         }
     }
 }

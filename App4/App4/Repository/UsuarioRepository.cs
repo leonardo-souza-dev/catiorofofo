@@ -22,6 +22,19 @@ namespace App4.Repository
             UrlBaseWebApi = Config.ObterUrlBaseWebApi();
         }
 
+        public static async Task<RespostaAtualizarUsuario> Atualizar(Usuario usuario)
+        {
+            var resposta = await Resposta<RespostaAtualizarUsuario>(
+                new {
+                    nomeUsuario = usuario.NomeUsuario,
+                    usuarioId = usuario.UsuarioId,
+                    email = usuario.Email
+                }, 
+                "atualizarusuario");
+
+            return resposta;
+        }
+
         public static async Task<Usuario> Cadastro(string emailDigitado, string senhaDigitada)
         {
             var resposta = await Resposta<RespostaCadastro>(new { email = emailDigitado, senha = senhaDigitada }, "cadastro");
