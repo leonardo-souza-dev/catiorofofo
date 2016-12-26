@@ -24,7 +24,6 @@ namespace App4.View
 
             postsListView.ItemTemplate = new DataTemplate(() => {
 
-                //int numCurtidas = 0;
                 var fotoImage = new Image { Margin = new Thickness(5, 15, 5, 5), VerticalOptions = LayoutOptions.CenterAndExpand };
 
                 var avatarImage = new Image { Margin = new Thickness(5, 5, 5, 5) };
@@ -37,7 +36,7 @@ namespace App4.View
                     Children = { avatarImage, descricaoLabel }
                 };
 
-                var curtirButton = new Button { FontSize = 10, Text = "asd123", Margin = new Thickness(5, 5, 5, 5) };
+                var curtirButton = new Button { FontSize = 10, Text = "", Margin = new Thickness(5, 5, 5, 5) };
                 var numCurtidasLabel = new Label { FontSize = 10, Text = "0", Margin = new Thickness(5, 5, 5, 5) };
                 var compartilharButton = new Button { FontSize = 10, Text = "compartilhar", Margin = new Thickness(5, 5, 5, 5) };
                 var curtirNumCurtidasStackLayout = new StackLayout()
@@ -81,8 +80,7 @@ namespace App4.View
                     else
                     {
                         var resultado = await PostViewModel.Descurtir(post);
-                    }
-                    
+                    }                    
 
                     return;
                 };

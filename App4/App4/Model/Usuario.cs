@@ -6,22 +6,22 @@ namespace App4.Model
     public class Usuario : INotifyPropertyChanged
     {
         public int UsuarioId { get; set; }
-        public string Email { get; set; }
-        public string AvatarHash { get; set; }
 
-        event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
+        private string email;
+        public string Email { get { return email; } set { email = value; OnPropertyChanged("Email"); } }
+
+        public string AvatarUrl { get; set; }
+        public string NomeUsuario { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string name)
         {
-            add
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
             {
-                throw new NotImplementedException();
-            }
-
-            remove
-            {
-                throw new NotImplementedException();
+                handler(this, new PropertyChangedEventArgs(name));
             }
         }
-
-
     }
 }

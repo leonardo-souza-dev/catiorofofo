@@ -38,6 +38,7 @@ namespace App4.ViewModel
                 Usuario usuario = new Usuario();
                 usuario.UsuarioId = resposta.usuario.usuarioId;
                 usuario.Email = resposta.usuario.email;
+                usuario.AvatarUrl = resposta.usuario.avatarUrl;
 
                 return new Tuple<RespostaStatus, Usuario>(RespostaStatus.Sucesso, usuario);
             }
