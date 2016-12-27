@@ -71,7 +71,7 @@ namespace App4.View
                 curtirButton.Clicked += async (object sender, EventArgs e) =>
                 {
                     Button botao = (Button)sender;
-                    Post post = (Post)botao.BindingContext;
+                    PostModel post = (PostModel)botao.BindingContext;
 
                     if (post.CurtidaHabilitada)
                     {

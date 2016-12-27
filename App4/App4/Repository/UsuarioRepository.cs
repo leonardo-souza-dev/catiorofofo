@@ -12,7 +12,6 @@ namespace App4.Repository
 {
     public static class UsuarioRepository
     {
-        private static Usuario usuario;
         private static ConfiguracaoApp Config;
         private static string UrlBaseWebApi;
 
@@ -22,7 +21,7 @@ namespace App4.Repository
             UrlBaseWebApi = Config.ObterUrlBaseWebApi();
         }
 
-        public static async Task<RespostaAtualizarUsuario> Atualizar(Usuario usuario)
+        public static async Task<RespostaAtualizarUsuario> Atualizar(UsuarioModel usuario)
         {
             var resposta = await Resposta<RespostaAtualizarUsuario>(
                 new {
@@ -38,9 +37,6 @@ namespace App4.Repository
         public static async Task<RespostaCadastro> Cadastro(string emailDigitado, string senhaDigitada, string nomeUsuarioDigitado)
         {
             var resposta = await Resposta<RespostaCadastro>(new { email = emailDigitado, senha = senhaDigitada, nomeUsuario = nomeUsuarioDigitado }, "cadastro");
-            //usuario = new Usuario();
-            //usuario.Email = resposta.usuario.email;
-            //usuario.UsuarioId = resposta.usuario.usuarioId;
 
             return resposta;
         }
@@ -48,6 +44,7 @@ namespace App4.Repository
         public static async Task<RespostaLogin> Login(string emailDigitado, string senhaDigitada)
         {
             var resposta = await Resposta<RespostaLogin>(new { email = emailDigitado, senha = senhaDigitada }, "login");
+
             return resposta;
         }
 
@@ -71,27 +68,5 @@ namespace App4.Repository
 
             return t;
         }
-
-        //private static string ObterUrlBaseWebApi()
-        //{
-        //    bool usarCloud = false;
-        //    bool debugarAndroid = true;
-
-        //    string enderecoBase = string.Empty;
-
-        //    if (usarCloud)
-        //        enderecoBase = "https://cfwebapi.herokuapp.com/";
-        //    else
-        //    {
-        //        enderecoBase += "http://";
-        //        if (debugarAndroid)
-        //            enderecoBase += "10.0.2.2";
-        //        else
-        //            enderecoBase += "localhost";
-        //        enderecoBase += ":8084/";
-        //    }
-        //    return enderecoBase;
-        //}
-        
     }
 }

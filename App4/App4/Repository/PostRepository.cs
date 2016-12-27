@@ -11,7 +11,7 @@ namespace App4.Repository
 {
     public static class PostRepository
     {
-        private static List<Post> ListaPosts;
+        private static List<PostModel> ListaPosts;
         private static ConfiguracaoApp Config;
         private static string UrlBaseWebApi;
 
@@ -21,16 +21,16 @@ namespace App4.Repository
             UrlBaseWebApi = Config.ObterUrlBaseWebApi();
         }
 
-        public static async Task<List<Post>> ObterPosts()
+        public static async Task<List<PostModel>> ObterPosts()
         {
             var listaRespPosts = await Resposta<List<RespostaPost>>(null, "obterposts");
 
-            ListaPosts = new List<Post>();
+            ListaPosts = new List<PostModel>();
 
             foreach (var item in listaRespPosts)
             {
                 List<Curtida> curtidas = new List<Curtida>();
-                Post post = new Post()
+                PostModel post = new PostModel()
                 {
                     PostId = item.postId,
                     Legenda = item.legenda,
@@ -87,7 +87,7 @@ namespace App4.Repository
             }
         }
 
-        public static async Task<Post> SalvarPost(Post post)
+        public static async Task<PostModel> SalvarPost(PostModel post)
         {   
             //upload da foto
             var urlUpload = UrlBaseWebApi + "api/uploadfoto";
@@ -106,7 +106,7 @@ namespace App4.Repository
             stream.Position = 0;
             var resposta = (RespostaUpload)ser.ReadObject(stream);
 
-            Post postFinal = new Post() { Legenda = post.Legenda, NomeArquivo = resposta.nomeArquivo, UsuarioId = post.UsuarioId };
+            PostModel postFinal = new PostModel() { Legenda = post.Legenda, NomeArquivo = resposta.nomeArquivo, UsuarioId = post.UsuarioId };
 
             //salva post
             var clientt = new HttpClient();

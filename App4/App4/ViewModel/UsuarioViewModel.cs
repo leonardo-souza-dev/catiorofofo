@@ -17,9 +17,10 @@ namespace App4.ViewModel
             UsuarioRepository.SetarConfiguracao(config);
         }
 
-        public async Task<RespostaStatus> AtualizarCadastro(Usuario usuario)
+        public async Task<RespostaStatus> AtualizarCadastro(UsuarioModel usuario)
         {
             var resposta2 = await UsuarioRepository.Atualizar(usuario);
+
             var status = RespostaStatus.Sucesso;
 
             switch (resposta2.mensagem.ToUpper())
@@ -42,9 +43,9 @@ namespace App4.ViewModel
             return status;
         }
 
-        public async Task<Tuple<RespostaStatus,Usuario>> CadastrarELogar(string email, string senha)
+        public async Task<Tuple<RespostaStatus,UsuarioModel>> CadastrarELogar(string email, string senha)
         {
-            Usuario usuario = new Usuario();
+            UsuarioModel usuario = new UsuarioModel();
 
             var nomeUsuario = email.Split('@')[0] +
                 DateTime.Now.ToString().Replace(" ", "")
@@ -69,27 +70,27 @@ namespace App4.ViewModel
                     usuario = null;
                     break;
             }
-            return new Tuple<RespostaStatus, Usuario>(respostaStatus, usuario);
+            return new Tuple<RespostaStatus, UsuarioModel>(respostaStatus, usuario);
         }
 
-        public async Task<Tuple<RespostaStatus,Usuario>> Login(string email, string senha)
+        public async Task<Tuple<RespostaStatus,UsuarioModel>> Login(string email, string senha)
         {
             var resposta = await UsuarioRepository.Login(email, senha);
 
             if (resposta.mensagem.ToUpper() == "INEXISTENTE")
             {
-                return new Tuple<RespostaStatus,Usuario>(RespostaStatus.Inexistente, null);
+                return new Tuple<RespostaStatus,UsuarioModel>(RespostaStatus.Inexistente, null);
             }
 
             if (resposta.mensagem.ToUpper() == "SUCESSO")
             {
-                Usuario usuario = new Usuario();
+                UsuarioModel usuario = new UsuarioModel();
                 usuario.UsuarioId = resposta.usuario.usuarioId;
                 usuario.Email = resposta.usuario.email;
                 usuario.NomeArquivoAvatar = resposta.usuario.nomeArquivoAvatar;
                 usuario.NomeUsuario = resposta.usuario.nomeUsuario;
 
-                return new Tuple<RespostaStatus, Usuario>(RespostaStatus.Sucesso, usuario);
+                return new Tuple<RespostaStatus, UsuarioModel>(RespostaStatus.Sucesso, usuario);
             }
 
             return null;

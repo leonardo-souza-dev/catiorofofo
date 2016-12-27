@@ -10,15 +10,15 @@ namespace App4.ViewModel
 {
     public class PostViewModel
     {
-        public ObservableCollection<Post> Posts { get; set; } = new ObservableCollection<Post>();
+        public ObservableCollection<PostModel> Posts { get; set; } = new ObservableCollection<PostModel>();
         //public int UsuarioId;
-        public Usuario Usuario;
+        public UsuarioModel Usuario;
 
         /// <summary>
         /// Construtor que recebe o id do usuário logado ou recém-cadastrado
         /// </summary>
         /// <param name="usuarioId">Id do usuário logado ou recém-cadastrado</param>
-        public PostViewModel(Usuario usuario, ConfiguracaoApp config)
+        public PostViewModel(UsuarioModel usuario, ConfiguracaoApp config)
         {
             PostRepository.SetarConfiguracao(config);
             Usuario = usuario;
@@ -27,7 +27,7 @@ namespace App4.ViewModel
 
         public async void ObterPosts()
         {
-            var listaPosts = new List<Post>();
+            var listaPosts = new List<PostModel>();
 
             listaPosts = await PostRepository.ObterPosts();
             for (int index = 0; index < listaPosts.Count; index++)
@@ -48,7 +48,7 @@ namespace App4.ViewModel
         }
 
 
-        public async Task<RespostaStatus> Curtir(Post post)
+        public async Task<RespostaStatus> Curtir(PostModel post)
         {
             var resposta = await PostRepository.Curtir(Usuario.UsuarioId, post.PostId);
 
@@ -65,7 +65,7 @@ namespace App4.ViewModel
         }
 
 
-        public async Task<RespostaStatus> Descurtir(Post post)
+        public async Task<RespostaStatus> Descurtir(PostModel post)
         {
             var resposta = await PostRepository.Descurtir(Usuario.UsuarioId, post.PostId);
 
@@ -82,7 +82,7 @@ namespace App4.ViewModel
         }
 
 
-        private void AdicionaCurtidaNoPost(Post post, int posicao, bool curtidaHabilitada)
+        private void AdicionaCurtidaNoPost(PostModel post, int posicao, bool curtidaHabilitada)
         {
             if (curtidaHabilitada)
             {
@@ -100,7 +100,7 @@ namespace App4.ViewModel
         }
 
 
-        private int ObterPosicao(Post post)
+        private int ObterPosicao(PostModel post)
         {
             int posicao = -1;
             for (int i = 0; i < Posts.Count; i++)
@@ -115,7 +115,7 @@ namespace App4.ViewModel
             return posicao;
         }
 
-        public void InserirPost(Post post)
+        public void InserirPost(PostModel post)
         {
             Posts.Insert(0, post);
         }

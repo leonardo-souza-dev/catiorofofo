@@ -3,7 +3,7 @@ using System.IO;
 
 namespace App4.Model
 {
-    public class Post
+    public class PostModel
     {
         private Stream FotoStream { get; set; }
 
@@ -52,12 +52,12 @@ namespace App4.Model
             return enderecoBase;
         }
 
-        public Post(Stream stream)
+        public PostModel(Stream stream)
         {
             FotoStream = stream;
         }
 
-        public Post()
+        public PostModel()
         {
             Curtidas = new List<Curtida>();
         }

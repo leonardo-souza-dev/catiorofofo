@@ -47,7 +47,7 @@
     <Compile Include="Model\Resposta\RespostaSalvarPost.cs" />
     <Compile Include="Model\Resposta\RespostaUpload.cs" />
     <Compile Include="Model\Resposta\RespostaLogin.cs" />
-    <Compile Include="Model\Usuario.cs" />
+    <Compile Include="Model\UsuarioModel.cs" />
     <Compile Include="Repository\UsuarioRepository.cs" />
     <Compile Include="Repository\PostRepository.cs" />
     <Compile Include="ViewModel\UsuarioViewModel.cs" />
@@ -57,7 +57,7 @@
     <Compile Include="View\UploadViewCS.cs" />
     <Compile Include="View\ExpViewCS.cs" />
     <Compile Include="View\MainPage.cs" />
-    <Compile Include="Model\Post.cs" />
+    <Compile Include="Model\PostModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

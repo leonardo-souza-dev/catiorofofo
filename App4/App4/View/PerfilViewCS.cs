@@ -17,8 +17,8 @@ namespace App4.View
     {
         private PostViewModel PostViewModel;
         private UsuarioViewModel UsuarioViewModel;
-        public Usuario posts { get; set; }
-        private Usuario Usuario;
+        public UsuarioModel posts { get; set; }
+        private UsuarioModel Usuario;
         MediaFile File;
         Stream Stream = null;
 
@@ -44,56 +44,55 @@ namespace App4.View
         private StackLayout ObterConteudo(){
 
             bool modoEdicao = false;
-            var TituloLabel = new Label
+            var tituloLabel = new Label
             {
                 Text = "perfil",
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
                 VerticalOptions = LayoutOptions.CenterAndExpand
             };
-            var AvatarImage = new Image
+            var avatarImage = new Image
             {
                 WidthRequest = 30,
                 HeightRequest = 30,
                 IsEnabled = false
             };
-            var NomeUsuarioEntry = new Entry
+            var nomeUsuarioEntry = new Entry
             {
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 IsEnabled = false
             };
-            var EmailEntry = new Entry
+            var emailEntry = new Entry
             {
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 IsEnabled = false
             };
-            var CancelarButton = new Button
+            var cancelarButton = new Button
             {
                 FontSize = 10,
                 Text = "cancelar",
                 IsVisible = false
-
             };
-            var SalvarButton = new Button
+            var salvarButton = new Button
             {
                 FontSize = 10,
                 Text = "salva",
                 IsVisible = false
             };
-            var EditarButton = new Button
+            var editarButton = new Button
             {
                 FontSize = 10,
                 Text = "editar"
             };
 
-            AvatarImage.SetBinding(Image.SourceProperty, new Binding("AvatarUrl"));
-            NomeUsuarioEntry.SetBinding(Entry.TextProperty, new Binding("NomeUsuario"));
-            EmailEntry.SetBinding(Entry.TextProperty, new Binding("Email"));
+            avatarImage.SetBinding(Image.SourceProperty, new Binding("AvatarUrl"));
+            nomeUsuarioEntry.SetBinding(Entry.TextProperty, new Binding("NomeUsuario"));
+            emailEntry.SetBinding(Entry.TextProperty, new Binding("Email"));
 
             var tapGestureRecognizer = new TapGestureRecognizer();
             tapGestureRecognizer.Tapped += async (s, e) => {
-                // handle the tap
+                
                 if (modoEdicao)
                 {
                     if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsPickPhotoSupported)
@@ -110,31 +109,32 @@ namespace App4.View
                     if (File == null)
                         return;
 
-                    AvatarImage.Source = ImageSource.FromStream(ObterStream);
+                    avatarImage.Source = ImageSource.FromStream(ObterStream);
                 }
             };
-            AvatarImage.GestureRecognizers.Add(tapGestureRecognizer);
-            //AvatarImage.Focused += AvatarImage_Focused;
+            avatarImage.GestureRecognizers.Add(tapGestureRecognizer);
 
-            CancelarButton.Clicked += (object sender, EventArgs e) =>
+            cancelarButton.Clicked += (object sender, EventArgs e) =>
             {
-                NomeUsuarioEntry.IsEnabled = false;
-                EmailEntry.IsEnabled = false;
-                CancelarButton.IsVisible = false;
-                SalvarButton.IsVisible = false;
-                EditarButton.IsVisible = true;
+                nomeUsuarioEntry.IsEnabled = false;
+                emailEntry.IsEnabled = false;
+                cancelarButton.IsVisible = false;
+                salvarButton.IsVisible = false;
+                editarButton.IsVisible = true;
 
-                NomeUsuarioEntry.Text = NomeUsuarioValorInicial;
+                nomeUsuarioEntry.Text = NomeUsuarioValorInicial;
                 modoEdicao = false;
             };
-            SalvarButton.Clicked += async (object sender, EventArgs e) =>
+            salvarButton.Clicked += async (object sender, EventArgs e) =>
             {
                 
-                NomeUsuarioEntry.IsEnabled = false;
-                EmailEntry.IsEnabled = false;
-                CancelarButton.IsVisible = false;
-                SalvarButton.IsVisible = false;
-                EditarButton.IsVisible = true;
+                nomeUsuarioEntry.IsEnabled = false;
+                emailEntry.IsEnabled = false;
+                cancelarButton.IsVisible = false;
+                salvarButton.IsVisible = false;
+                editarButton.IsVisible = true;
+
+                Usuario.SetarAvatarStream(Stream);
 
                 var resultado = await UsuarioViewModel.AtualizarCadastro(Usuario);
                 switch (resultado)
@@ -146,35 +146,35 @@ namespace App4.View
                         break;
                     case RespostaStatus.JaExiste:
                         await DisplayAlert("ops", "ja existe nome de usuario", "volta lá");
-                        NomeUsuarioEntry.Focus();
+                        nomeUsuarioEntry.Focus();
                         break;
                 }
                 modoEdicao = false;
                 return;
             };
-            EditarButton.Clicked += (object sender, EventArgs e) =>
+            editarButton.Clicked += (object sender, EventArgs e) =>
             {
                 modoEdicao = true;
-                NomeUsuarioValorInicial = NomeUsuarioEntry.Text;
+                NomeUsuarioValorInicial = nomeUsuarioEntry.Text;
 
-                NomeUsuarioEntry.IsEnabled = true;
-                EmailEntry.IsEnabled = true;
-                CancelarButton.IsVisible = true;
-                SalvarButton.IsVisible = true;
-                EditarButton.IsVisible = false;
+                nomeUsuarioEntry.IsEnabled = true;
+                emailEntry.IsEnabled = true;
+                cancelarButton.IsVisible = true;
+                salvarButton.IsVisible = true;
+                editarButton.IsVisible = false;
             };
 
             return new StackLayout
             {
                 Padding = new Thickness(0, 10, 0, 0),
                 Children = {
-                    TituloLabel,
-                    AvatarImage,
-                    NomeUsuarioEntry,
-                    EmailEntry,
-                    CancelarButton,
-                    SalvarButton,
-                    EditarButton
+                    tituloLabel,
+                    avatarImage,
+                    nomeUsuarioEntry,
+                    emailEntry,
+                    cancelarButton,
+                    salvarButton,
+                    editarButton
                 }
             };
         }

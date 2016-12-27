@@ -10,7 +10,7 @@ namespace App4.View
         /// Construtor que recebe o id do usuário logado
         /// </summary>
         /// <param name="usuarioId">Id do usuário logado</param>
-        public MainPage(Usuario usuario, ConfiguracaoApp config)
+        public MainPage(UsuarioModel usuario, ConfiguracaoApp config)
         {
             var postViewModel = new PostViewModel(usuario, config);
             Children.Add(new ExpViewCS(postViewModel));

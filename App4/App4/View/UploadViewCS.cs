@@ -15,7 +15,7 @@ namespace App4.View
     public partial class UploadViewCS : ContentPage
     {
         private PostViewModel PostViewModel;
-        public ObservableCollection<Post> posts { get; set; }
+        public ObservableCollection<PostModel> posts { get; set; }
 
         Button AcharButton = new Button();
         Image FotoImage;
@@ -87,12 +87,12 @@ namespace App4.View
 
             PostarButton.Clicked += async (sender, args) =>
             {
-                Post post = new Post(Stream)
+                PostModel post = new PostModel(Stream)
                 {
                     Legenda = LegendaEntry.Text,
                     UsuarioId = PostViewModel.Usuario.UsuarioId
                 };
-                var postFinal = new Post();
+                var postFinal = new PostModel();
                 postFinal = await PostRepository.SalvarPost(post);
                 PostViewModel.InserirPost(postFinal);
                 var expViewCode = new ExpViewCS(PostViewModel);

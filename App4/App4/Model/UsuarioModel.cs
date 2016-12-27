@@ -1,9 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
+using System.IO;
 
 namespace App4.Model
 {
-    public class Usuario : INotifyPropertyChanged
+    public class UsuarioModel : INotifyPropertyChanged
     {
         public int UsuarioId { get; set; }
 
@@ -13,7 +14,11 @@ namespace App4.Model
         public string NomeArquivoAvatar { get; set; }
         public string NomeUsuario { get; set; }
 
-
+        private Stream AvatarStream { get; set; }
+        public void SetarAvatarStream(Stream stream)
+        {
+            AvatarStream = stream;
+        }
 
         public string AvatarUrl
         {
