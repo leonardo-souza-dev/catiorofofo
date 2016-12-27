@@ -12,6 +12,9 @@ namespace App4.Model
         internal string email;
 
         [DataMember]
-        internal string avatarUrl;
+        internal string nomeArquivoAvatar;
+
+        [DataMember]
+        internal string nomeUsuario;
     }
 }

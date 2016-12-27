@@ -1,4 +1,5 @@
 ﻿using App4.Model;
+using App4.Model.Resposta;
 using App4.Repository;
 using System;
 using System.Threading.Tasks;
@@ -32,6 +33,7 @@ namespace App4.ViewModel
                 case "JAEXISTE":
                     status = RespostaStatus.JaExiste;
                     break;
+                case "ERROGENERICO":
                 default:
                     status = RespostaStatus.ErroGenerico;
                     break;
@@ -40,12 +42,34 @@ namespace App4.ViewModel
             return status;
         }
 
-        public async Task<Usuario> CadastrarELogar(string email, string senha)
+        public async Task<Tuple<RespostaStatus,Usuario>> CadastrarELogar(string email, string senha)
         {
             Usuario usuario = new Usuario();
-            usuario = await UsuarioRepository.Cadastro(email, senha);
 
-            return usuario;
+            var nomeUsuario = email.Split('@')[0] +
+                DateTime.Now.ToString().Replace(" ", "")
+                .Replace("-", "").Replace(".", "")
+                .Replace(":", "").Replace("/", "")
+                .Replace("A", "").Replace("M", "").Replace("P", "");
+            //TODO:jogar essa regra de criacao automatica de nome de usuario para a web api
+
+            var resposta = await UsuarioRepository.Cadastro(email, senha, nomeUsuario);
+            var respostaStatus = RespostaStatus.Sucesso;
+
+            switch(resposta.mensagem.ToUpper())
+            {
+                case "SUCESSO":
+                    usuario.NomeArquivoAvatar = resposta.usuario.nomeArquivoAvatar;
+                    usuario.Email = resposta.usuario.email;
+                    usuario.NomeUsuario = resposta.usuario.nomeUsuario;
+                    usuario.UsuarioId = resposta.usuario.usuarioId;
+                    break;
+                case "JAEXISTE":
+                    respostaStatus = RespostaStatus.JaExiste;
+                    usuario = null;
+                    break;
+            }
+            return new Tuple<RespostaStatus, Usuario>(respostaStatus, usuario);
         }
 
         public async Task<Tuple<RespostaStatus,Usuario>> Login(string email, string senha)
@@ -62,7 +86,8 @@ namespace App4.ViewModel
                 Usuario usuario = new Usuario();
                 usuario.UsuarioId = resposta.usuario.usuarioId;
                 usuario.Email = resposta.usuario.email;
-                usuario.AvatarUrl = resposta.usuario.avatarUrl;
+                usuario.NomeArquivoAvatar = resposta.usuario.nomeArquivoAvatar;
+                usuario.NomeUsuario = resposta.usuario.nomeUsuario;
 
                 return new Tuple<RespostaStatus, Usuario>(RespostaStatus.Sucesso, usuario);
             }

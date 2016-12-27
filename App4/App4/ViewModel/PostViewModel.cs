@@ -4,30 +4,32 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Linq;
+using App4.Model.Resposta;
 
 namespace App4.ViewModel
 {
     public class PostViewModel
     {
         public ObservableCollection<Post> Posts { get; set; } = new ObservableCollection<Post>();
-        public int UsuarioId;
+        //public int UsuarioId;
+        public Usuario Usuario;
 
         /// <summary>
         /// Construtor que recebe o id do usuário logado ou recém-cadastrado
         /// </summary>
         /// <param name="usuarioId">Id do usuário logado ou recém-cadastrado</param>
-        public PostViewModel(int usuarioId, ConfiguracaoApp config)
+        public PostViewModel(Usuario usuario, ConfiguracaoApp config)
         {
             PostRepository.SetarConfiguracao(config);
-            UsuarioId = usuarioId;
-            ObterPosts(usuarioId);
+            Usuario = usuario;
+            ObterPosts();
         }
 
-        public async void ObterPosts(int usuarioId)
+        public async void ObterPosts()
         {
             var listaPosts = new List<Post>();
 
-            listaPosts = await PostRepository.ObterPosts(usuarioId);
+            listaPosts = await PostRepository.ObterPosts();
             for (int index = 0; index < listaPosts.Count; index++)
             {
                 var item = listaPosts[index];
@@ -35,7 +37,7 @@ namespace App4.ViewModel
                 {
                     foreach (var curtida in item.Curtidas)
                     {
-                        if (curtida.UsuarioId == usuarioId)
+                        if (curtida.UsuarioId == Usuario.UsuarioId)
                         {
                             item.CurtidaHabilitada = false;
                         }
@@ -48,7 +50,7 @@ namespace App4.ViewModel
 
         public async Task<RespostaStatus> Curtir(Post post)
         {
-            var resposta = await PostRepository.Curtir(UsuarioId, post.PostId);
+            var resposta = await PostRepository.Curtir(Usuario.UsuarioId, post.PostId);
 
             int posicao = ObterPosicao(post);
 
@@ -65,7 +67,7 @@ namespace App4.ViewModel
 
         public async Task<RespostaStatus> Descurtir(Post post)
         {
-            var resposta = await PostRepository.Descurtir(UsuarioId, post.PostId);
+            var resposta = await PostRepository.Descurtir(Usuario.UsuarioId, post.PostId);
 
             int posicao = ObterPosicao(post);
 
@@ -84,11 +86,11 @@ namespace App4.ViewModel
         {
             if (curtidaHabilitada)
             {
-                post.Curtidas.Remove(post.Curtidas.FirstOrDefault(x => x.UsuarioId == UsuarioId));
+                post.Curtidas.Remove(post.Curtidas.FirstOrDefault(x => x.UsuarioId == Usuario.UsuarioId));
             }
             else
             {
-                post.Curtidas.Add(new Curtida { UsuarioId = UsuarioId, PostId = post.PostId });
+                post.Curtidas.Add(new Curtida { UsuarioId = Usuario.UsuarioId, PostId = post.PostId });
             }
             
             post.CurtidaHabilitada = curtidaHabilitada;

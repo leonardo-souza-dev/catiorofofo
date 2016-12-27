@@ -35,20 +35,19 @@ namespace App4.Repository
             return resposta;
         }
 
-        public static async Task<Usuario> Cadastro(string emailDigitado, string senhaDigitada)
+        public static async Task<RespostaCadastro> Cadastro(string emailDigitado, string senhaDigitada, string nomeUsuarioDigitado)
         {
-            var resposta = await Resposta<RespostaCadastro>(new { email = emailDigitado, senha = senhaDigitada }, "cadastro");
-            usuario = new Usuario();
-            usuario.Email = resposta.usuario.email;
-            usuario.UsuarioId = resposta.usuario.usuarioId;
+            var resposta = await Resposta<RespostaCadastro>(new { email = emailDigitado, senha = senhaDigitada, nomeUsuario = nomeUsuarioDigitado }, "cadastro");
+            //usuario = new Usuario();
+            //usuario.Email = resposta.usuario.email;
+            //usuario.UsuarioId = resposta.usuario.usuarioId;
 
-            return usuario;
+            return resposta;
         }
 
         public static async Task<RespostaLogin> Login(string emailDigitado, string senhaDigitada)
         {
             var resposta = await Resposta<RespostaLogin>(new { email = emailDigitado, senha = senhaDigitada }, "login");
-            resposta.usuario.avatarUrl = @"http://icon-icons.com/icons2/108/PNG/128/males_male_avatar_man_people_faces_18362.png";
             return resposta;
         }
 

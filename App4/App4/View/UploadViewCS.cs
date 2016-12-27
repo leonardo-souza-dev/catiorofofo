@@ -90,7 +90,7 @@ namespace App4.View
                 Post post = new Post(Stream)
                 {
                     Legenda = LegendaEntry.Text,
-                    UsuarioId = PostViewModel.UsuarioId
+                    UsuarioId = PostViewModel.Usuario.UsuarioId
                 };
                 var postFinal = new Post();
                 postFinal = await PostRepository.SalvarPost(post);

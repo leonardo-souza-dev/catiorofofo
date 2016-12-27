@@ -21,9 +21,9 @@ namespace App4.Repository
             UrlBaseWebApi = Config.ObterUrlBaseWebApi();
         }
 
-        public static async Task<List<Post>> ObterPosts(int usuarioIdPassado)
+        public static async Task<List<Post>> ObterPosts()
         {
-            var listaRespPosts = await Resposta<List<RespostaPost>>(new { usuarioId = usuarioIdPassado }, "obterposts");
+            var listaRespPosts = await Resposta<List<RespostaPost>>(null, "obterposts");
 
             ListaPosts = new List<Post>();
 
@@ -64,37 +64,28 @@ namespace App4.Repository
         private static async Task<T> Resposta<T>(object conteudo, string metodo, bool ehDownload = false)
         {
             var httpClient = new HttpClient();
-            var json = JsonConvert.SerializeObject(conteudo);
-            var contentPost = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await httpClient.PostAsync(UrlBaseWebApi + "api/" + metodo, contentPost);
-            var stream = await response.Content.ReadAsStreamAsync();
-            var ser = new DataContractJsonSerializer(typeof(T));
-            stream.Position = 0;
-            T t = (T)ser.ReadObject(stream);
 
-            return t;
+            if (conteudo != null)
+            {
+                var json = JsonConvert.SerializeObject(conteudo);
+                var contentPost = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await httpClient.PostAsync(UrlBaseWebApi + "api/" + metodo, contentPost);
+                var stream = await response.Content.ReadAsStreamAsync();
+                var ser = new DataContractJsonSerializer(typeof(T));
+                stream.Position = 0;
+                T t = (T)ser.ReadObject(stream);
+                return t;
+            }
+            else
+            {
+                var response = await httpClient.GetAsync(UrlBaseWebApi + "api/" + metodo);
+                var stream = await response.Content.ReadAsStreamAsync();
+                var ser = new DataContractJsonSerializer(typeof(T));
+                stream.Position = 0;
+                T t = (T)ser.ReadObject(stream);
+                return t;
+            }
         }
-
-        //private static string ObterUrlBaseWebApi()
-        //{
-        //    bool usarCloud = false;
-        //    bool debugarAndroid = true;
-
-        //    string enderecoBase = string.Empty;
-
-        //    if (usarCloud)
-        //        enderecoBase = "https://cfwebapi.herokuapp.com/";
-        //    else
-        //    {
-        //        enderecoBase += "http://";
-        //        if (debugarAndroid)
-        //            enderecoBase += "10.0.2.2";
-        //        else
-        //            enderecoBase += "localhost";
-        //        enderecoBase += ":8084/";
-        //    }
-        //    return enderecoBase;
-        //}
 
         public static async Task<Post> SalvarPost(Post post)
         {   

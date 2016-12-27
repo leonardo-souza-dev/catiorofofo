@@ -1,4 +1,5 @@
 ﻿using App4.Model;
+using App4.Model.Resposta;
 using App4.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -139,11 +140,11 @@ namespace App4.View
             string email = EmailEntry.Text;
             string senha = SenhaEntry.Text;
 
-            Usuario usuario = await UsuarioViewModel.CadastrarELogar(email, senha);
+            var resposta = await UsuarioViewModel.CadastrarELogar(email, senha);
 
-            if (usuario.UsuarioId > 0)
+            if (resposta != null && resposta.Item1 == RespostaStatus.Sucesso)
             {
-                var mainPage = new MainPage(usuario.UsuarioId, Config);
+                var mainPage = new MainPage(resposta.Item2, Config);
                 await Navigation.PushModalAsync(mainPage);
             }
         }
@@ -175,7 +176,7 @@ namespace App4.View
             switch(resultado.Item1)
             {
                 case RespostaStatus.Sucesso:
-                    var mainPage = new MainPage(resultado.Item2.UsuarioId, Config);
+                    var mainPage = new MainPage(resultado.Item2, Config);
                     await Navigation.PushModalAsync(mainPage);
                     break;
                 case RespostaStatus.Inexistente:

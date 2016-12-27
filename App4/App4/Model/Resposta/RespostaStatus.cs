@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace App4.Model
+namespace App4.Model.Resposta
 {
     public enum RespostaStatus
     {

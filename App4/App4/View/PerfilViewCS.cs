@@ -1,4 +1,5 @@
 ﻿using App4.Model;
+using App4.Model.Resposta;
 using App4.Repository;
 using App4.ViewModel;
 
@@ -18,64 +19,59 @@ namespace App4.View
         private UsuarioViewModel UsuarioViewModel;
         public Usuario posts { get; set; }
         private Usuario Usuario;
+        MediaFile File;
+        Stream Stream = null;
 
         string NomeUsuarioValorInicial;
 
         public PerfilViewCS(PostViewModel postViewModel, ConfiguracaoApp config)
         {
             UsuarioViewModel = new UsuarioViewModel(config);
+
             PostViewModel = postViewModel;
 
             Title = "perfil";
 
             CrossMedia.Current.Initialize();
-            Usuario = new Usuario
-            {
-                AvatarUrl = @"http://icon-icons.com/icons2/108/PNG/128/males_male_avatar_man_people_faces_18362.png",
-                Email = "asdasdasd@asdasd.xom",
-                NomeUsuario = "rex"
-            };
 
-            BindingContext = Usuario;
-                
+            Usuario = postViewModel.Usuario;
+
+            BindingContext = Usuario;                
 
             Content = ObterConteudo();
         }
 
         private StackLayout ObterConteudo(){
+
+            bool modoEdicao = false;
             var TituloLabel = new Label
             {
                 Text = "perfil",
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
-                //Margin = new Thickness(5, 5, 5, 5),
                 VerticalOptions = LayoutOptions.CenterAndExpand
             };
             var AvatarImage = new Image
             {
                 WidthRequest = 30,
                 HeightRequest = 30,
-                //Margin = new Thickness(5, 5, 5, 5),
                 IsEnabled = false
             };
             var NomeUsuarioEntry = new Entry
             {
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
                 VerticalOptions = LayoutOptions.CenterAndExpand,
-                //Margin = new Thickness(5, 5, 5, 5),
                 IsEnabled = false
             };
             var EmailEntry = new Entry
             {
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
                 VerticalOptions = LayoutOptions.CenterAndExpand,
-                //Margin = new Thickness(5, 5, 5, 5),
                 IsEnabled = false
             };
             var CancelarButton = new Button
             {
                 FontSize = 10,
                 Text = "cancelar",
-                //Margin = new Thickness(5, 5, 5, 5),
                 IsVisible = false
 
             };
@@ -83,19 +79,42 @@ namespace App4.View
             {
                 FontSize = 10,
                 Text = "salva",
-                //Margin = new Thickness(5, 5, 5, 5),
                 IsVisible = false
             };
             var EditarButton = new Button
             {
                 FontSize = 10,
                 Text = "editar"
-                //,Margin = new Thickness(5, 5, 5, 5)
             };
 
             AvatarImage.SetBinding(Image.SourceProperty, new Binding("AvatarUrl"));
             NomeUsuarioEntry.SetBinding(Entry.TextProperty, new Binding("NomeUsuario"));
             EmailEntry.SetBinding(Entry.TextProperty, new Binding("Email"));
+
+            var tapGestureRecognizer = new TapGestureRecognizer();
+            tapGestureRecognizer.Tapped += async (s, e) => {
+                // handle the tap
+                if (modoEdicao)
+                {
+                    if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsPickPhotoSupported)
+                    {
+                        await DisplayAlert("No Camera", ":( No camera avaialble.", "OK");
+                        return;
+                    }
+
+                    File = await CrossMedia.Current.PickPhotoAsync(new PickMediaOptions()
+                    {
+                        CompressionQuality = 50
+                    });
+
+                    if (File == null)
+                        return;
+
+                    AvatarImage.Source = ImageSource.FromStream(ObterStream);
+                }
+            };
+            AvatarImage.GestureRecognizers.Add(tapGestureRecognizer);
+            //AvatarImage.Focused += AvatarImage_Focused;
 
             CancelarButton.Clicked += (object sender, EventArgs e) =>
             {
@@ -106,17 +125,19 @@ namespace App4.View
                 EditarButton.IsVisible = true;
 
                 NomeUsuarioEntry.Text = NomeUsuarioValorInicial;
+                modoEdicao = false;
             };
             SalvarButton.Clicked += async (object sender, EventArgs e) =>
             {
+                
                 NomeUsuarioEntry.IsEnabled = false;
                 EmailEntry.IsEnabled = false;
                 CancelarButton.IsVisible = false;
                 SalvarButton.IsVisible = false;
                 EditarButton.IsVisible = true;
 
-                var resultado2 = await UsuarioViewModel.AtualizarCadastro(Usuario);
-                switch (resultado2)
+                var resultado = await UsuarioViewModel.AtualizarCadastro(Usuario);
+                switch (resultado)
                 {
                     case RespostaStatus.Sucesso:
                         break;
@@ -125,13 +146,15 @@ namespace App4.View
                         break;
                     case RespostaStatus.JaExiste:
                         await DisplayAlert("ops", "ja existe nome de usuario", "volta lá");
-                        EmailEntry.Focus();
+                        NomeUsuarioEntry.Focus();
                         break;
                 }
+                modoEdicao = false;
                 return;
             };
             EditarButton.Clicked += (object sender, EventArgs e) =>
             {
+                modoEdicao = true;
                 NomeUsuarioValorInicial = NomeUsuarioEntry.Text;
 
                 NomeUsuarioEntry.IsEnabled = true;
@@ -155,6 +178,15 @@ namespace App4.View
                 }
             };
         }
-        
+
+        private Stream ObterStream()
+        {
+            Stream stream = File.GetStream();
+            Stream = File.GetStream();
+            File.Dispose();
+
+            return stream;
+        }
+
     }
 }
