@@ -23,11 +23,29 @@ namespace App4.Repository
 
         public static async Task<RespostaAtualizarUsuario> Atualizar(UsuarioModel usuario)
         {
+            //upload da foto
+            var urlUpload = UrlBaseWebApi + "api/uploadavatar";
+            byte[] byteArray = usuario.ObterByteArrayAvatar();
+
+            var requestContent = new MultipartFormDataContent();
+            var imageContent = new ByteArrayContent(byteArray);
+            imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
+            requestContent.Add(imageContent, "av", usuario.UsuarioId.ToString().PadLeft(6, '0') + ".jpg");
+            requestContent.Add(new StringContent(usuario.UsuarioId.ToString()), "usuarioId");
+
+            var client = new HttpClient();
+            var response = await client.PostAsync(urlUpload, requestContent);
+            var stream = await response.Content.ReadAsStreamAsync();
+            var ser = new DataContractJsonSerializer(typeof(RespostaUpload));
+            stream.Position = 0;
+            var respostaUpload = (RespostaUpload)ser.ReadObject(stream);
+
             var resposta = await Resposta<RespostaAtualizarUsuario>(
                 new {
                     nomeUsuario = usuario.NomeUsuario,
                     usuarioId = usuario.UsuarioId,
-                    email = usuario.Email
+                    email = usuario.Email,
+                    nomeArquivoAvatar = respostaUpload.nomeArquivo
                 }, 
                 "atualizarusuario");
 

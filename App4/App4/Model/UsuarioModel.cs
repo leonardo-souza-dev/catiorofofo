@@ -39,6 +39,15 @@ namespace App4.Model
             }
         }
 
+        public byte[] ObterByteArrayAvatar()
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                AvatarStream.CopyTo(ms);
+                return ms.ToArray();
+            }
+        }
+
         private static string ObterUrlBaseWebApi()
         {
             bool usarCloud = false;
