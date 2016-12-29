@@ -13,7 +13,19 @@ namespace App4.Model
 
         public int UsuarioId { get; set; }
 
+        public UsuarioModel Usuario { get; set; }
+
+        public string AvatarUrl
+        {
+            get
+            {
+                return ObterUrlBaseWebApi() + "api/foto?na=" + NomeArquivoAvatar;
+            }
+        }
+
         public string NomeArquivo { get; set; }
+
+        public string NomeArquivoAvatar { get; set; }
 
         public bool CurtidaHabilitada { get; set; } = true;
 
@@ -21,7 +33,7 @@ namespace App4.Model
 
         public int NumCurtidas { get { return Curtidas.Count; } }
 
-        public List<Curtida> Curtidas { get; set; }
+        public List<CurtidaModel> Curtidas { get; set; }
 
         public string FotoUrl
         {
@@ -59,7 +71,7 @@ namespace App4.Model
 
         public PostModel()
         {
-            Curtidas = new List<Curtida>();
+            Curtidas = new List<CurtidaModel>();
         }
 
         public byte[] ObterByteArrayFoto()
@@ -70,11 +82,5 @@ namespace App4.Model
                 return ms.ToArray();
             }
         }
-    }
-
-    public class Curtida
-    {
-        public int PostId { get; set; }
-        public int UsuarioId { get; set; }
     }
 }

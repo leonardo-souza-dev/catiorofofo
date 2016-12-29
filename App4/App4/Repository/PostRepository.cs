@@ -23,24 +23,33 @@ namespace App4.Repository
 
         public static async Task<List<PostModel>> ObterPosts()
         {
-            var listaRespPosts = await Resposta<List<RespostaPost>>(null, "obterposts");
+            var respostaPosts = await Resposta<List<RespostaPost>>(null, "obterposts");
 
             ListaPosts = new List<PostModel>();
 
-            foreach (var item in listaRespPosts)
+            foreach (var respostaPost in respostaPosts)
             {
-                List<Curtida> curtidas = new List<Curtida>();
+                List<CurtidaModel> curtidas = new List<CurtidaModel>();
+
+                UsuarioModel usuario = new UsuarioModel();
+                usuario.NomeArquivoAvatar = respostaPost.usuario.nomeArquivoAvatar;
+                usuario.UsuarioId = respostaPost.usuario.usuarioId;
+                usuario.Email = respostaPost.usuario.email;
+                usuario.NomeUsuario = respostaPost.usuario.nomeUsuario;
+
+
                 PostModel post = new PostModel()
                 {
-                    PostId = item.postId,
-                    Legenda = item.legenda,
-                    UsuarioId = item.usuarioId,
-                    NomeArquivo = item.nomeArquivo,
-                    Curtidas = curtidas
+                    PostId = respostaPost.postId,
+                    Legenda = respostaPost.legenda,
+                    UsuarioId = respostaPost.usuarioId,
+                    NomeArquivo = respostaPost.nomeArquivo,
+                    Curtidas = curtidas,
+                    Usuario = usuario
                 };
-                foreach (var c in item.curtidas )
+                foreach (var c in respostaPost.curtidas )
                 {
-                    curtidas.Add(new Curtida { UsuarioId = c.usuarioId, PostId = c.postId });
+                    curtidas.Add(new CurtidaModel { UsuarioId = c.usuarioId, PostId = c.postId });
                 }
                 ListaPosts.Add(post);
             }

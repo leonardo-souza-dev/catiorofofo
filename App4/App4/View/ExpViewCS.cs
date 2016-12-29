@@ -26,7 +26,12 @@ namespace App4.View
 
                 var fotoImage = new Image { Margin = new Thickness(5, 15, 5, 5), VerticalOptions = LayoutOptions.CenterAndExpand };
 
-                var avatarImage = new Image { Margin = new Thickness(5, 5, 5, 5) };
+                var avatarImage = new Image
+                {
+                    Margin = new Thickness(5, 5, 5, 5),
+                    WidthRequest = 30,
+                    HeightRequest = 30,
+                };
                 var descricaoLabel = new Label { FontSize = 14 };
                 var avatarDescricaoStackLayout = new StackLayout
                 {
@@ -113,57 +118,5 @@ namespace App4.View
 
             public double AspectRatio { get; set; }
         }
-
-        //public class CustomPostCell : ViewCell
-        //{
-        //    public CustomPostCell()
-        //    {
-        //        var fotoImage = new Image { Margin = new Thickness(5, 15, 5, 5), VerticalOptions = LayoutOptions.CenterAndExpand };
-
-        //        var avatarImage = new Image { Margin = new Thickness(5, 5, 5, 5) };
-        //        var descricaoLabel = new Label { FontSize = 14 };
-        //        var avatarDescricaoStackLayout = new StackLayout
-        //        {
-        //            Padding = new Thickness(0, 0, 0, 0),
-        //            Orientation = StackOrientation.Horizontal,
-        //            Margin = 0,
-        //            Children = { avatarImage, descricaoLabel }
-        //        };
-
-        //        var curtirButton = new Button { FontSize = 10, Text = "curtir", Margin = new Thickness(5, 5, 5, 5) };
-        //        var numCurtidasLabel = new Label { FontSize = 10, Text = "22", Margin = new Thickness(5, 5, 5, 5) };
-        //        var compartilharButton = new Button { FontSize = 10, Text = "compartilhar", Margin = new Thickness(5, 5, 5, 5) };
-        //        var curtirNumCurtidasStackLayout = new StackLayout()
-        //        {
-        //            Padding = new Thickness(0, 0, 0, 0),
-        //            Orientation = StackOrientation.Horizontal,
-        //            Margin = 0,
-        //            Children = { curtirButton, numCurtidasLabel, compartilharButton }
-        //        };
-
-
-        //        var principalLayout = new StackLayout()
-        //        {
-        //            Padding = new Thickness(0, 0, 0, 0),
-        //            Orientation = StackOrientation.Vertical,
-        //            HorizontalOptions = new LayoutOptions { Alignment = LayoutAlignment.Center },
-        //            Margin = 0,
-        //            Children =
-        //                {
-        //                    fotoImage,
-        //                    avatarDescricaoStackLayout,
-        //                    curtirNumCurtidasStackLayout
-        //                }
-        //        };
-
-        //        fotoImage.SetBinding(Image.SourceProperty, new Binding("FotoUrl"));
-        //        avatarImage.SetBinding(Image.SourceProperty, new Binding("AvatarUrl"));
-        //        descricaoLabel.SetBinding(Label.TextProperty, new Binding("Legenda"));
-
-        //        //curtirButton.Clicked += CurtirButton_Clicked;
-
-        //        View = principalLayout;
-        //    }
-        //}
     }
 }

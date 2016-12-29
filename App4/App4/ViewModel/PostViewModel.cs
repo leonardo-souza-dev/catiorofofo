@@ -11,7 +11,6 @@ namespace App4.ViewModel
     public class PostViewModel
     {
         public ObservableCollection<PostModel> Posts { get; set; } = new ObservableCollection<PostModel>();
-        //public int UsuarioId;
         public UsuarioModel Usuario;
 
         /// <summary>
@@ -42,6 +41,7 @@ namespace App4.ViewModel
                             item.CurtidaHabilitada = false;
                         }
                     }
+                    item.NomeArquivoAvatar = item.Usuario.NomeArquivoAvatar;
                     Posts.Insert(index, item);
                 }
             }
@@ -90,7 +90,7 @@ namespace App4.ViewModel
             }
             else
             {
-                post.Curtidas.Add(new Curtida { UsuarioId = Usuario.UsuarioId, PostId = post.PostId });
+                post.Curtidas.Add(new CurtidaModel { UsuarioId = Usuario.UsuarioId, PostId = post.PostId });
             }
             
             post.CurtidaHabilitada = curtidaHabilitada;

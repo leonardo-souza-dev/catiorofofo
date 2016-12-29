@@ -16,7 +16,13 @@ namespace App4.Model
         internal int usuarioId;
 
         [DataMember]
+        internal RespostaUsuario usuario;
+
+        [DataMember]
         internal string nomeArquivo;
+
+        [DataMember]
+        internal string avatarUrl;
 
         [DataMember]
         internal List<RespostaCurtida> curtidas;

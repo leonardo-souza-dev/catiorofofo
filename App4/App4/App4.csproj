@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
+    <Compile Include="Model\CurtidaModel.cs" />
     <Compile Include="Model\Resposta\RespostaStatus.cs" />
     <Compile Include="Model\Resposta\RespostaAtualizarUsuario.cs" />
     <Compile Include="Model\Resposta\RespostaCurtir.cs" />
