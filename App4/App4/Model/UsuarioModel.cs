@@ -15,6 +15,11 @@ namespace App4.Model
         public string NomeUsuario { get; set; }
 
         private Stream AvatarStream { get; set; }
+
+        public bool EditouAvatar()
+        {
+            return AvatarStream != null;
+        }
         public void SetarAvatarStream(Stream stream)
         {
             AvatarStream = stream;

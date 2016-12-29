@@ -8,8 +8,6 @@ namespace App4.ViewModel
 {
     public class UsuarioViewModel
     {
-        //public Usuario Usuario { get; set; } = new Usuario();
-
         public bool LoginSucesso;
 
         public UsuarioViewModel(ConfiguracaoApp config)

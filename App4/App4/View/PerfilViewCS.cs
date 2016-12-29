@@ -17,15 +17,15 @@ namespace App4.View
     {
         private PostViewModel PostViewModel;
         private UsuarioViewModel UsuarioViewModel;
-        public UsuarioModel posts { get; set; }
         private UsuarioModel Usuario;
         MediaFile File;
         Stream Stream = null;
+        bool EditouAvatar;
 
         string NomeUsuarioValorInicial;
 
         public PerfilViewCS(PostViewModel postViewModel, ConfiguracaoApp config)
-        {
+        {            
             UsuarioViewModel = new UsuarioViewModel(config);
 
             PostViewModel = postViewModel;
@@ -109,6 +109,7 @@ namespace App4.View
                     if (File == null)
                         return;
 
+                    EditouAvatar = true;
                     avatarImage.Source = ImageSource.FromStream(ObterStream);
                 }
             };
@@ -134,7 +135,10 @@ namespace App4.View
                 salvarButton.IsVisible = false;
                 editarButton.IsVisible = true;
 
-                Usuario.SetarAvatarStream(Stream);
+                if (EditouAvatar)
+                {
+                    Usuario.SetarAvatarStream(Stream);
+                }
 
                 var resultado = await UsuarioViewModel.AtualizarCadastro(Usuario);
                 switch (resultado)

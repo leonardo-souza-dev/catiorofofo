@@ -10,6 +10,11 @@ using System.Diagnostics;
 
 namespace App4.Repository
 {
+    public abstract class Repository
+    {
+        public abstract void SetarConfiguracao(ConfiguracaoApp config);
+    }
+
     public static class UsuarioRepository
     {
         private static ConfiguracaoApp Config;
@@ -23,33 +28,46 @@ namespace App4.Repository
 
         public static async Task<RespostaAtualizarUsuario> Atualizar(UsuarioModel usuario)
         {
-            //upload da foto
-            var urlUpload = UrlBaseWebApi + "api/uploadavatar";
-            byte[] byteArray = usuario.ObterByteArrayAvatar();
+            if (usuario.EditouAvatar())
+            {
+                //upload da foto
+                var urlUpload = UrlBaseWebApi + "api/uploadavatar";
+                byte[] byteArray = usuario.ObterByteArrayAvatar();
 
-            var requestContent = new MultipartFormDataContent();
-            var imageContent = new ByteArrayContent(byteArray);
-            imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
-            requestContent.Add(imageContent, "av", usuario.UsuarioId.ToString().PadLeft(6, '0') + ".jpg");
-            requestContent.Add(new StringContent(usuario.UsuarioId.ToString()), "usuarioId");
+                var requestContent = new MultipartFormDataContent();
+                var imageContent = new ByteArrayContent(byteArray);
+                imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
+                requestContent.Add(imageContent, "av", usuario.UsuarioId.ToString().PadLeft(6, '0') + ".jpg");
+                requestContent.Add(new StringContent(usuario.UsuarioId.ToString()), "usuarioId");
 
-            var client = new HttpClient();
-            var response = await client.PostAsync(urlUpload, requestContent);
-            var stream = await response.Content.ReadAsStreamAsync();
-            var ser = new DataContractJsonSerializer(typeof(RespostaUpload));
-            stream.Position = 0;
-            var respostaUpload = (RespostaUpload)ser.ReadObject(stream);
-
-            var resposta = await Resposta<RespostaAtualizarUsuario>(
-                new {
+                var client = new HttpClient();
+                var response = await client.PostAsync(urlUpload, requestContent);
+                var stream = await response.Content.ReadAsStreamAsync();
+                var ser = new DataContractJsonSerializer(typeof(RespostaUpload));
+                stream.Position = 0;
+                var respostaUpload = (RespostaUpload)ser.ReadObject(stream);
+                var request = new
+                {
                     nomeUsuario = usuario.NomeUsuario,
                     usuarioId = usuario.UsuarioId,
                     email = usuario.Email,
                     nomeArquivoAvatar = respostaUpload.nomeArquivo
-                }, 
-                "atualizarusuario");
+                };
+                var resposta = await Resposta<RespostaAtualizarUsuario>(request, "atualizarusuario");
+                return resposta;
+            }
+            else
+            {
+                var request = new
+                {
+                    nomeUsuario = usuario.NomeUsuario,
+                    usuarioId = usuario.UsuarioId,
+                    email = usuario.Email
+                };
+                var resposta = await Resposta<RespostaAtualizarUsuario>(request, "atualizarusuario");
+                return resposta;
+            }
 
-            return resposta;
         }
 
         public static async Task<RespostaCadastro> Cadastro(string emailDigitado, string senhaDigitada, string nomeUsuarioDigitado)
