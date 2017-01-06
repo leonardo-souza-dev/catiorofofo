@@ -10,11 +10,6 @@ namespace App4.ViewModel
     {
         public bool LoginSucesso;
 
-        public UsuarioViewModel(ConfiguracaoApp config)
-        {
-            UsuarioRepository.SetarConfiguracao(config);
-        }
-
         public async Task<RespostaStatus> AtualizarCadastro(UsuarioModel usuario)
         {
             var resposta2 = await UsuarioRepository.Atualizar(usuario);

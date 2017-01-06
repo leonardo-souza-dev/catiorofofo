@@ -17,9 +17,8 @@ namespace App4.ViewModel
         /// Construtor que recebe o id do usuário logado ou recém-cadastrado
         /// </summary>
         /// <param name="usuarioId">Id do usuário logado ou recém-cadastrado</param>
-        public PostViewModel(UsuarioModel usuario, ConfiguracaoApp config)
+        public PostViewModel(UsuarioModel usuario)
         {
-            PostRepository.SetarConfiguracao(config);
             Usuario = usuario;
             ObterPosts();
         }

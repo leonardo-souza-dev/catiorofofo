@@ -12,14 +12,12 @@ namespace App4.Repository
     public static class PostRepository
     {
         private static List<PostModel> ListaPosts;
-        private static ConfiguracaoApp Config;
-        private static string UrlBaseWebApi;
+        //private static string UrlBaseWebApi;
 
-        public static void SetarConfiguracao(ConfiguracaoApp config)
-        {
-            Config = config;
-            UrlBaseWebApi = Config.ObterUrlBaseWebApi();
-        }
+        //public static void SetarConfiguracao()
+        //{
+        //    UrlBaseWebApi = Configuracao2.UrlWebApi;
+        //}
 
         public static async Task<List<PostModel>> ObterPosts()
         {
@@ -78,7 +76,7 @@ namespace App4.Repository
             {
                 var json = JsonConvert.SerializeObject(conteudo);
                 var contentPost = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await httpClient.PostAsync(UrlBaseWebApi + "api/" + metodo, contentPost);
+                var response = await httpClient.PostAsync(Configuracao2.UrlWebApi + "api/" + metodo, contentPost);
                 var stream = await response.Content.ReadAsStreamAsync();
                 var ser = new DataContractJsonSerializer(typeof(T));
                 stream.Position = 0;
@@ -87,7 +85,7 @@ namespace App4.Repository
             }
             else
             {
-                var response = await httpClient.GetAsync(UrlBaseWebApi + "api/" + metodo);
+                var response = await httpClient.GetAsync(Configuracao2.UrlWebApi + "api/" + metodo);
                 var stream = await response.Content.ReadAsStreamAsync();
                 var ser = new DataContractJsonSerializer(typeof(T));
                 stream.Position = 0;
@@ -99,7 +97,7 @@ namespace App4.Repository
         public static async Task<PostModel> SalvarPost(PostModel post)
         {   
             //upload da foto
-            var urlUpload = UrlBaseWebApi + "api/uploadfoto";
+            var urlUpload = Configuracao2.UrlWebApi + "api/uploadfoto";
             byte[] byteArray = post.ObterByteArrayFoto();
 
             var requestContent = new MultipartFormDataContent();
@@ -122,7 +120,7 @@ namespace App4.Repository
             var json = JsonConvert.SerializeObject(postFinal);
             var contentPost = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response3 = await client.PostAsync(UrlBaseWebApi + "api/salvarpost", contentPost);
+            var response3 = await client.PostAsync(Configuracao2.UrlWebApi + "api/salvarpost", contentPost);
             var stream3 = await response3.Content.ReadAsStreamAsync();
 
             var ser3 = new DataContractJsonSerializer(typeof(RespostaSalvarPost));

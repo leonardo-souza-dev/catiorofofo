@@ -8,33 +8,42 @@ namespace App4
     {
         public App()
         {
-            ConfiguracaoApp config = new ConfiguracaoApp();
-            MainPage = new LoginViewCS(config);
+            //ConfiguracaoApp config = new ConfiguracaoApp();
+            MainPage = new LoginViewCS();
         }
     }
 
-    public class ConfiguracaoApp
+    //public class ConfiguracaoApp
+    //{
+    //    bool DebugarAndroid = false;
+    //    bool UsarCloud = true;
+
+    //    public string ObterUrlBaseWebApi()
+    //    {
+
+    //        string enderecoBase = string.Empty;
+
+    //        if (UsarCloud)
+    //            enderecoBase = "https://cfwebapi.herokuapp.com/";
+    //        else
+    //        {
+    //            enderecoBase += "http://";
+    //            if (DebugarAndroid)
+    //                enderecoBase += "10.0.2.2";
+    //            else
+    //                enderecoBase += "localhost";
+    //            enderecoBase += ":8084/";
+    //        }
+    //        return enderecoBase;
+    //    }
+    //}
+
+    public static class Configuracao2
     {
-        bool DebugarAndroid = false;
-        bool UsarCloud = false;
+        private static string UrlLocalAndroid = "http://10.0.2.2:8084/";
+        private static string UrlLocalWindows = "http://localhost:8084/";
+        private static string UrlCloud = "https://cfwebapi.herokuapp.com/";
 
-        public string ObterUrlBaseWebApi()
-        {
-
-            string enderecoBase = string.Empty;
-
-            if (UsarCloud)
-                enderecoBase = "https://cfwebapi.herokuapp.com/";
-            else
-            {
-                enderecoBase += "http://";
-                if (DebugarAndroid)
-                    enderecoBase += "10.0.2.2";
-                else
-                    enderecoBase += "localhost";
-                enderecoBase += ":8084/";
-            }
-            return enderecoBase;
-        }
+        public static string UrlWebApi = UrlCloud;
     }
 }

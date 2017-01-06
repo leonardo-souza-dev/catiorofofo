@@ -29,7 +29,7 @@ namespace App4.Model
         {
             get
             {
-                return ObterUrlBaseWebApi() + "api/foto?na=" + NomeArquivoAvatar;
+                return Configuracao2.UrlWebApi + "api/foto?na=" + NomeArquivoAvatar;
             }
         }
 
@@ -53,25 +53,25 @@ namespace App4.Model
             }
         }
 
-        private static string ObterUrlBaseWebApi()
-        {
-            bool usarCloud = false;
-            bool debugarAndroid = false;
+        //private static string ObterUrlBaseWebApi()
+        //{
+        //    bool usarCloud = true;
+        //    bool debugarAndroid = false;
 
-            string enderecoBase = string.Empty;
+        //    string enderecoBase = string.Empty;
 
-            if (usarCloud)
-                enderecoBase = "https://cfwebapi.herokuapp.com/";
-            else
-            {
-                enderecoBase += "http://";
-                if (debugarAndroid)
-                    enderecoBase += "10.0.2.2";
-                else
-                    enderecoBase += "localhost";
-                enderecoBase += ":8084/";
-            }
-            return enderecoBase;
-        }
+        //    if (usarCloud)
+        //        enderecoBase = "https://cfwebapi.herokuapp.com/";
+        //    else
+        //    {
+        //        enderecoBase += "http://";
+        //        if (debugarAndroid)
+        //            enderecoBase += "10.0.2.2";
+        //        else
+        //            enderecoBase += "localhost";
+        //        enderecoBase += ":8084/";
+        //    }
+        //    return enderecoBase;
+        //}
     }
 }

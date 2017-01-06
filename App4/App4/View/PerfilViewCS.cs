@@ -24,9 +24,9 @@ namespace App4.View
 
         string NomeUsuarioValorInicial;
 
-        public PerfilViewCS(PostViewModel postViewModel, ConfiguracaoApp config)
+        public PerfilViewCS(PostViewModel postViewModel)
         {            
-            UsuarioViewModel = new UsuarioViewModel(config);
+            UsuarioViewModel = new UsuarioViewModel();
 
             PostViewModel = postViewModel;
 
