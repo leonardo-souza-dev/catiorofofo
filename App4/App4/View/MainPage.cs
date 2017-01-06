@@ -6,10 +6,6 @@ namespace App4.View
 {
     public class MainPage : TabbedPage
     {
-        /// <summary>
-        /// Construtor que recebe o id do usuário logado
-        /// </summary>
-        /// <param name="usuarioId">Id do usuário logado</param>
         public MainPage(UsuarioModel usuario)
         {
             var postViewModel = new PostViewModel(usuario);

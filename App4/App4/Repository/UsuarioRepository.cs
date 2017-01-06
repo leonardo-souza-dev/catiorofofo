@@ -10,27 +10,14 @@ using System.Diagnostics;
 
 namespace App4.Repository
 {
-    public abstract class Repository
-    {
-        //public abstract void SetarConfiguracao(ConfiguracaoApp config);
-    }
-
     public static class UsuarioRepository
     {
-        //private static ConfiguracaoApp Config;
-        //private static string UrlBaseWebApi;
-
-        //public static void SetarConfiguracao()
-        //{
-        //    UrlBaseWebApi = Configuracao2.UrlWebApi;
-        //}
-
         public static async Task<RespostaAtualizarUsuario> Atualizar(UsuarioModel usuario)
         {
             if (usuario.EditouAvatar())
             {
                 //upload da foto
-                var urlUpload = Configuracao2.UrlWebApi + "api/uploadavatar";
+                var urlUpload = Configuracao.UrlWebApi + "api/uploadavatar";
                 byte[] byteArray = usuario.ObterByteArrayAvatar();
 
                 var requestContent = new MultipartFormDataContent();
@@ -95,7 +82,7 @@ namespace App4.Repository
             var httpClient = new HttpClient();
             var json = JsonConvert.SerializeObject(conteudo);
             var contentPost = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await httpClient.PostAsync(Configuracao2.UrlWebApi + "api/" + metodo, contentPost);
+            var response = await httpClient.PostAsync(Configuracao.UrlWebApi + "api/" + metodo, contentPost);
             var stream = await response.Content.ReadAsStreamAsync();
             var ser = new DataContractJsonSerializer(typeof(T));
             stream.Position = 0;

@@ -13,7 +13,6 @@ namespace App4.View
 {
     public partial class LoginViewCS : ContentPage
     {
-        //ConfiguracaoApp Config;
         UsuarioViewModel UsuarioViewModel;
 
         Label CatioroFofoLabel;
@@ -31,8 +30,6 @@ namespace App4.View
 
         public LoginViewCS()
         {
-            //Config = config;
-
             UsuarioViewModel = new UsuarioViewModel();
             this.Title = "login";
 
@@ -52,7 +49,7 @@ namespace App4.View
             };
             LogoImage = new Image
             {
-                Source = ImageSource.FromResource("puppy150.png"),// FromUri(new Uri(@"http://download.seaicons.com/download/i34286/wackypixel/dogs-n-puppies/wackypixel-dogs-n-puppies-puppy-10.ico")),
+                Source = ImageSource.FromResource("puppy150.png"),
                 HorizontalOptions = LayoutOptions.Center,
                 Margin = new Thickness(5, 5, 5, 5)
             };
@@ -66,7 +63,7 @@ namespace App4.View
             };
             EmailEntry = new Entry
             {
-                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Entry)),
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 Margin = new Thickness(5, 5, 5, 5)
             };
@@ -80,7 +77,7 @@ namespace App4.View
             };
             SenhaEntry = new Entry
             {
-                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Entry)),
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 Margin = new Thickness(5, 5, 5, 5),
                 IsPassword = true
@@ -89,21 +86,21 @@ namespace App4.View
             LoginButton = new Button
             {
                 Text = "login",
-                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Button)),
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 Margin = new Thickness(5, 5, 5, 5)
             };
             CadastroButton = new Button
             {
                 Text = "cadastro",
-                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Button)),
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 Margin = new Thickness(5, 5, 5, 5)
             };
             EsqueciButton = new Button
             {
                 Text = "esqueci a senha",
-                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Button)),
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 Margin = new Thickness(5, 5, 5, 5)
             };
