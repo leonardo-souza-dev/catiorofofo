@@ -17,7 +17,7 @@ namespace App4.Repository
             if (usuario.EditouAvatar())
             {
                 //upload da foto
-                var urlUpload = Configuracao.UrlWebApi + "api/uploadavatar";
+                var urlUpload = ObterUrlBaseWebApi() + "api/uploadavatar";
                 byte[] byteArray = usuario.ObterByteArrayAvatar();
 
                 var requestContent = new MultipartFormDataContent();
@@ -56,6 +56,27 @@ namespace App4.Repository
 
         }
 
+        private static string ObterUrlBaseWebApi()
+        {
+            bool usarCloud = true;
+            bool debugarAndroid = false;
+
+            string enderecoBase = string.Empty;
+
+            if (usarCloud)
+                enderecoBase = "https://cfwebapi.herokuapp.com/";
+            else
+            {
+                enderecoBase += "http://";
+                if (debugarAndroid)
+                    enderecoBase += "10.0.2.2";
+                else
+                    enderecoBase += "localhost";
+                enderecoBase += ":8084/";
+            }
+            return enderecoBase;
+        }
+
         public static async Task<RespostaCadastro> Cadastro(string emailDigitado, string senhaDigitada, string nomeUsuarioDigitado)
         {
             var resposta = await Resposta<RespostaCadastro>(new { email = emailDigitado, senha = senhaDigitada, nomeUsuario = nomeUsuarioDigitado }, "cadastro");
@@ -82,7 +103,7 @@ namespace App4.Repository
             var httpClient = new HttpClient();
             var json = JsonConvert.SerializeObject(conteudo);
             var contentPost = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await httpClient.PostAsync(Configuracao.UrlWebApi + "api/" + metodo, contentPost);
+            var response = await httpClient.PostAsync(ObterUrlBaseWebApi() + "api/" + metodo, contentPost);
             var stream = await response.Content.ReadAsStreamAsync();
             var ser = new DataContractJsonSerializer(typeof(T));
             stream.Position = 0;
@@ -90,5 +111,6 @@ namespace App4.Repository
 
             return t;
         }
+        
     }
 }
