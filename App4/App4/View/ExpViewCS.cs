@@ -29,8 +29,8 @@ namespace App4.View
                 var avatarImage = new Image
                 {
                     Margin = new Thickness(5, 5, 5, 5),
-                    WidthRequest = 30,
-                    HeightRequest = 30,
+                    WidthRequest = 60,
+                    HeightRequest = 60,
                 };
                 var descricaoLabel = new Label { FontSize = 14 };
                 var avatarDescricaoStackLayout = new StackLayout

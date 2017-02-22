@@ -13,8 +13,13 @@ namespace App4.View
         public MainPage(UsuarioModel usuario, ConfiguracaoApp config)
         {
             var postViewModel = new PostViewModel(usuario, config);
-            Children.Add(new ExpViewCS(postViewModel));
-            
+
+            //layout via código CSharp
+            //Children.Add(new ExpViewCS(postViewModel)); 
+
+            //layout via XAML
+            Children.Add(new Page1(postViewModel)); 
+
             var uploadView = new UploadViewCS(postViewModel, this);
             uploadView.Title = "upload";
             Children.Add(uploadView);

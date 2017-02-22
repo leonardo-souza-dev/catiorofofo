@@ -55,7 +55,7 @@ namespace App4.Model
 
         private static string ObterUrlBaseWebApi()
         {
-            bool usarCloud = false;
+            bool usarCloud = true;
             bool debugarAndroid = false;
 
             string enderecoBase = string.Empty;

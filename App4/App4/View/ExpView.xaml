@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="App4.View.Page1">
+
+  <StackLayout Padding="0,20,0,0">
+
+    <Label Text="explorar catioros fofos" Font="18" FontAttributes="Bold" HorizontalOptions="Center" />
+
+    <ListView x:Name="lstPosts" ItemsSource="{Binding Posts}" >
+      <ListView.ItemTemplate>
+        <DataTemplate>
+          <ViewCell>
+            <StackLayout Padding="0,0,0,0" Orientation="Vertical" HorizontalOptions="Center" Margin="0">
+              <Image Source="{Binding FotoUrl}" Margin="5,15,5,5" VerticalOptions="CenterAndExpand"/>
+              <StackLayout Padding="0,0,0,0" Orientation="Horizontal" Margin="0">
+                  <Image Source="{Binding AvatarUrl}" Margin="5,5,5,5" WidthRequest="60" HeightRequest="60"  />
+                  <Label Text="{Binding Legenda}" Font="14"/>
+              </StackLayout>
+            
+              <StackLayout Padding="0,0,0,0" Orientation="Horizontal" Margin="0">
+                  <Button Font="10" Text="{Binding CurtidaTexto}" Margin="5,5,5,5" />
+                  <Label Text="{Binding NumCurtidas}" Font="10"/>
+                  <Button Font="10" Text="compartilhar" Margin="5,5,5,5" />
+              </StackLayout>
+    
+            </StackLayout>
+          </ViewCell>
+        </DataTemplate>
+      </ListView.ItemTemplate>
+    </ListView>
+
+  </StackLayout>
+</ContentPage>
