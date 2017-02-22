@@ -13,13 +13,8 @@ namespace App4.ViewModel
         public ObservableCollection<PostModel> Posts { get; set; } = new ObservableCollection<PostModel>();
         public UsuarioModel Usuario;
 
-        /// <summary>
-        /// Construtor que recebe o id do usuário logado ou recém-cadastrado
-        /// </summary>
-        /// <param name="usuarioId">Id do usuário logado ou recém-cadastrado</param>
-        public PostViewModel(UsuarioModel usuario, ConfiguracaoApp config)
+        public PostViewModel(UsuarioModel usuario)
         {
-            PostRepository.SetarConfiguracao(config);
             Usuario = usuario;
             ObterPosts();
         }

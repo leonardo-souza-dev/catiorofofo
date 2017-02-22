@@ -1,12 +1,10 @@
 ﻿using App4.Model;
 using App4.Model.Resposta;
-using App4.Repository;
 using App4.ViewModel;
 
 using Plugin.Media;
 using Plugin.Media.Abstractions;
 using System;
-using System.Collections.ObjectModel;
 using System.IO;
 
 using Xamarin.Forms;
@@ -24,9 +22,9 @@ namespace App4.View
 
         string NomeUsuarioValorInicial;
 
-        public PerfilViewCS(PostViewModel postViewModel, ConfiguracaoApp config)
+        public PerfilViewCS(PostViewModel postViewModel)
         {            
-            UsuarioViewModel = new UsuarioViewModel(config);
+            UsuarioViewModel = new UsuarioViewModel();
 
             PostViewModel = postViewModel;
 
@@ -56,15 +54,29 @@ namespace App4.View
                 HeightRequest = 30,
                 IsEnabled = false
             };
+            var nomeUsuarioLabel = new Label
+            {
+                Text = "nome do catioro",
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                IsEnabled = false
+            };
             var nomeUsuarioEntry = new Entry
             {
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Entry)),
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                IsEnabled = false
+            };
+            var emailLabel = new Label
+            {
+                Text = "email",
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 IsEnabled = false
             };
             var emailEntry = new Entry
             {
-                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Entry)),
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 IsEnabled = false
             };
@@ -128,7 +140,6 @@ namespace App4.View
             };
             salvarButton.Clicked += async (object sender, EventArgs e) =>
             {
-                
                 nomeUsuarioEntry.IsEnabled = false;
                 emailEntry.IsEnabled = false;
                 cancelarButton.IsVisible = false;
@@ -174,7 +185,9 @@ namespace App4.View
                 Children = {
                     tituloLabel,
                     avatarImage,
+                    nomeUsuarioLabel,
                     nomeUsuarioEntry,
+                    emailLabel,
                     emailEntry,
                     cancelarButton,
                     salvarButton,

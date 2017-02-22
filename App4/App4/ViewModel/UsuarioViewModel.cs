@@ -10,11 +10,6 @@ namespace App4.ViewModel
     {
         public bool LoginSucesso;
 
-        public UsuarioViewModel(ConfiguracaoApp config)
-        {
-            UsuarioRepository.SetarConfiguracao(config);
-        }
-
         public async Task<RespostaStatus> AtualizarCadastro(UsuarioModel usuario)
         {
             var resposta2 = await UsuarioRepository.Atualizar(usuario);
@@ -45,17 +40,12 @@ namespace App4.ViewModel
         {
             UsuarioModel usuario = new UsuarioModel();
 
-            var nomeUsuario = email.Split('@')[0] +
-                DateTime.Now.ToString().Replace(" ", "")
-                .Replace("-", "").Replace(".", "")
-                .Replace(":", "").Replace("/", "")
-                .Replace("A", "").Replace("M", "").Replace("P", "");
-            //TODO:jogar essa regra de criacao automatica de nome de usuario para a web api
+            string nomeUsuario = ObterNomeUsuario(email);
 
             var resposta = await UsuarioRepository.Cadastro(email, senha, nomeUsuario);
             var respostaStatus = RespostaStatus.Sucesso;
 
-            switch(resposta.mensagem.ToUpper())
+            switch (resposta.mensagem.ToUpper())
             {
                 case "SUCESSO":
                     usuario.NomeArquivoAvatar = resposta.usuario.nomeArquivoAvatar;
@@ -69,6 +59,15 @@ namespace App4.ViewModel
                     break;
             }
             return new Tuple<RespostaStatus, UsuarioModel>(respostaStatus, usuario);
+        }
+
+        private static string ObterNomeUsuario(string email)
+        {
+            return email.Split('@')[0] +
+                            DateTime.Now.ToString().Replace(" ", "")
+                            .Replace("-", "").Replace(".", "")
+                            .Replace(":", "").Replace("/", "")
+                            .Replace("A", "").Replace("M", "").Replace("P", "");
         }
 
         public async Task<Tuple<RespostaStatus,UsuarioModel>> Login(string email, string senha)
