@@ -16,7 +16,7 @@ namespace App4.View
 
             //layout via código CSharp
             //Children.Add(new ExpViewCS(postViewModel)); 
-
+            
             //layout via XAML
             Children.Add(new Page1(postViewModel)); 
 

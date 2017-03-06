@@ -1,34 +1,80 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="App4.View.Page1">
+             x:Class="App4.View.Page1" Title="catioro fofo">
 
-  <StackLayout Padding="0,20,0,0">
+    <StackLayout Padding="0" BackgroundColor="White" Margin="0" Orientation="Vertical" >
 
-    <Label Text="explorar catioros fofos" Font="18" FontAttributes="Bold" HorizontalOptions="Center" />
+        <Label Text="explorar" TextColor="#333333" FontSize="Large" FontAttributes="Bold" 
+               HorizontalOptions="Center" Margin="0,4"/>
 
-    <ListView x:Name="lstPosts" ItemsSource="{Binding Posts}" >
-      <ListView.ItemTemplate>
-        <DataTemplate>
-          <ViewCell>
-            <StackLayout Padding="0,0,0,0" Orientation="Vertical" HorizontalOptions="Center" Margin="0">
-              <Image Source="{Binding FotoUrl}" Margin="5,15,5,5" VerticalOptions="CenterAndExpand"/>
-              <StackLayout Padding="0,0,0,0" Orientation="Horizontal" Margin="0">
-                  <Image Source="{Binding AvatarUrl}" Margin="5,5,5,5" WidthRequest="60" HeightRequest="60"  />
-                  <Label Text="{Binding Legenda}" Font="14"/>
-              </StackLayout>
-            
-              <StackLayout Padding="0,0,0,0" Orientation="Horizontal" Margin="0">
-                  <Button Font="10" Text="{Binding CurtidaTexto}" Margin="5,5,5,5" />
-                  <Label Text="{Binding NumCurtidas}" Font="10"/>
-                  <Button Font="10" Text="compartilhar" Margin="5,5,5,5" />
-              </StackLayout>
-    
+        <!-- um item da listview -->
+        <!--
+        <StackLayout Padding="0" Spacing="0" BackgroundColor="White" Orientation="Vertical" 
+                     HorizontalOptions="FillAndExpand" Margin="0">
+
+            <StackLayout Padding="0" Spacing="0" BackgroundColor="White" Orientation="Horizontal" 
+                         Margin="0">
+                <Image Source="{Binding FotoUrl}" Margin="4" WidthRequest="36" HeightRequest="36"  />
+                <Label Text="sukinho" FontSize="12" Margin="0,2" TextColor="#343434"/>
             </StackLayout>
-          </ViewCell>
-        </DataTemplate>
-      </ListView.ItemTemplate>
-    </ListView>
 
-  </StackLayout>
+            <Image Source="{Binding AvatarUrl}" Margin="0" BackgroundColor="Aqua" Aspect="AspectFit"  VerticalOptions="CenterAndExpand"/>
+
+            <Label Text="{Binding Legenda}" FontSize="18" Margin="0,4" HorizontalOptions="CenterAndExpand" 
+                   TextColor="#343434" BackgroundColor="White"/>
+
+            <StackLayout Padding="0" Margin="0" Spacing="0" BackgroundColor="White" Orientation="Horizontal" 
+                         HorizontalOptions="CenterAndExpand" VerticalOptions="Center" HeightRequest="36" >
+                <Button FontSize="12" TextColor="Black" Text="{Binding CurtidaTexto}" 
+                        Margin="0" BackgroundColor="Transparent" BorderColor="Transparent" 
+                        HorizontalOptions="Start" VerticalOptions="Center"/>
+
+                <Label FontSize="12" Text="{Binding NumCurtidas}" BackgroundColor="Transparent" TextColor="Black"
+                       Margin="0" VerticalOptions="Center" HorizontalOptions="Start"/>
+
+                <Button FontSize="12" TextColor="Black" Text="compartilhar" 
+                        Margin="0" BackgroundColor="Transparent" BorderColor="Transparent" 
+                        HorizontalOptions="End" VerticalOptions="Center"/>
+            </StackLayout>
+
+        </StackLayout>
+
+        -->
+        <ListView x:Name="lstPosts" ItemsSource="{Binding Posts}" HasUnevenRows="True" >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout Padding="0" Spacing="0" BackgroundColor="White" Orientation="Vertical" 
+                     HorizontalOptions="FillAndExpand" Margin="0">
+
+                            <StackLayout Padding="0" Spacing="0" BackgroundColor="White" Orientation="Horizontal" Margin="0">
+                                <Image Source="{Binding AvatarUrl}" Margin="4" WidthRequest="36" HeightRequest="36"  />
+                                <Label Text="sukinho" FontSize="12" Margin="0,2" TextColor="#343434"/>
+                            </StackLayout>
+
+                            <Image Source="{Binding FotoUrl}" Margin="0" BackgroundColor="Aqua" Aspect="AspectFit"  VerticalOptions="CenterAndExpand"/>
+
+                            <Label Text="{Binding Legenda}" FontSize="18" Margin="0,4" HorizontalOptions="CenterAndExpand" TextColor="#343434" BackgroundColor="White"/>
+
+                            <StackLayout Padding="0" Margin="0" Spacing="0" BackgroundColor="White" Orientation="Horizontal" 
+                         HorizontalOptions="CenterAndExpand" VerticalOptions="Center" HeightRequest="36" >
+                                <Button FontSize="12" TextColor="Black" Text="{Binding CurtidaTexto}" 
+                        Margin="0" BackgroundColor="Transparent" BorderColor="Transparent" 
+                        HorizontalOptions="Start" VerticalOptions="Center"/>
+
+                                <Label FontSize="12" Text="{Binding NumCurtidas}" BackgroundColor="Transparent" TextColor="Black"
+                       Margin="0" VerticalOptions="Center" HorizontalOptions="Start"/>
+
+                                <Button FontSize="12" TextColor="Black" Text="compartilhar" 
+                        Margin="0" BackgroundColor="Transparent" BorderColor="Transparent" 
+                        HorizontalOptions="End" VerticalOptions="Center"/>
+                            </StackLayout>
+
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackLayout>
 </ContentPage>
