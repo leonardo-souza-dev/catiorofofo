@@ -7,7 +7,6 @@
     <ContentPage.Content>
         <RelativeLayout Margin="4">
             <Button x:Name="AcharButton" Text="Achar catiofo fofo" 
-                    Clicked="AcharButtonClicked"
                     HorizontalOptions="Center"    
                     WidthRequest="300"
                     HeightRequest="100"

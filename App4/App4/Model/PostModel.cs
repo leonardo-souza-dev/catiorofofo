@@ -11,7 +11,13 @@ namespace App4.Model
 
         public string Legenda { get; set; }
 
-        public int UsuarioId { get; set; }
+        public int UsuarioId
+        {
+            get
+            {
+                return this.Usuario.UsuarioId;
+            }
+        }
 
         public UsuarioModel Usuario { get; set; }
 

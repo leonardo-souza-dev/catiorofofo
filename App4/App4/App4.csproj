@@ -72,7 +72,7 @@
     </Compile>
     <Compile Include="View\UploadViewCS.cs" />
     <Compile Include="View\ExpViewCS.cs" />
-    <Compile Include="View\MainPage.cs" />
+    <Compile Include="MainPage.cs" />
     <Compile Include="Model\PostModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

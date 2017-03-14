@@ -38,7 +38,6 @@ namespace App4.Repository
                 {
                     PostId = respostaPost.postId,
                     Legenda = respostaPost.legenda,
-                    UsuarioId = respostaPost.usuarioId,
                     NomeArquivo = respostaPost.nomeArquivo,
                     Curtidas = curtidas,
                     Usuario = usuario

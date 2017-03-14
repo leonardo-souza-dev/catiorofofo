@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Linq;
 using App4.Model.Resposta;
+using System.IO;
 
 namespace App4.ViewModel
 {
@@ -119,10 +120,16 @@ namespace App4.ViewModel
             Posts.Insert(0, post);
         }
 
-        public async Task<RespostaStatus> Salvar(PostModel post)
+        public async Task<RespostaStatus> Salvar(Stream stream, string legenda, UsuarioModel usuario)
         {
             try
             {
+                PostModel post = new PostModel(stream)
+                {
+                    Legenda = legenda,
+                    Usuario = usuario
+                };
+
                 await PostRepository.SalvarPost(post);
                 InserirPost(post);
 

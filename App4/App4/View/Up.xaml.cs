@@ -21,39 +21,37 @@ namespace App4.View
     public partial class Up : ContentPage
     {
         private PostViewModel PostViewModel;
+        private Stream Stream = null;
+        private MediaFile File;
+        private TabbedPage MainPage;
+
         public ObservableCollection<PostModel> posts { get; set; }
 
-        //Image FotoImage;
-        Stream Stream = null;
-        MediaFile File;
         public string Arquivo = string.Empty;
-
-        TabbedPage MainPage;
-
-        private PostViewModel _postViewModel;
 
         public Up(PostViewModel postViewModel, TabbedPage mainPage)
         {
             InitializeComponent();
-            MainPage = mainPage;
-            PostViewModel = postViewModel;
+
+            this.MainPage = mainPage;
+            this.PostViewModel = postViewModel;
             this.Title = "enviar catioro fofo";
             CrossMedia.Current.Initialize();
-            //FotoImage = new Image { WidthRequest = 100, HeightRequest = 100 };
 
-            //PostarButton.IsEnabled = false;
-            //PostarButton.IsVisible = false;
-            UploadViewModel uvm = new UploadViewModel();
-            uvm.UploadModel = new UploadModel(){PostarButtonIsEnabled = false};
-            BindingContext = uvm.UploadModel;
+            UploadViewModel uploadViewModel = new UploadViewModel();
+            uploadViewModel.UploadModel = new UploadModel(){ PostarButtonIsEnabled = false };
+            this.BindingContext = uploadViewModel.UploadModel;
         }
 
-        protected async void AcharButtonClicked(object o, EventArgs args)
+        public async void EscolherFoto()
         {
-            if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsPickPhotoSupported)
+            var cameraNaoDisponivel = !CrossMedia.Current.IsCameraAvailable;
+            var escolherFotoNaoSuportado = !CrossMedia.Current.IsPickPhotoSupported;
+
+            if (cameraNaoDisponivel || escolherFotoNaoSuportado)
             {
                 await DisplayAlert("No Camera", ":( No camera avaialble.", "OK");
-                return;
+                // return;
             }
 
             File = await CrossMedia.Current.PickPhotoAsync(new PickMediaOptions()
@@ -73,22 +71,16 @@ namespace App4.View
 
         protected async void PostarButtonClicked(object o, EventArgs args)
         {
-            PostModel post = new PostModel(Stream)
-            {
-                Legenda = LegendaEntry.Text,
-                UsuarioId = PostViewModel.Usuario.UsuarioId,
-                Usuario = PostViewModel.Usuario
-            };
-            //var postFinal = new PostModel();
-            //postFinal = await PostRepository.SalvarPost(post);
-            //PostViewModel.InserirPost(postFinal);
-            var resposta = await PostViewModel.Salvar(post);
+            var resposta = await PostViewModel.Salvar(Stream,
+                                                      LegendaEntry.Text,     
+                                                      PostViewModel.Usuario);
 
             if (resposta == RespostaStatus.ErroGenerico)
             {
                 await DisplayAlert("erro", "ocorreu um erro","cancelar");
                 return;
             }
+
             var expViewCode = new ExpViewCS(PostViewModel);
             MainPage.CurrentPage = MainPage.Children[0];
         }
