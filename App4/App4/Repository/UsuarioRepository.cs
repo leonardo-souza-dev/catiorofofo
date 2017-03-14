@@ -7,11 +7,24 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Text;
 using System.Diagnostics;
+using App4.Model.Resposta;
 
 namespace App4.Repository
 {
     public static class UsuarioRepository
     {
+        public static async Task<RespostaFetch> TesteConexao()
+        {
+            var httpClient = new HttpClient();
+            var response = await httpClient.GetAsync(ObterUrlBaseWebApi() + "fetch");
+            var stream = await response.Content.ReadAsStreamAsync();
+            var ser = new DataContractJsonSerializer(typeof(RespostaFetch));
+            stream.Position = 0;
+            RespostaFetch t = (RespostaFetch)ser.ReadObject(stream);
+            return t;
+        }
+
+
         public static async Task<RespostaAtualizarUsuario> Atualizar(UsuarioModel usuario)
         {
             if (usuario.EditouAvatar())

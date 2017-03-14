@@ -32,7 +32,7 @@ namespace App4.Model
         public string CurtidaTexto { get { return CurtidaHabilitada ? "curtir" : "descurtir"; } }
 
         public int NumCurtidas { get { return Curtidas.Count; } }
-
+        
         public List<CurtidaModel> Curtidas { get; set; }
 
         public string FotoUrl
@@ -40,6 +40,14 @@ namespace App4.Model
             get
             {
                 return ObterUrlBaseWebApi() + "api/foto?na=" + NomeArquivo;
+            }
+        }
+
+        public string QuemPostou
+        {
+            get
+            {
+                return this.Usuario.NomeUsuario;
             }
         }
 
@@ -66,7 +74,8 @@ namespace App4.Model
 
         public PostModel(Stream stream)
         {
-            FotoStream = stream;
+            this.FotoStream = stream;
+            this.Curtidas = new List<CurtidaModel>();
         }
 
         public PostModel()

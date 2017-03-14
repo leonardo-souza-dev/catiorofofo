@@ -20,10 +20,10 @@ namespace App4.ViewModel
         public PostViewModel(UsuarioModel usuario, ConfiguracaoApp config)
         {
             Usuario = usuario;
-            ObterPosts();
+            CarregarPosts();
         }
 
-        public async void ObterPosts()
+        public async void CarregarPosts()
         {
             var listaPosts = new List<PostModel>();
 
@@ -117,6 +117,21 @@ namespace App4.ViewModel
         public void InserirPost(PostModel post)
         {
             Posts.Insert(0, post);
+        }
+
+        public async Task<RespostaStatus> Salvar(PostModel post)
+        {
+            try
+            {
+                await PostRepository.SalvarPost(post);
+                InserirPost(post);
+
+                return RespostaStatus.Sucesso;
+            }
+            catch (System.Exception)
+            {
+                return RespostaStatus.ErroGenerico;
+            }
         }
     }
 }

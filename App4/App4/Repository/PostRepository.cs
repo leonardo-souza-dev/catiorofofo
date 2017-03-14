@@ -6,15 +6,19 @@ using System.Runtime.Serialization.Json;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Text;
+using System;
 
 namespace App4.Repository
 {
     public static class PostRepository
     {
+        private static Guid idTemp;
         private static List<PostModel> ListaPosts;
 
         public static async Task<List<PostModel>> ObterPosts()
         {
+            idTemp = Guid.NewGuid();
+
             var respostaPosts = await Resposta<List<RespostaPost>>(null, "obterposts");
 
             ListaPosts = new List<PostModel>();
@@ -107,11 +111,11 @@ namespace App4.Repository
             stream.Position = 0;
             var resposta = (RespostaUpload)ser.ReadObject(stream);
 
-            PostModel postFinal = new PostModel() { Legenda = post.Legenda, NomeArquivo = resposta.nomeArquivo, UsuarioId = post.UsuarioId };
-
+            //PostModel postFinal = new PostModel() { Legenda = post.Legenda, NomeArquivo = resposta.nomeArquivo, UsuarioId = post.UsuarioId };
+            post.NomeArquivo = resposta.nomeArquivo;
             //salva post
             var clientt = new HttpClient();
-            var json = JsonConvert.SerializeObject(postFinal);
+            var json = JsonConvert.SerializeObject(post);
             var contentPost = new StringContent(json, Encoding.UTF8, "application/json");
 
             var response3 = await client.PostAsync(ObterUrlBaseWebApi() + "api/salvarpost", contentPost);
@@ -121,7 +125,7 @@ namespace App4.Repository
             stream3.Position = 0;
             var resposta3 = (RespostaSalvarPost)ser3.ReadObject(stream3);
 
-            return postFinal;
+            return post;
         }
 
         private static string ObterUrlBaseWebApi()

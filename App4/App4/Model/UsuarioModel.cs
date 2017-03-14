@@ -6,13 +6,28 @@ namespace App4.Model
 {
     public class UsuarioModel : INotifyPropertyChanged
     {
+        public bool NomeUsuarioEntry { get; set; }
+
         public int UsuarioId { get; set; }
 
         private string email;
         public string Email { get { return email; } set { email = value; OnPropertyChanged("Email"); } }
 
         public string NomeArquivoAvatar { get; set; }
-        public string NomeUsuario { get; set; }
+
+        private string nomeUsuario;
+        public string NomeUsuario
+        {
+            get
+            {
+                return nomeUsuario;
+            }
+            set
+            {
+                nomeUsuario = value;
+                OnPropertyChanged("NomeUsuario");
+            }
+        }
 
         private Stream AvatarStream { get; set; }
 

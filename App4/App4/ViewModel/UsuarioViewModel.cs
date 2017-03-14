@@ -10,6 +10,26 @@ namespace App4.ViewModel
     {
         public bool LoginSucesso;
 
+        public RespostaStatus TesteConexao()
+        {
+            var resposta = UsuarioRepository.TesteConexao().Result;
+            var status = RespostaStatus.Sucesso;
+
+            switch (resposta.status)
+            {
+                case 1:
+                    status = RespostaStatus.Sucesso;
+                    break;
+                case 0:
+                    status = RespostaStatus.Inexistente;
+                    break;
+                default:
+                    status = RespostaStatus.ErroGenerico;
+                    break;
+            }
+            return status;
+        }
+
         public async Task<RespostaStatus> AtualizarCadastro(UsuarioModel usuario)
         {
             var resposta2 = await UsuarioRepository.Atualizar(usuario);

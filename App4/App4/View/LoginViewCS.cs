@@ -41,6 +41,10 @@ namespace App4.View
             var scroll = new ScrollView();
             scroll.Content = ObterConteudo();
             Content = scroll;
+
+            //temp
+            EmailEntry.Text = "qwe";
+            SenhaEntry.Text = "qwe";
         }
 
         private StackLayout ObterConteudo()
@@ -48,7 +52,7 @@ namespace App4.View
             CatioroFofoLabel = new Label
             {
                 Text = "catioro fofo",
-                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
+                FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 Margin = new Thickness(5, 5, 5, 5)
             };
@@ -167,8 +171,21 @@ namespace App4.View
             }
         }
 
+        private void TesteConexao()
+        {
+            var resposta = UsuarioViewModel.TesteConexao();
+
+            if (resposta == RespostaStatus.Inexistente)
+            {
+                DisplayAlert("ops", "parece que nao tem internet", "volta lá");
+            }
+
+        }
+
         async void LoginBotao_Clicked(object sender, EventArgs e)
         {
+            //TesteConexao();
+
             ValidaEntradas();
 
             string email = EmailEntry.Text;

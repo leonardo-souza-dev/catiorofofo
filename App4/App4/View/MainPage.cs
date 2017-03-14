@@ -20,11 +20,17 @@ namespace App4.View
             //layout via XAML
             Children.Add(new Page1(postViewModel)); 
 
-            var uploadView = new UploadViewCS(postViewModel, this);
-            uploadView.Title = "upload";
-            Children.Add(uploadView);
+            //var uploadView = new UploadViewCS(postViewModel, this);
+            //uploadView.Title = "upload";
+            //Children.Add(uploadView);
 
-            Children.Add(new PerfilViewCS(postViewModel, config));
+
+            var up = new Up(postViewModel, this);
+            up.Title = "upload";
+            Children.Add(up);
+
+            //Children.Add(new PerfilViewCS(postViewModel, config));
+            Children.Add(new PerfilView(postViewModel, config));
         }
     }
 }

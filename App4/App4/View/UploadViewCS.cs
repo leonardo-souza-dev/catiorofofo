@@ -25,7 +25,6 @@ namespace App4.View
         MediaFile File;
         public string Arquivo = string.Empty;
 
-        Button CriarPerfil = new Button();
         TabbedPage MainPage;
 
         public UploadViewCS(PostViewModel postViewModel, TabbedPage mainPage)
@@ -106,7 +105,6 @@ namespace App4.View
                 Padding = new Thickness(0, 0, 0, 0),
                 Orientation = StackOrientation.Vertical,
                 Children = {
-                    CriarPerfil,
                     AcharButton,
                     PostarButton,
                     FotoImage,

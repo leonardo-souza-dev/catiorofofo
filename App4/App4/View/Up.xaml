@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="App4.View.Up"
+             BackgroundColor="Aqua"
+             Title="upload">
+    <ContentPage.Content>
+        <RelativeLayout Margin="4">
+            <Button x:Name="AcharButton" Text="Achar catiofo fofo" 
+                    Clicked="AcharButtonClicked"
+                    HorizontalOptions="Center"    
+                    WidthRequest="300"
+                    HeightRequest="100"
+                    RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Factor=1, Property=X}" 
+                    RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Factor=1, Property=Y}"  />
+            <Image x:Name="FotoImage"
+                   WidthRequest="100"
+                   HeightRequest="100"/>
+            <Entry x:Name="LegendaEntry" 
+                   Text="legenda" 
+                   BackgroundColor="Blue"
+                   RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Factor=1, Property=Width}" 
+                   RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Factor=0.1, Property=Height}" 
+                   RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Factor=0, Property=X}" 
+                   RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Factor=0.755, Property=Height}"/>
+            <Button x:Name="PostarButton" 
+                    Clicked="PostarButtonClicked"
+                    Text="postar catiofo fofo" 
+                    RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Factor=1, Property=Width}" 
+                    RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Factor=0.1, Property=Height}" 
+                    RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Factor=0, Property=X}" 
+                    RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Factor=0.896, Property=Height}"  />
+        </RelativeLayout>
+    </ContentPage.Content>
+</ContentPage>
