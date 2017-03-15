@@ -8,6 +8,7 @@ namespace App4
     {
         public App()
         {
+            InitializeComponent();
             ConfiguracaoApp config = new ConfiguracaoApp();
             MainPage = new LoginViewCS(config);
         }

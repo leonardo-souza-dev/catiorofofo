@@ -11,9 +11,32 @@ namespace App4.Model
         public int UsuarioId { get; set; }
 
         private string email;
-        public string Email { get { return email; } set { email = value; OnPropertyChanged("Email"); } }
+        public string Email
+        {
+            get
+            {
+                return email;
+            }
+            set
+            {
+                email = value;
+                OnPropertyChanged("Email");
+            }
+        }
 
-        public string NomeArquivoAvatar { get; set; }
+        private string nomeArquivoAvatar;
+        public string NomeArquivoAvatar
+        {
+            get
+            {
+                return nomeArquivoAvatar;
+            }
+            set
+            {
+                nomeArquivoAvatar = value;
+                OnPropertyChanged("NomeArquivoAvatar");
+            }
+        }
 
         private string nomeUsuario;
         public string NomeUsuario

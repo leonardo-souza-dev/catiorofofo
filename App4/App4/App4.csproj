@@ -60,18 +60,12 @@
     <Compile Include="View\ExpView.xaml.cs">
       <DependentUpon>ExpView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\PerfilAltView.xaml.cs">
-      <DependentUpon>PerfilAltView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\PerfilView.xaml.cs">
       <DependentUpon>PerfilView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\PerfilViewCS.cs" />
     <Compile Include="View\Up.xaml.cs">
       <DependentUpon>Up.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\UploadViewCS.cs" />
-    <Compile Include="View\ExpViewCS.cs" />
     <Compile Include="MainPage.cs" />
     <Compile Include="Model\PostModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -156,12 +150,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="View\Up.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="View\PerfilAltView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>

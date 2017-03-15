@@ -45,28 +45,34 @@ namespace App4.View
 
         public async void EscolherFoto()
         {
-            var cameraNaoDisponivel = !CrossMedia.Current.IsCameraAvailable;
-            var escolherFotoNaoSuportado = !CrossMedia.Current.IsPickPhotoSupported;
-
-            if (cameraNaoDisponivel || escolherFotoNaoSuportado)
+            try
             {
-                await DisplayAlert("No Camera", ":( No camera avaialble.", "OK");
-                // return;
+                var cameraNaoDisponivel = !CrossMedia.Current.IsCameraAvailable;
+                var escolherFotoNaoSuportado = !CrossMedia.Current.IsPickPhotoSupported;
+
+                if (cameraNaoDisponivel || escolherFotoNaoSuportado)
+                {
+                    await DisplayAlert("No Camera", ":( No camera avaialble.", "OK");
+                    // return;
+                }
+
+                File = await CrossMedia.Current.PickPhotoAsync(new PickMediaOptions()
+                {
+                    CompressionQuality = 50
+                });
+
+                if (File == null)
+                    return;
+
+                PostarButton.IsEnabled = true;
+                PostarButton.IsVisible = true;
+
+                FotoImage.Source = ImageSource.FromStream(ObterStream);
             }
-
-            File = await CrossMedia.Current.PickPhotoAsync(new PickMediaOptions()
+            catch (Exception ex)
             {
-                CompressionQuality = 50
-            });
-
-            if (File == null)
-                return;
-
-            PostarButton.IsEnabled = true;
-            PostarButton.IsVisible = true;
-            AcharButton.Text = "trocar catioro fofo";
-
-            FotoImage.Source = ImageSource.FromStream(ObterStream);
+                throw;
+            }
         }
 
         protected async void PostarButtonClicked(object o, EventArgs args)
@@ -81,10 +87,29 @@ namespace App4.View
                 return;
             }
 
-            var expViewCode = new ExpViewCS(PostViewModel);
+            var expViewCode = new Page1(PostViewModel);
             MainPage.CurrentPage = MainPage.Children[0];
         }
 
+
+        protected async void OnImageTapped(object sender, EventArgs e)
+        {
+            if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsPickPhotoSupported)
+            {
+                await DisplayAlert("No Camera", ":( No camera avaialble.", "OK");
+                return;
+            }
+
+            File = await CrossMedia.Current.PickPhotoAsync(new PickMediaOptions()
+            {
+                CompressionQuality = 50
+            });
+
+            if (File == null)
+                return;
+
+            FotoImage.Source = ImageSource.FromStream(ObterStream);
+        }
         private Stream ObterStream()
         {
             Stream stream = File.GetStream();

@@ -2,29 +2,33 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="App4.View.Up"
-             BackgroundColor="Aqua"
+             BackgroundColor="White"
              Title="upload">
     <ContentPage.Content>
         <RelativeLayout Margin="4">
-            <Button x:Name="AcharButton" Text="Achar catiofo fofo" 
-                    HorizontalOptions="Center"    
-                    WidthRequest="300"
-                    HeightRequest="100"
-                    RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Factor=1, Property=X}" 
-                    RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Factor=1, Property=Y}"  />
             <Image x:Name="FotoImage"
-                   WidthRequest="100"
-                   HeightRequest="100"/>
-            <Entry x:Name="LegendaEntry" 
-                   Text="legenda" 
-                   BackgroundColor="Blue"
+                   Aspect="AspectFit"
+                   RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Factor=1, Property=Width}" 
+                   RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Factor=0.5, Property=Height}">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnImageTapped"
+                                              NumberOfTapsRequired="1" />
+                </Image.GestureRecognizers>
+            </Image>
+            <StackLayout Padding="1,1,1,1" 
                    RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Factor=1, Property=Width}" 
                    RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Factor=0.1, Property=Height}" 
                    RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Factor=0, Property=X}" 
-                   RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Factor=0.755, Property=Height}"/>
+                   RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Factor=0.755, Property=Height}">
+                <Entry x:Name="LegendaEntry" 
+                       Text="legenda" 
+                       BackgroundColor="White"/>
+            </StackLayout>
             <Button x:Name="PostarButton" 
                     Clicked="PostarButtonClicked"
                     Text="postar catiofo fofo" 
+                    BackgroundColor="Gray"
+                    TextColor="Black"
                     RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Factor=1, Property=Width}" 
                     RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Factor=0.1, Property=Height}" 
                     RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Factor=0, Property=X}" 

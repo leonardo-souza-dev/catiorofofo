@@ -26,11 +26,6 @@ namespace App4
             Children.Add(perfil);
         }
 
-        private void NotifyObserver()
-        {
-
-        }
-
         protected override void OnCurrentPageChanged()
         {
             Debug.WriteLine(" ");
