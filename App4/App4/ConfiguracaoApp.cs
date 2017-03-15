@@ -1,19 +1,11 @@
-﻿using App4.View;
-
-using Xamarin.Forms;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace App4
 {
-    public class App : Application
-    {
-        public App()
-        {
-            InitializeComponent();
-            ConfiguracaoApp config = new ConfiguracaoApp();
-            MainPage = new LoginViewCS(config);
-        }
-    }
-
     public class ConfiguracaoApp
     {
         bool DebugarAndroid = false;

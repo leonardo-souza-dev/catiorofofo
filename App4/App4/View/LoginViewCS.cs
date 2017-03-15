@@ -53,65 +53,65 @@ namespace App4.View
             {
                 Text = "catioro fofo",
                 FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
-                VerticalOptions = LayoutOptions.CenterAndExpand,
-                Margin = new Thickness(5, 5, 5, 5)
+                VerticalOptions = LayoutOptions.CenterAndExpand
+                //,Margin = new Thickness(5, 5, 5, 5)
             };
             LogoImage = new Image
             {
                 Source = ImageSource.FromResource("puppy150.png"),
-                HorizontalOptions = LayoutOptions.Center,
-                Margin = new Thickness(5, 5, 5, 5)
+                HorizontalOptions = LayoutOptions.Center
+                //,Margin = new Thickness(5, 5, 5, 5)
             };
 
             EmailLabel = new Label
             {
                 Text = "email",
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
-                VerticalOptions = LayoutOptions.CenterAndExpand,
-                Margin = new Thickness(5, 5, 5, 5)
+                VerticalOptions = LayoutOptions.CenterAndExpand
+                //,Margin = new Thickness(5, 5, 5, 5)
             };
             EmailEntry = new Entry
             {
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Entry)),
-                VerticalOptions = LayoutOptions.CenterAndExpand,
-                Margin = new Thickness(5, 5, 5, 5)
+                VerticalOptions = LayoutOptions.CenterAndExpand
+                //,Margin = new Thickness(5, 5, 5, 5)
             };
 
             SenhaLabel = new Label
             {
                 Text = "senha",
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
-                VerticalOptions = LayoutOptions.CenterAndExpand,
-                Margin = new Thickness(5, 5, 5, 5)
+                VerticalOptions = LayoutOptions.CenterAndExpand
+                //,Margin = new Thickness(5, 5, 5, 5)
             };
             SenhaEntry = new Entry
             {
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Entry)),
-                VerticalOptions = LayoutOptions.CenterAndExpand,
-                Margin = new Thickness(5, 5, 5, 5),
-                IsPassword = true
+                VerticalOptions = LayoutOptions.CenterAndExpand
+                //,Margin = new Thickness(5, 5, 5, 5)
+                ,IsPassword = true
             };
 
             LoginButton = new Button
             {
                 Text = "login",
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Button)),
-                VerticalOptions = LayoutOptions.CenterAndExpand,
-                Margin = new Thickness(5, 5, 5, 5)
+                VerticalOptions = LayoutOptions.CenterAndExpand
+                //,Margin = new Thickness(5, 5, 5, 5)
             };
             CadastroButton = new Button
             {
                 Text = "cadastro",
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Button)),
-                VerticalOptions = LayoutOptions.CenterAndExpand,
-                Margin = new Thickness(5, 5, 5, 5)
+                VerticalOptions = LayoutOptions.CenterAndExpand
+                //,Margin = new Thickness(5, 5, 5, 5)
             };
             EsqueciButton = new Button
             {
                 Text = "esqueci a senha",
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Button)),
                 VerticalOptions = LayoutOptions.CenterAndExpand,
-                Margin = new Thickness(5, 5, 5, 5)
+                //,Margin = new Thickness(5, 5, 5, 5)
             };
 
 
@@ -121,7 +121,7 @@ namespace App4.View
 
             return new StackLayout
             {
-                Padding = new Thickness(0, 20, 0, 0),
+                //Padding = new Thickness(0, 20, 0, 0),
                 Children = {
                     CatioroFofoLabel,
                     LogoImage,
