@@ -25,7 +25,7 @@ namespace App4.Model
         {
             get
             {
-                return ObterUrlBaseWebApi() + "api/foto?na=" + NomeArquivoAvatar;
+                return App.Config.ObterUrlBaseWebApi() + "api/foto?na=" + NomeArquivoAvatar;
             }
         }
 
@@ -45,7 +45,7 @@ namespace App4.Model
         {
             get
             {
-                return ObterUrlBaseWebApi() + "api/foto?na=" + NomeArquivo;
+                return App.Config.ObterUrlBaseWebApi() + "api/foto?na=" + NomeArquivo;
             }
         }
 
@@ -55,27 +55,6 @@ namespace App4.Model
             {
                 return this.Usuario.NomeUsuario;
             }
-        }
-
-        private static string ObterUrlBaseWebApi()
-        {
-            bool usarCloud = true;
-            bool debugarAndroid = false;
-
-            string enderecoBase = string.Empty;
-
-            if (usarCloud)
-                enderecoBase = "https://cfwebapi.herokuapp.com/";
-            else
-            {
-                enderecoBase += "http://";
-                if (debugarAndroid)
-                    enderecoBase += "10.0.2.2";
-                else
-                    enderecoBase += "localhost";
-                enderecoBase += ":8084/";
-            }
-            return enderecoBase;
         }
 
         public PostModel(Stream stream)

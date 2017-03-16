@@ -12,14 +12,11 @@ namespace App4.View
 {
     public partial class Page1 : ContentPage
     {
-        private PostViewModel _postViewModel;
-
-        public Page1(PostViewModel postVM)
+        public Page1()
         {
             InitializeComponent();
-            _postViewModel = postVM;
             
-            BindingContext = postVM;
+            BindingContext = App.PostVM;
         }
 
         protected async void CurtirButtonClicked(object sender, EventArgs e)
@@ -29,14 +26,20 @@ namespace App4.View
 
             if (post.CurtidaHabilitada)
             {
-                var resultado = _postViewModel.Curtir(post);
+                var resultado = await App.PostVM.Curtir(post);
             }
             else
             {
-                var resultado = _postViewModel.Descurtir(post);
+                var resultado = await App.PostVM.Descurtir(post);
             }
 
             return;
+        }
+
+        protected override void OnAppearing()
+        {
+            App.PostVM.CarregarPosts();
+            base.OnAppearing();
         }
 
     }

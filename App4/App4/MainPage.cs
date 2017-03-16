@@ -13,13 +13,11 @@ namespace App4
         private Up upload;
         private PerfilView perfil;
 
-        public MainPage(UsuarioModel usuario, ConfiguracaoApp config)
+        public MainPage()
         {
-            var postViewModel = new PostViewModel(usuario, config);
-
-            explorar = new Page1(postViewModel);
-            upload = new Up(postViewModel, this);
-            perfil = new PerfilView(postViewModel, config);
+            explorar = new Page1();
+            upload = new Up(this);
+            perfil = new PerfilView();
 
             Children.Add(explorar);
             Children.Add(upload);

@@ -18,28 +18,23 @@ namespace App4.View
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class PerfilView : ContentPage
     {
-        private PostViewModel PostViewModel;
         private UsuarioViewModel UsuarioViewModel;
-        private UsuarioModel Usuario;
         MediaFile File;
         Stream Stream = null;
         bool EditouAvatar;
         bool modoEdicao = false;
         string NomeUsuarioValorInicial;
 
-        public PerfilView(PostViewModel postViewModel, ConfiguracaoApp c)
+        public PerfilView()
         {
             InitializeComponent();
 
             UsuarioViewModel = new UsuarioViewModel();
 
-            PostViewModel = postViewModel;
-
             CrossMedia.Current.Initialize();
 
-            Usuario = postViewModel.Usuario;
-            Usuario.NomeUsuarioEntry = false;
-            BindingContext = Usuario;
+            App.UsuarioVM.Usuario.NomeUsuarioEntry = false;
+            BindingContext = App.UsuarioVM.Usuario;
 
             //avatarImage.GestureRecognizers.Add(tapGestureRecognizer);
         }
@@ -83,7 +78,7 @@ namespace App4.View
             modoEdicao = true;
             NomeUsuarioValorInicial = nomeUsuarioEntry.Text;
 
-            Usuario.NomeUsuarioEntry = true;
+            App.UsuarioVM.Usuario.NomeUsuarioEntry = true;
             emailEntry.IsEnabled = true;
             nomeUsuarioEntry.IsEnabled = true;
 
@@ -132,10 +127,10 @@ namespace App4.View
 
             if (EditouAvatar)
             {
-                Usuario.SetarAvatarStream(Stream);
+                App.UsuarioVM.Usuario.SetarAvatarStream(Stream);
             }
 
-            var resultado = await UsuarioViewModel.AtualizarCadastro(Usuario);
+            var resultado = await UsuarioViewModel.AtualizarCadastro();
             switch (resultado)
             {
                 case RespostaStatus.Sucesso:

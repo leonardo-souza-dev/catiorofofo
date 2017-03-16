@@ -6,7 +6,7 @@ namespace App4.Model
     public class RespostaLogin
     {
         [DataMember]
-        internal RespostaUsuario usuario;
+        internal UsuarioModel usuario;
 
         [DataMember]
         internal string mensagem;

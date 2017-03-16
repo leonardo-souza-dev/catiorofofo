@@ -1,58 +1,70 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
+using System.Threading.Tasks;
+using App4.Model;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Runtime.Serialization.Json;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using System.Text;
+using System.Diagnostics;
+using App4.Model.Resposta;
+using System.Runtime.Serialization;
 
 namespace App4.Model
 {
-    public class UsuarioModel : INotifyPropertyChanged
+    [DataContract]
+    public class UsuarioModel
     {
+        //public event PropertyChangedEventHandler PropertyChanged;
+
+        #region Campos
+
+        private int usuarioId;
+        private string nomeArquivoAvatar;
+        private string email;
+        private string nomeUsuario;
+        private Stream AvatarStream { get; set; }
+
+        #endregion
+
+        #region Propriedades
+
+        [DataMember]
+        public int UsuarioId { get { return usuarioId; } set { usuarioId = value; } }
+        [DataMember]
+        public string NomeArquivoAvatar { get { return nomeArquivoAvatar; } set { nomeArquivoAvatar = value; } }
+        [DataMember]
+        public string Email { get { return email; } set { email = value; } }
+        [DataMember]
+        public string NomeUsuario { get { return nomeUsuario; } set { nomeUsuario = value; } }
+        public string AvatarUrl { get { return App.Config.ObterUrlBaseWebApi() + "api/foto?na=" + NomeArquivoAvatar; } }
         public bool NomeUsuarioEntry { get; set; }
 
-        public int UsuarioId { get; set; }
+        #endregion
 
-        private string email;
-        public string Email
+        #region Metodos
+
+        /*protected void OnPropertyChanged(string name)
         {
-            get
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
             {
-                return email;
-            }
-            set
-            {
-                email = value;
-                OnPropertyChanged("Email");
+                handler(this, new PropertyChangedEventArgs(name));
             }
         }
-
-        private string nomeArquivoAvatar;
-        public string NomeArquivoAvatar
+        */
+        public byte[] ObterByteArrayAvatar()
         {
-            get
+            using (MemoryStream ms = new MemoryStream())
             {
-                return nomeArquivoAvatar;
-            }
-            set
-            {
-                nomeArquivoAvatar = value;
-                OnPropertyChanged("NomeArquivoAvatar");
+                AvatarStream.CopyTo(ms);
+                return ms.ToArray();
             }
         }
-
-        private string nomeUsuario;
-        public string NomeUsuario
-        {
-            get
-            {
-                return nomeUsuario;
-            }
-            set
-            {
-                nomeUsuario = value;
-                OnPropertyChanged("NomeUsuario");
-            }
-        }
-
-        private Stream AvatarStream { get; set; }
 
         public bool EditouAvatar()
         {
@@ -63,53 +75,101 @@ namespace App4.Model
             AvatarStream = stream;
         }
 
-        public string AvatarUrl
+        #endregion
+    }
+
+    public static class UsuarioRepository
+    {
+        public static async Task<RespostaFetch> TesteConexao()
         {
-            get
-            {
-                return ObterUrlBaseWebApi() + "api/foto?na=" + NomeArquivoAvatar;
-            }
+            var httpClient = new HttpClient();
+            var response = await httpClient.GetAsync(App.Config.ObterUrlBaseWebApi() + "fetch");
+            var stream = await response.Content.ReadAsStreamAsync();
+            var ser = new DataContractJsonSerializer(typeof(RespostaFetch));
+            stream.Position = 0;
+            RespostaFetch t = (RespostaFetch)ser.ReadObject(stream);
+            return t;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
 
-        protected void OnPropertyChanged(string name)
+        public static async Task<RespostaAtualizarUsuario> Atualizar(UsuarioModel usuario)
         {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null)
+            if (usuario.EditouAvatar())
             {
-                handler(this, new PropertyChangedEventArgs(name));
+                //upload da foto
+                var urlUpload = App.Config.ObterUrlBaseWebApi() + "api/uploadavatar";
+                byte[] byteArray = usuario.ObterByteArrayAvatar();
+
+                var requestContent = new MultipartFormDataContent();
+                var imageContent = new ByteArrayContent(byteArray);
+                imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
+                requestContent.Add(imageContent, "av", usuario.UsuarioId.ToString().PadLeft(6, '0') + ".jpg");
+                requestContent.Add(new StringContent(usuario.UsuarioId.ToString()), "usuarioId");
+
+                var client = new HttpClient();
+                var response = await client.PostAsync(urlUpload, requestContent);
+                var stream = await response.Content.ReadAsStreamAsync();
+                var ser = new DataContractJsonSerializer(typeof(RespostaUpload));
+                stream.Position = 0;
+                var respostaUpload = (RespostaUpload)ser.ReadObject(stream);
+                var request = new
+                {
+                    nomeUsuario = usuario.NomeUsuario,
+                    usuarioId = usuario.UsuarioId,
+                    email = usuario.Email,
+                    nomeArquivoAvatar = respostaUpload.nomeArquivo
+                };
+                var resposta = await Resposta<RespostaAtualizarUsuario>(request, "atualizarusuario");
+                return resposta;
             }
-        }
-
-        public byte[] ObterByteArrayAvatar()
-        {
-            using (MemoryStream ms = new MemoryStream())
-            {
-                AvatarStream.CopyTo(ms);
-                return ms.ToArray();
-            }
-        }
-
-        private static string ObterUrlBaseWebApi()
-        {
-            bool usarCloud = true;
-            bool debugarAndroid = false;
-
-            string enderecoBase = string.Empty;
-
-            if (usarCloud)
-                enderecoBase = "https://cfwebapi.herokuapp.com/";
             else
             {
-                enderecoBase += "http://";
-                if (debugarAndroid)
-                    enderecoBase += "10.0.2.2";
-                else
-                    enderecoBase += "localhost";
-                enderecoBase += ":8084/";
+                var request = new
+                {
+                    nomeUsuario = usuario.NomeUsuario,
+                    usuarioId = usuario.UsuarioId,
+                    email = usuario.Email
+                };
+                var resposta = await Resposta<RespostaAtualizarUsuario>(request, "atualizarusuario");
+                return resposta;
             }
-            return enderecoBase;
+
         }
+
+        public static async Task<RespostaCadastro> Cadastro(string emailDigitado, string senhaDigitada, string nomeUsuarioDigitado)
+        {
+            var resposta = await Resposta<RespostaCadastro>(new { email = emailDigitado, senha = senhaDigitada, nomeUsuario = nomeUsuarioDigitado }, "cadastro");
+
+            return resposta;
+        }
+
+        public static async Task<UsuarioModel> Login(string emailDigitado, string senhaDigitada)
+        {
+            var resposta = await Resposta<UsuarioModel>(new { email = emailDigitado, senha = senhaDigitada }, "login");
+
+            return resposta;
+        }
+
+        public static async Task<RespostaEsqueciSenha> EsqueciSenha(string emailDigitado)
+        {
+            var resposta = await Resposta<RespostaEsqueciSenha>(new { email = emailDigitado }, "esquecisenha");
+
+            return resposta;
+        }
+
+        private static async Task<T> Resposta<T>(object conteudo, string metodo, bool ehDownload = false)
+        {
+            var httpClient = new HttpClient();
+            var json = JsonConvert.SerializeObject(conteudo);
+            var contentPost = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await httpClient.PostAsync(App.Config.ObterUrlBaseWebApi() + "api/" + metodo, contentPost);
+            var stream = await response.Content.ReadAsStreamAsync();
+            var ser = new DataContractJsonSerializer(typeof(T));
+            stream.Position = 0;
+            T t = (T)ser.ReadObject(stream);
+
+            return t;
+        }
+
     }
 }

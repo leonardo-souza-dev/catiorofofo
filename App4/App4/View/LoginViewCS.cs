@@ -13,8 +13,7 @@ namespace App4.View
 {
     public partial class LoginViewCS : ContentPage
     {
-        ConfiguracaoApp Config;
-        UsuarioViewModel UsuarioViewModel;
+        //UsuarioViewModel UsuarioViewModel;
 
         Label CatioroFofoLabel;
         Image LogoImage;
@@ -29,13 +28,8 @@ namespace App4.View
         Button CadastroButton;
         Button EsqueciButton;
 
-
-
-        public LoginViewCS(ConfiguracaoApp config)
+        public LoginViewCS()
         {
-            Config = config;
-
-            UsuarioViewModel = new UsuarioViewModel();
             this.Title = "login";
 
             var scroll = new ScrollView();
@@ -54,13 +48,11 @@ namespace App4.View
                 Text = "catioro fofo",
                 FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
                 VerticalOptions = LayoutOptions.CenterAndExpand
-                //,Margin = new Thickness(5, 5, 5, 5)
             };
             LogoImage = new Image
             {
                 Source = ImageSource.FromResource("puppy150.png"),
                 HorizontalOptions = LayoutOptions.Center
-                //,Margin = new Thickness(5, 5, 5, 5)
             };
 
             EmailLabel = new Label
@@ -68,13 +60,11 @@ namespace App4.View
                 Text = "email",
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
                 VerticalOptions = LayoutOptions.CenterAndExpand
-                //,Margin = new Thickness(5, 5, 5, 5)
             };
             EmailEntry = new Entry
             {
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Entry)),
                 VerticalOptions = LayoutOptions.CenterAndExpand
-                //,Margin = new Thickness(5, 5, 5, 5)
             };
 
             SenhaLabel = new Label
@@ -82,13 +72,11 @@ namespace App4.View
                 Text = "senha",
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
                 VerticalOptions = LayoutOptions.CenterAndExpand
-                //,Margin = new Thickness(5, 5, 5, 5)
             };
             SenhaEntry = new Entry
             {
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Entry)),
                 VerticalOptions = LayoutOptions.CenterAndExpand
-                //,Margin = new Thickness(5, 5, 5, 5)
                 ,IsPassword = true
             };
 
@@ -97,21 +85,18 @@ namespace App4.View
                 Text = "login",
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Button)),
                 VerticalOptions = LayoutOptions.CenterAndExpand
-                //,Margin = new Thickness(5, 5, 5, 5)
             };
             CadastroButton = new Button
             {
                 Text = "cadastro",
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Button)),
                 VerticalOptions = LayoutOptions.CenterAndExpand
-                //,Margin = new Thickness(5, 5, 5, 5)
             };
             EsqueciButton = new Button
             {
                 Text = "esqueci a senha",
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Button)),
                 VerticalOptions = LayoutOptions.CenterAndExpand,
-                //,Margin = new Thickness(5, 5, 5, 5)
             };
 
 
@@ -121,7 +106,6 @@ namespace App4.View
 
             return new StackLayout
             {
-                //Padding = new Thickness(0, 20, 0, 0),
                 Children = {
                     CatioroFofoLabel,
                     LogoImage,
@@ -146,11 +130,11 @@ namespace App4.View
             string email = EmailEntry.Text;
             string senha = SenhaEntry.Text;
 
-            var resposta = await UsuarioViewModel.CadastrarELogar(email, senha);
+            var resposta = await App.UsuarioVM.CadastrarELogar(email, senha);
 
             if (resposta != null && resposta.Item1 == RespostaStatus.Sucesso)
             {
-                var mainPage = new MainPage(resposta.Item2, Config);
+                var mainPage = new MainPage();
                 await Navigation.PushModalAsync(mainPage);
             }
         }
@@ -173,7 +157,7 @@ namespace App4.View
 
         private void TesteConexao()
         {
-            var resposta = UsuarioViewModel.TesteConexao();
+            var resposta = App.UsuarioVM.TesteConexao();
 
             if (resposta == RespostaStatus.Inexistente)
             {
@@ -190,22 +174,17 @@ namespace App4.View
 
             string email = EmailEntry.Text;
             string senha = SenhaEntry.Text;
-            var resultado = await UsuarioViewModel.Login(email, senha);
+            bool logou = await App.UsuarioVM.Login(email, senha);
 
-            switch(resultado.Item1)
+            if (logou)
             {
-                case RespostaStatus.Sucesso:
-                    var mainPage = new MainPage(resultado.Item2, Config);
-                    await Navigation.PushModalAsync(mainPage);
-                    break;
-                case RespostaStatus.Inexistente:
-                    await DisplayAlert("ops", "não tem esse email", "volta lá");
-                    EmailEntry.Focus();
-                    break;
-                case RespostaStatus.ErroGenerico:
-                   await DisplayAlert("ops", "ziquizera. espera um pouco", "volta lá");
-                    EmailEntry.Focus();
-                    break;
+                var mainPage = new MainPage();
+                await Navigation.PushModalAsync(mainPage);
+            }
+            else
+            {
+                await DisplayAlert("ops", "não tem esse email", "volta lá");
+                EmailEntry.Focus();
             }
         }
 
@@ -219,7 +198,7 @@ namespace App4.View
             }
 
             string email = EmailEntry.Text;
-            var resultado = await UsuarioViewModel.EsqueciSenha(email);
+            var resultado = await App.UsuarioVM.EsqueciSenha(email);
 
             switch (resultado)
             {

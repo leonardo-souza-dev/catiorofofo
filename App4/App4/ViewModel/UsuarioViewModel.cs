@@ -2,13 +2,41 @@
 using App4.Model.Resposta;
 using App4.Repository;
 using System;
+using System.ComponentModel;
 using System.Threading.Tasks;
 
 namespace App4.ViewModel
 {
-    public class UsuarioViewModel
+    public class UsuarioViewModel : INotifyPropertyChanged
     {
+        #region Propriedades
+
+        private UsuarioModel usuario;
+        public UsuarioModel Usuario
+        {
+            get
+            {
+                return usuario;
+            }
+            set
+            {
+                usuario = value;
+            }
+        }
+
+        #endregion
+
         public bool LoginSucesso;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string name)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(name));
+            }
+        }
 
         public RespostaStatus TesteConexao()
         {
@@ -30,9 +58,9 @@ namespace App4.ViewModel
             return status;
         }
 
-        public async Task<RespostaStatus> AtualizarCadastro(UsuarioModel usuario)
+        public async Task<RespostaStatus> AtualizarCadastro()
         {
-            var resposta2 = await UsuarioRepository.Atualizar(usuario);
+            var resposta2 = await UsuarioRepository.Atualizar(this.Usuario);
 
             var status = RespostaStatus.Sucesso;
 
@@ -90,27 +118,11 @@ namespace App4.ViewModel
                             .Replace("A", "").Replace("M", "").Replace("P", "");
         }
 
-        public async Task<Tuple<RespostaStatus,UsuarioModel>> Login(string email, string senha)
+        public async Task<bool> Login(string email, string senha)
         {
-            var resposta = await UsuarioRepository.Login(email, senha);
+            this.Usuario = await UsuarioRepository.Login(email, senha);
 
-            if (resposta.mensagem.ToUpper() == "INEXISTENTE")
-            {
-                return new Tuple<RespostaStatus,UsuarioModel>(RespostaStatus.Inexistente, null);
-            }
-
-            if (resposta.mensagem.ToUpper() == "SUCESSO")
-            {
-                UsuarioModel usuario = new UsuarioModel();
-                usuario.UsuarioId = resposta.usuario.usuarioId;
-                usuario.Email = resposta.usuario.email;
-                usuario.NomeArquivoAvatar = resposta.usuario.nomeArquivoAvatar;
-                usuario.NomeUsuario = resposta.usuario.nomeUsuario;
-
-                return new Tuple<RespostaStatus, UsuarioModel>(RespostaStatus.Sucesso, usuario);
-            }
-
-            return null;
+            return this.Usuario != null ? true : false;
         }
 
         public async Task<RespostaStatus> EsqueciSenha(string email)

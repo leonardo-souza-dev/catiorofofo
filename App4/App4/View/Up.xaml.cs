@@ -20,7 +20,6 @@ namespace App4.View
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class Up : ContentPage
     {
-        private PostViewModel PostViewModel;
         private Stream Stream = null;
         private MediaFile File;
         private TabbedPage MainPage;
@@ -29,18 +28,16 @@ namespace App4.View
 
         public string Arquivo = string.Empty;
 
-        public Up(PostViewModel postViewModel, TabbedPage mainPage)
+        public Up(TabbedPage mainPage)
         {
             InitializeComponent();
 
             this.MainPage = mainPage;
-            this.PostViewModel = postViewModel;
             this.Title = "enviar catioro fofo";
             CrossMedia.Current.Initialize();
 
-            UploadViewModel uploadViewModel = new UploadViewModel();
-            uploadViewModel.UploadModel = new UploadModel(){ PostarButtonIsEnabled = false };
-            this.BindingContext = uploadViewModel.UploadModel;
+            UsuarioViewModel usuarioViewModel = new UsuarioViewModel();
+            this.BindingContext = usuarioViewModel;
         }
 
         public async void EscolherFoto()
@@ -77,9 +74,9 @@ namespace App4.View
 
         protected async void PostarButtonClicked(object o, EventArgs args)
         {
-            var resposta = await PostViewModel.Salvar(Stream,
+            var resposta = await App.PostVM.Salvar(Stream,
                                                       LegendaEntry.Text,     
-                                                      PostViewModel.Usuario);
+                                                      App.UsuarioVM.Usuario);
 
             if (resposta == RespostaStatus.ErroGenerico)
             {
@@ -87,7 +84,7 @@ namespace App4.View
                 return;
             }
 
-            var expViewCode = new Page1(PostViewModel);
+            var expViewCode = new Page1();
             MainPage.CurrentPage = MainPage.Children[0];
         }
 

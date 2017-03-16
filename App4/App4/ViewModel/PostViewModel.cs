@@ -12,17 +12,6 @@ namespace App4.ViewModel
     public class PostViewModel
     {
         public ObservableCollection<PostModel> Posts { get; set; } = new ObservableCollection<PostModel>();
-        public UsuarioModel Usuario;
-
-        /// <summary>
-        /// Construtor que recebe o id do usuário logado ou recém-cadastrado
-        /// </summary>
-        /// <param name="usuarioId">Id do usuário logado ou recém-cadastrado</param>
-        public PostViewModel(UsuarioModel usuario, ConfiguracaoApp config)
-        {
-            Usuario = usuario;
-            CarregarPosts();
-        }
 
         public async void CarregarPosts()
         {
@@ -36,7 +25,7 @@ namespace App4.ViewModel
                 {
                     foreach (var curtida in item.Curtidas)
                     {
-                        if (curtida.UsuarioId == Usuario.UsuarioId)
+                        if (curtida.UsuarioId == App.UsuarioVM.Usuario.UsuarioId)
                         {
                             item.CurtidaHabilitada = false;
                         }
@@ -50,7 +39,7 @@ namespace App4.ViewModel
 
         public async Task<RespostaStatus> Curtir(PostModel post)
         {
-            var resposta = await PostRepository.Curtir(Usuario.UsuarioId, post.PostId);
+            var resposta = await PostRepository.Curtir(App.UsuarioVM.Usuario.UsuarioId, post.PostId);
 
             int posicao = ObterPosicao(post);
 
@@ -67,7 +56,7 @@ namespace App4.ViewModel
 
         public async Task<RespostaStatus> Descurtir(PostModel post)
         {
-            var resposta = await PostRepository.Descurtir(Usuario.UsuarioId, post.PostId);
+            var resposta = await PostRepository.Descurtir(App.UsuarioVM.Usuario.UsuarioId, post.PostId);
 
             int posicao = ObterPosicao(post);
 
@@ -86,11 +75,11 @@ namespace App4.ViewModel
         {
             if (curtidaHabilitada)
             {
-                post.Curtidas.Remove(post.Curtidas.FirstOrDefault(x => x.UsuarioId == Usuario.UsuarioId));
+                post.Curtidas.Remove(post.Curtidas.FirstOrDefault(x => x.UsuarioId == App.UsuarioVM.Usuario.UsuarioId));
             }
             else
             {
-                post.Curtidas.Add(new CurtidaModel { UsuarioId = Usuario.UsuarioId, PostId = post.PostId });
+                post.Curtidas.Add(new CurtidaModel { UsuarioId = App.UsuarioVM.Usuario.UsuarioId, PostId = post.PostId });
             }
             
             post.CurtidaHabilitada = curtidaHabilitada;
