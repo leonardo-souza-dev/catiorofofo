@@ -15,46 +15,23 @@ namespace App4.ViewModel
         private string nomeUsuario;
         private bool nomeUsuarioEntryIsEnabled;
         private string email;
-
-        #endregion
-
-        #region Bindings
-
-        public string AvatarUrl { get { return usuario.AvatarUrl; } set { avatarUrl = value; OnPropertyChanged("AvatarUrl"); } }
-        public string NomeUsuario { get { return usuario.NomeUsuario; } set { nomeUsuario = value; OnPropertyChanged("NomeUsuario"); } }
-        public bool NomeUsuarioEntryIsEnabled { get { return nomeUsuarioEntryIsEnabled; } set { nomeUsuarioEntryIsEnabled = value; OnPropertyChanged("NomeUsuarioEntryIsEnabled"); } }
-        public string Email { get { return usuario.Email; } set { email = value; OnPropertyChanged("Email"); } }
+        private UsuarioModel usuario;
 
         #endregion
 
         #region Propriedades
 
-        private UsuarioModel usuario;
-        public UsuarioModel Usuario
-        {
-            get
-            {
-                return usuario;
-            }
-            set
-            {
-                usuario = value;
-            }
-        }
+        public string AvatarUrl { get { return usuario.AvatarUrl; } set { avatarUrl = value; OnPropertyChanged("AvatarUrl"); } }
+        public string NomeUsuario { get { return usuario.NomeUsuario; } set { nomeUsuario = value; OnPropertyChanged("NomeUsuario"); } }
+        public bool NomeUsuarioEntryIsEnabled { get { return nomeUsuarioEntryIsEnabled; } set { nomeUsuarioEntryIsEnabled = value; OnPropertyChanged("NomeUsuarioEntryIsEnabled"); } }
+        public string Email { get { return usuario.Email; } set { email = value; OnPropertyChanged("Email"); } }
+        
+        public UsuarioModel Usuario { get { return usuario; } set { usuario = value; } }
 
         #endregion
 
-        public bool LoginSucesso;
-
         public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string name)
-        {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(name));
-            }
-        }
+        protected void OnPropertyChanged(string name) { PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name)); }
 
         public RespostaStatus TesteConexao()
         {

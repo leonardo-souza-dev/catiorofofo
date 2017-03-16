@@ -34,20 +34,25 @@ namespace App4.View
             BindingContext = App.UsuarioVM;
         }
 
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+        }
+
         protected async void OnAvatarImageTapped(object sender, EventArgs e)
         {
             if (modoEdicao)
             {
-                if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsPickPhotoSupported)
+                //var cameraNaoDisponivel = !CrossMedia.Current.IsCameraAvailable;
+                var escolherFotoNaoSuportado = !CrossMedia.Current.IsPickPhotoSupported;
+
+                if (/*cameraNaoDisponivel || */escolherFotoNaoSuportado)
                 {
                     await DisplayAlert("No Camera", ":( No camera avaialble.", "OK");
                     return;
                 }
 
-                File = await CrossMedia.Current.PickPhotoAsync(new PickMediaOptions()
-                {
-                    CompressionQuality = 50
-                });
+                File = await CrossMedia.Current.PickPhotoAsync(new PickMediaOptions() { CompressionQuality = 50 });
 
                 if (File == null)
                     return;
@@ -65,8 +70,6 @@ namespace App4.View
 
             return stream;
         }
-
-
 
         protected void EditarClicked(object sender, EventArgs e)
         {

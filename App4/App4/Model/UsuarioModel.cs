@@ -19,8 +19,6 @@ namespace App4.Model
     [DataContract]
     public class UsuarioModel
     {
-        //public event PropertyChangedEventHandler PropertyChanged;
-
         #region Campos
 
         private int usuarioId;
@@ -76,6 +74,7 @@ namespace App4.Model
         }
 
         #endregion
+
     }
 
     public static class UsuarioRepository
@@ -90,7 +89,6 @@ namespace App4.Model
             RespostaFetch t = (RespostaFetch)ser.ReadObject(stream);
             return t;
         }
-
 
         public static async Task<RespostaAtualizarUsuario> Atualizar(UsuarioModel usuario)
         {
