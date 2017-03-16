@@ -54,7 +54,7 @@
                 <Label x:Name="nomeUsuarioEntry"
                        Text="{Binding NomeUsuario}" 
                        Style="{StaticResource MyLabel}"
-                       IsEnabled="{Binding NomeUsuarioEntry}"
+                       IsEnabled="{Binding NomeUsuarioEntryIsEnabled}"
                        FontAttributes="Bold" 
                        FontSize="26" 
                        HorizontalTextAlignment="Center" 

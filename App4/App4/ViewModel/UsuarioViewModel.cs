@@ -9,6 +9,24 @@ namespace App4.ViewModel
 {
     public class UsuarioViewModel : INotifyPropertyChanged
     {
+        #region Campos
+
+        private string avatarUrl;
+        private string nomeUsuario;
+        private bool nomeUsuarioEntryIsEnabled;
+        private string email;
+
+        #endregion
+
+        #region Bindings
+
+        public string AvatarUrl { get { return usuario.AvatarUrl; } set { avatarUrl = value; OnPropertyChanged("AvatarUrl"); } }
+        public string NomeUsuario { get { return usuario.NomeUsuario; } set { nomeUsuario = value; OnPropertyChanged("NomeUsuario"); } }
+        public bool NomeUsuarioEntryIsEnabled { get { return nomeUsuarioEntryIsEnabled; } set { nomeUsuarioEntryIsEnabled = value; OnPropertyChanged("NomeUsuarioEntryIsEnabled"); } }
+        public string Email { get { return usuario.Email; } set { email = value; OnPropertyChanged("Email"); } }
+
+        #endregion
+
         #region Propriedades
 
         private UsuarioModel usuario;

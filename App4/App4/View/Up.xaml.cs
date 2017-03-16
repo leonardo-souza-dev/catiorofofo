@@ -36,8 +36,7 @@ namespace App4.View
             this.Title = "enviar catioro fofo";
             CrossMedia.Current.Initialize();
 
-            UsuarioViewModel usuarioViewModel = new UsuarioViewModel();
-            this.BindingContext = usuarioViewModel;
+            this.BindingContext = App.UsuarioVM;
         }
 
         public async void EscolherFoto()

@@ -18,7 +18,6 @@ namespace App4.View
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class PerfilView : ContentPage
     {
-        private UsuarioViewModel UsuarioViewModel;
         MediaFile File;
         Stream Stream = null;
         bool EditouAvatar;
@@ -29,14 +28,10 @@ namespace App4.View
         {
             InitializeComponent();
 
-            UsuarioViewModel = new UsuarioViewModel();
-
             CrossMedia.Current.Initialize();
 
             App.UsuarioVM.Usuario.NomeUsuarioEntry = false;
-            BindingContext = App.UsuarioVM.Usuario;
-
-            //avatarImage.GestureRecognizers.Add(tapGestureRecognizer);
+            BindingContext = App.UsuarioVM;
         }
 
         protected async void OnAvatarImageTapped(object sender, EventArgs e)
@@ -130,7 +125,7 @@ namespace App4.View
                 App.UsuarioVM.Usuario.SetarAvatarStream(Stream);
             }
 
-            var resultado = await UsuarioViewModel.AtualizarCadastro();
+            var resultado = await App.UsuarioVM.AtualizarCadastro();
             switch (resultado)
             {
                 case RespostaStatus.Sucesso:
