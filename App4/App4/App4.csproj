@@ -53,6 +53,7 @@
     <Compile Include="Model\Resposta\RespostaUpload.cs" />
     <Compile Include="Model\Resposta\RespostaLogin.cs" />
     <Compile Include="Model\UsuarioModel.cs" />
+    <Compile Include="Repository\ClienteHttp.cs" />
     <Compile Include="Repository\UsuarioRepository.cs" />
     <Compile Include="Repository\PostRepository.cs" />
     <Compile Include="Model\UploadModel.cs" />

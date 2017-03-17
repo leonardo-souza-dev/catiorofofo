@@ -19,6 +19,9 @@ namespace App4.ViewModel
 
             listaPosts = await PostRepository.ObterPosts();
 
+            DebugHelper d = new DebugHelper();
+            d.Print(listaPosts);
+
             for (int index = 0; index < listaPosts.Count; index++)
             {
                 var post = listaPosts[index];

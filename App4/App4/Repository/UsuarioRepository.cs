@@ -52,6 +52,8 @@ namespace App4.Repository
                     nomeArquivoAvatar = respostaUpload.nomeArquivo
                 };
                 var resposta = await Resposta<RespostaAtualizarUsuario>(request, "atualizarusuario");
+
+                App.UsuarioVM.Usuario.NomeArquivoAvatar = respostaUpload.nomeArquivo;
                 return resposta;
             }
             else

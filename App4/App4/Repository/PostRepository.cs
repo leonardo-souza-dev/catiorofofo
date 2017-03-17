@@ -14,7 +14,7 @@ namespace App4.Repository
     public static class PostRepository
     {
         private static Guid idTemp;
-        private static List<PostModel> ListaPosts;
+        //private static List<PostModel> ListaPosts;
 
         public static async Task<List<PostModel>> ObterPosts()
         {
@@ -22,6 +22,7 @@ namespace App4.Repository
 
             var respostaPosts = await Resposta<List<PostModel>>(null, "obterposts");
 
+            /*
             ListaPosts = new List<PostModel>();
 
             foreach (var respostaPost in respostaPosts)
@@ -49,7 +50,15 @@ namespace App4.Repository
                 }
                 ListaPosts.Add(post);
             }
-            return ListaPosts;
+            return ListaPosts;*/
+            Debug.WriteLine(" ***** DEBUG ***** ");
+            foreach (var item in respostaPosts)
+            {
+                Debug.WriteLine(item.PostId);
+                Debug.WriteLine(item.Usuario.UsuarioId);
+                Debug.WriteLine(item.Usuario.AvatarUrl);
+            }
+            return respostaPosts;
         }
 
         public static async Task<RespostaCurtir> Descurtir(int usuarioIdPassado, int postIdPassado)
@@ -69,26 +78,19 @@ namespace App4.Repository
         private static async Task<T> Resposta<T>(object conteudo, string metodo, bool ehDownload = false)
         {
             var httpClient = new HttpClient();
+            var uri = App.Config.ObterUrlBaseWebApi() + "api/" + metodo;
 
             if (conteudo != null)
             {
-                var json = JsonConvert.SerializeObject(conteudo);
-                var contentPost = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await httpClient.PostAsync(App.Config.ObterUrlBaseWebApi() + "api/" + metodo, contentPost);
-                var stream = await response.Content.ReadAsStreamAsync();
-                var ser = new DataContractJsonSerializer(typeof(T));
-                stream.Position = 0;
-                T t = (T)ser.ReadObject(stream);
-                return t;
+                var retorno = await new ClienteHttp().PostAsync<T>(uri, conteudo);
+
+                return retorno;
             }
             else
             {
-                var response = await httpClient.GetAsync(App.Config.ObterUrlBaseWebApi() + "api/" + metodo);
-                var stream = await response.Content.ReadAsStreamAsync();
-                var ser = new DataContractJsonSerializer(typeof(T));
-                stream.Position = 0;
-                T t = (T)ser.ReadObject(stream);
-                return t;
+                var retorno = await new ClienteHttp().GetAsync<T>(uri);
+
+                return retorno;
             }
         }
 

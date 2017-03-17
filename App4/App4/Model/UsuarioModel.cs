@@ -16,10 +16,11 @@ using System.Runtime.Serialization;
 namespace App4.Model
 {
     [DataContract]
-    public class UsuarioModel
+    public class UsuarioModel : INotifyPropertyChanged
     {
         #region Campos
 
+        private string nomeArquivoAvatar;
         private Stream AvatarStream { get; set; }
 
         #endregion
@@ -29,8 +30,21 @@ namespace App4.Model
 
         [DataMember(Name = "usuarioId")]
         public int UsuarioId { get; set; }
+
         [DataMember(Name = "nomeArquivoAvatar")]
-        public string NomeArquivoAvatar { get; set; }
+        public string NomeArquivoAvatar
+        {
+            get
+            {
+                return nomeArquivoAvatar;
+            }
+            set
+            {
+                nomeArquivoAvatar = value;
+                OnPropertyChanged("NomeArquivoAvatar");
+            }
+        }
+
         [DataMember(Name = "email")]
         public string Email { get; set; }
         [DataMember(Name = "nomeUsuario")]
@@ -61,6 +75,9 @@ namespace App4.Model
         {
             AvatarStream = stream;
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string name) { PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name)); }
 
         #endregion
     }
