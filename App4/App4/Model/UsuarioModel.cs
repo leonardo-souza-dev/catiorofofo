@@ -27,14 +27,15 @@ namespace App4.Model
 
         #region Propriedades
 
-        [DataMember]
+        [DataMember(Name = "usuarioId")]
         public int UsuarioId { get; set; }
-        [DataMember]
+        [DataMember(Name = "nomeArquivoAvatar")]
         public string NomeArquivoAvatar { get; set; }
-        [DataMember]
+        [DataMember(Name = "email")]
         public string Email { get; set; }
-        [DataMember]
+        [DataMember(Name = "nomeUsuario")]
         public string NomeUsuario { get; set; }
+
         public string AvatarUrl { get { return App.Config.ObterUrlBaseWebApi() + "api/foto?na=" + NomeArquivoAvatar; } }
         public bool NomeUsuarioEntry { get; set; }
 

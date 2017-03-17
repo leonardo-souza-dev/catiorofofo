@@ -9,8 +9,6 @@ namespace App4.Model
     {
         #region Campos
 
-        private int usuarioId;
-
         #endregion
 
 
@@ -18,19 +16,20 @@ namespace App4.Model
 
         #region Binds
 
-        [DataMember]
+        [DataMember(Name = "postId")]
         public int PostId { get; set; }
-        [DataMember]
+        [DataMember(Name = "legenda")]
         public string Legenda { get; set; }
-        [DataMember]
+        [DataMember(Name = "nomeArquivo")]
         public string NomeArquivo { get; set; }
-        [DataMember]
-        public int UsuarioId { get { return this.Usuario.UsuarioId; } set { usuarioId = value; } }
-        [DataMember]
+        //[DataMember(Name = "usuarioId")]
+        //public int UsuarioId { get; set; }
+        [DataMember(Name = "curtidas")]
         public List<CurtidaModel> Curtidas { get; set; }
-
+        [DataMember(Name = "usuario")]
         public UsuarioModel Usuario { get; set; }
-        public string AvatarUrl { get { return App.Config.ObterUrlBaseWebApi() + "api/foto?na=" + NomeArquivoAvatar; } }
+
+        public string AvatarUrl { get { return App.Config.ObterUrlBaseWebApi() + "api/foto?na=" + Usuario.NomeArquivoAvatar; } }
 
         #endregion
 

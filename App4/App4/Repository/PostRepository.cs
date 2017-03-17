@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Text;
 using System;
+using System.Diagnostics;
 
 namespace App4.Repository
 {
@@ -29,7 +30,7 @@ namespace App4.Repository
 
                 UsuarioModel usuario = new UsuarioModel();
                 usuario.NomeArquivoAvatar = respostaPost.NomeArquivoAvatar;
-                usuario.UsuarioId = respostaPost.UsuarioId;
+                usuario.UsuarioId = respostaPost.Usuario.UsuarioId;
                 usuario.Email = respostaPost.Usuario.Email;
                 usuario.NomeUsuario = respostaPost.Usuario.NomeUsuario;
 
@@ -100,12 +101,12 @@ namespace App4.Repository
             var requestContent = new MultipartFormDataContent();
             var imageContent = new ByteArrayContent(byteArray);
             imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
-            requestContent.Add(imageContent, "cf", post.UsuarioId.ToString().PadLeft(6,'0') + ".jpg");
-            requestContent.Add(new StringContent(post.UsuarioId.ToString()), "usuarioId");
+            requestContent.Add(imageContent, "cf", post.Usuario.UsuarioId.ToString().PadLeft(6,'0') + ".jpg");
+            requestContent.Add(new StringContent(post.Usuario.UsuarioId.ToString()), "usuarioId");
 
             var client = new HttpClient();
-            var response = await client.PostAsync(urlUpload, requestContent);
-            var stream = await response.Content.ReadAsStreamAsync();
+            var response2 = await client.PostAsync(urlUpload, requestContent);
+            var stream = await response2.Content.ReadAsStreamAsync();
             var ser = new DataContractJsonSerializer(typeof(RespostaUpload));
             stream.Position = 0;
             var resposta = (RespostaUpload)ser.ReadObject(stream);
@@ -114,18 +115,32 @@ namespace App4.Repository
             post.NomeArquivo = resposta.nomeArquivo;
 
             //salva post
-            //var clientt = new HttpClient();
-            var json = JsonConvert.SerializeObject(post);
-            var contentPost = new StringContent(json, Encoding.UTF8, "application/json");
+            var httpRequest = new HttpClient();
+            //var json = JsonConvert.SerializeObject(post);
+            //var contentPost = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response3 = await client.PostAsync(App.Config.ObterUrlBaseWebApi() + "api/salvarpost", contentPost);
-            var stream3 = await response3.Content.ReadAsStreamAsync();
+            string userJson = Newtonsoft.Json.JsonConvert.SerializeObject(post);
+            var response = await httpRequest.PostAsync(App.Config.ObterUrlBaseWebApi() + "api/salvarpost",
+                new StringContent(userJson, System.Text.Encoding.UTF8, "application/json"));
 
+            var streamm = await response.Content.ReadAsStreamAsync();
+            var x = new DataContractJsonSerializer(typeof(PostModel));
+            streamm.Position = 0;
+            var respostaUpload = (PostModel)x.ReadObject(streamm);
+
+
+            return respostaUpload;
+        }
+
+        private static PostModel Convert(System.IO.Stream stream)
+        {
             var ser3 = new DataContractJsonSerializer(typeof(PostModel));
-            stream3.Position = 0;
-            var resposta3 = (PostModel)ser3.ReadObject(stream3);
-
-            return post;
+            stream.Position = 0;
+            PostModel resposta3 = (PostModel)ser3.ReadObject(stream);
+            Debug.WriteLine("PostModel");
+            Debug.WriteLine(resposta3.PostId);
+            Debug.WriteLine(resposta3.Legenda);
+            return resposta3;
         }
     }
 }

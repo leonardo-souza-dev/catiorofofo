@@ -23,7 +23,7 @@ namespace App4.ViewModel
             {
                 var post = listaPosts[index];
 
-                if (App.UsuarioVM.Usuario.UsuarioId == post.UsuarioId)
+                if (App.UsuarioVM.Usuario.UsuarioId == post.Usuario.UsuarioId)
                 {
                     post.Usuario = App.UsuarioVM.Usuario;
                 }
@@ -126,8 +126,8 @@ namespace App4.ViewModel
                     Usuario = usuario
                 };
 
-                await PostRepository.SalvarPost(post);
-                InserirPost(post);
+                PostModel postSalvo = await PostRepository.SalvarPost(post);
+                InserirPost(postSalvo);
 
                 return RespostaStatus.Sucesso;
             }

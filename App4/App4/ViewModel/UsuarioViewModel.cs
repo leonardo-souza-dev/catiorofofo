@@ -55,7 +55,7 @@ namespace App4.ViewModel
 
         public async Task<RespostaStatus> AtualizarCadastro()
         {
-            var resposta2 = await UsuarioRepository.Atualizar(this.Usuario);
+            var resposta2 = await UsuarioRepository.Atualizar();
 
             var status = RespostaStatus.Sucesso;
 

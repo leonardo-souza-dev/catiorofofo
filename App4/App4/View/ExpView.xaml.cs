@@ -15,7 +15,9 @@ namespace App4.View
         public Page1()
         {
             InitializeComponent();
-            
+
+            App.PostVM.CarregarPosts();
+
             BindingContext = App.PostVM;
         }
 
@@ -35,12 +37,5 @@ namespace App4.View
 
             return;
         }
-
-        protected override void OnAppearing()
-        {
-            App.PostVM.CarregarPosts();
-            base.OnAppearing();
-        }
-
     }
 }
