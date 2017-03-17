@@ -56,7 +56,6 @@
     <Compile Include="Repository\UsuarioRepository.cs" />
     <Compile Include="Repository\PostRepository.cs" />
     <Compile Include="Model\UploadModel.cs" />
-    <Compile Include="ViewModel\UploadViewModel.cs" />
     <Compile Include="ViewModel\UsuarioViewModel.cs" />
     <Compile Include="ViewModel\PostViewModel.cs" />
     <Compile Include="View\LoginViewCS.cs" />

@@ -19,7 +19,7 @@ namespace App4.Repository
         {
             idTemp = Guid.NewGuid();
 
-            var respostaPosts = await Resposta<List<RespostaPost>>(null, "obterposts");
+            var respostaPosts = await Resposta<List<PostModel>>(null, "obterposts");
 
             ListaPosts = new List<PostModel>();
 
@@ -28,23 +28,23 @@ namespace App4.Repository
                 List<CurtidaModel> curtidas = new List<CurtidaModel>();
 
                 UsuarioModel usuario = new UsuarioModel();
-                usuario.NomeArquivoAvatar = respostaPost.usuario.nomeArquivoAvatar;
-                usuario.UsuarioId = respostaPost.usuario.usuarioId;
-                usuario.Email = respostaPost.usuario.email;
-                usuario.NomeUsuario = respostaPost.usuario.nomeUsuario;
+                usuario.NomeArquivoAvatar = respostaPost.NomeArquivoAvatar;
+                usuario.UsuarioId = respostaPost.UsuarioId;
+                usuario.Email = respostaPost.Usuario.Email;
+                usuario.NomeUsuario = respostaPost.Usuario.NomeUsuario;
 
 
                 PostModel post = new PostModel()
                 {
-                    PostId = respostaPost.postId,
-                    Legenda = respostaPost.legenda,
-                    NomeArquivo = respostaPost.nomeArquivo,
+                    PostId = respostaPost.PostId,
+                    Legenda = respostaPost.Legenda,
+                    NomeArquivo = respostaPost.NomeArquivo,
                     Curtidas = curtidas,
                     Usuario = usuario
                 };
-                foreach (var c in respostaPost.curtidas )
+                foreach (var c in respostaPost.Curtidas)
                 {
-                    curtidas.Add(new CurtidaModel { UsuarioId = c.usuarioId, PostId = c.postId });
+                    curtidas.Add(new CurtidaModel { UsuarioId = c.UsuarioId, PostId = c.PostId });
                 }
                 ListaPosts.Add(post);
             }
@@ -112,17 +112,18 @@ namespace App4.Repository
 
             //PostModel postFinal = new PostModel() { Legenda = post.Legenda, NomeArquivo = resposta.nomeArquivo, UsuarioId = post.UsuarioId };
             post.NomeArquivo = resposta.nomeArquivo;
+
             //salva post
-            var clientt = new HttpClient();
+            //var clientt = new HttpClient();
             var json = JsonConvert.SerializeObject(post);
             var contentPost = new StringContent(json, Encoding.UTF8, "application/json");
 
             var response3 = await client.PostAsync(App.Config.ObterUrlBaseWebApi() + "api/salvarpost", contentPost);
             var stream3 = await response3.Content.ReadAsStreamAsync();
 
-            var ser3 = new DataContractJsonSerializer(typeof(RespostaSalvarPost));
+            var ser3 = new DataContractJsonSerializer(typeof(PostModel));
             stream3.Position = 0;
-            var resposta3 = (RespostaSalvarPost)ser3.ReadObject(stream3);
+            var resposta3 = (PostModel)ser3.ReadObject(stream3);
 
             return post;
         }

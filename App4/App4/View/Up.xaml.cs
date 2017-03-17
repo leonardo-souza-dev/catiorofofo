@@ -43,10 +43,10 @@ namespace App4.View
         {
             try
             {
-                var cameraNaoDisponivel = !CrossMedia.Current.IsCameraAvailable;
+                //var cameraNaoDisponivel = !CrossMedia.Current.IsCameraAvailable;
                 var escolherFotoNaoSuportado = !CrossMedia.Current.IsPickPhotoSupported;
 
-                if (cameraNaoDisponivel || escolherFotoNaoSuportado)
+                if (/*cameraNaoDisponivel || */escolherFotoNaoSuportado)
                 {
                     await DisplayAlert("No Camera", ":( No camera avaialble.", "OK");
                     // return;

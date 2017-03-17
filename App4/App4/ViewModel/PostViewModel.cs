@@ -18,20 +18,27 @@ namespace App4.ViewModel
             var listaPosts = new List<PostModel>();
 
             listaPosts = await PostRepository.ObterPosts();
+
             for (int index = 0; index < listaPosts.Count; index++)
             {
-                var item = listaPosts[index];
-                if (index + 1 > Posts.Count || Posts[index].Equals(item))
+                var post = listaPosts[index];
+
+                if (App.UsuarioVM.Usuario.UsuarioId == post.UsuarioId)
                 {
-                    foreach (var curtida in item.Curtidas)
+                    post.Usuario = App.UsuarioVM.Usuario;
+                }
+
+                if (index + 1 > Posts.Count || Posts[index].Equals(post))
+                {
+                    foreach (var curtida in post.Curtidas)
                     {
                         if (curtida.UsuarioId == App.UsuarioVM.Usuario.UsuarioId)
                         {
-                            item.CurtidaHabilitada = false;
+                            post.CurtidaHabilitada = false;
                         }
                     }
-                    item.NomeArquivoAvatar = item.Usuario.NomeArquivoAvatar;
-                    Posts.Insert(index, item);
+                    post.NomeArquivoAvatar = post.Usuario.NomeArquivoAvatar;
+                    Posts.Insert(index, post);
                 }
             }
         }
