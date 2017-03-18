@@ -6,19 +6,12 @@
              Title="perfil">
     <ContentPage.Resources>
         <ResourceDictionary>
-            <Color x:Key="entry_background">#FAFAFA</Color>
-            <Color x:Key="entry_placeholder_text">#808080</Color>
+            <Color x:Key="entry_background">#EEEEEE</Color>
+            <Color x:Key="entry_text">#222222</Color>
 
             <Style x:Key="MyEntry" TargetType="Entry">
                 <Setter Property="BackgroundColor" Value="{StaticResource entry_background}" />
-                <Setter Property="PlaceholderColor" Value="{StaticResource entry_placeholder_text}" />
-                <Setter Property="TextColor" Value="Black" />
-            </Style>
-
-            <Style x:Key="MyLabel" TargetType="Entry">
-                <Setter Property="BackgroundColor" Value="{StaticResource entry_background}" />
-                <Setter Property="PlaceholderColor" Value="{StaticResource entry_placeholder_text}" />
-                <Setter Property="TextColor" Value="Black" />
+                <Setter Property="TextColor" Value="{StaticResource entry_text}" />
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
@@ -51,32 +44,32 @@
                                               NumberOfTapsRequired="1" />
                     </Image.GestureRecognizers>
                 </Image>
-                <Label x:Name="nomeUsuarioEntry"
-                       Text="{Binding NomeUsuario}" 
-                       Style="{StaticResource MyLabel}"
-                       IsEnabled="{Binding NomeUsuarioEntryIsEnabled}"
-                       FontAttributes="Bold" 
-                       FontSize="26" 
-                       HorizontalTextAlignment="Center" 
-                       RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToView, ElementName=borda, Property=Y, Factor=2.55}" 
-                       RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}" />
-                <StackLayout Padding="1,1,1,1" 
-                             RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToView, ElementName=borda, Property=Y, Factor=2.85}" 
-                             RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}">
+                <!--<StackLayout Padding="1,1,1,1" >-->
+                    <Entry x:Name="nomeUsuarioEntry"
+                           Text="{Binding NomeUsuario}" 
+                           FontAttributes="Bold" 
+                           FontSize="26" 
+                           HorizontalTextAlignment="Center" 
+                           RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToView, ElementName=borda, Property=Y, Factor=2.55}" 
+                           RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}" />
+                <!--</StackLayout>-->
+                <!--<StackLayout Padding="1,1,1,1" >-->
                     <Entry Text="raça" 
-                       IsEnabled="False"
-                       HorizontalOptions="Center" />
-                </StackLayout>
-                <StackLayout Padding="1,1,1,1" 
-                             RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToView, ElementName=borda, Property=Y, Factor=1, Constant=190}" 
-                             RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}">
-                    <Entry Text="{Binding Email}" 
-                       x:Name="emailEntry"
-                       Style="{StaticResource MyEntry}"
-                       TextColor="Gray" 
-                       IsEnabled="False"
-                       HorizontalOptions="Center" />
-                </StackLayout>
+                           Style="{StaticResource MyEntry}"
+                           IsEnabled="False"
+                           HorizontalOptions="Center"
+                           RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToView, ElementName=borda, Property=Y, Factor=2.85}" 
+                           RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}" />
+                <!--</StackLayout>-->
+                <!--<StackLayout Padding="1,1,1,1" >-->
+                    <Entry x:Name="emailEntry" 
+                           Text="{Binding Email}" 
+                           FontAttributes="Bold" 
+                           FontSize="26" 
+                           HorizontalTextAlignment="Center" 
+                           RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToView, ElementName=borda, Property=Y, Factor=1, Constant=190}" 
+                           RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"/>
+                <!--</StackLayout>-->
                 <Button Text="Cancelar" 
                         x:Name="cancelarButton"
                         TextColor="White" 

@@ -11,6 +11,7 @@ namespace App4.Model
         #region Campos
 
         private UsuarioModel usuario;
+        private string nomeArquivoAvatar;
 
         #endregion
 
@@ -48,6 +49,20 @@ namespace App4.Model
             }
         }
 
+
+        public string NomeArquivoAvatar
+        {
+            get
+            {
+                return App.Config.ObterUrlBaseWebApi() + "api/foto?na=" + this.Usuario.NomeArquivoAvatar;
+            }
+            set
+            {
+                nomeArquivoAvatar = value;
+                OnPropertyChanged("NomeArquivoAvatar");
+            }
+        }
+
         /*public string AvatarUrl
         {
             get
@@ -59,7 +74,6 @@ namespace App4.Model
         #endregion
 
         private Stream FotoStream { get; set; }
-        public string NomeArquivoAvatar { get; set; }
         public bool CurtidaHabilitada { get; set; } = true;
         public string CurtidaTexto { get { return CurtidaHabilitada ? "curtir" : "descurtir"; } }
         public int NumCurtidas { get { return Curtidas.Count; } }

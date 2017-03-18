@@ -17,14 +17,24 @@ namespace App4.ViewModel
         private string email;
         private UsuarioModel usuario;
 
+
         #endregion
 
         #region Propriedades
 
-        public string AvatarUrl { get { return usuario.AvatarUrl; } set { avatarUrl = value; OnPropertyChanged("AvatarUrl"); } }
-        public string NomeUsuario { get { return usuario.NomeUsuario; } set { nomeUsuario = value; OnPropertyChanged("NomeUsuario"); } }
+        public string TempEmail;
+        public string TempNomeArquivoAvatar;
+        public string TempNomeUsuario;
+
+        public string Email             { get { return usuario.Email; }             set { email = value;       OnPropertyChanged("Email"); } }
+        public string NomeArquivoAvatar { get { return usuario.NomeArquivoAvatar; } set { avatarUrl = value;   OnPropertyChanged("AvatarUrl"); } }
+        public string NomeUsuario       { get { return usuario.NomeUsuario; }       set { nomeUsuario = value; OnPropertyChanged("NomeUsuario"); } }
+
+        public string AvatarUrl { get { return App.Config.ObterUrlBaseWebApi() + "api/foto?na=" + NomeArquivoAvatar; } }
+
+
         public bool NomeUsuarioEntryIsEnabled { get { return nomeUsuarioEntryIsEnabled; } set { nomeUsuarioEntryIsEnabled = value; OnPropertyChanged("NomeUsuarioEntryIsEnabled"); } }
-        public string Email { get { return usuario.Email; } set { email = value; OnPropertyChanged("Email"); } }
+        
         
         public UsuarioModel Usuario { get { return usuario; } set { usuario = value; } }
 
@@ -55,28 +65,39 @@ namespace App4.ViewModel
 
         public async Task<RespostaStatus> AtualizarCadastro()
         {
-            var resposta2 = await UsuarioRepository.Atualizar();
-
-            var status = RespostaStatus.Sucesso;
-
-            switch (resposta2.mensagem.ToUpper())
+            bool mudou = Usuario.Email != TempEmail || Usuario.NomeUsuario != TempNomeUsuario || Usuario.NomeArquivoAvatar != TempNomeArquivoAvatar;
+            try
             {
-                case "SUCESSO":
-                    status = RespostaStatus.Sucesso;
-                    break;
-                case "INEXISTENTE":
-                    status = RespostaStatus.Inexistente;
-                    break;
-                case "JAEXISTE":
-                    status = RespostaStatus.JaExiste;
-                    break;
-                case "ERROGENERICO":
-                default:
-                    status = RespostaStatus.ErroGenerico;
-                    break;
-            }
+                if (mudou)
+                { 
+                    RespostaUploadAvatar respostaUploadAvatar = null;
+                    if (App.UsuarioVM.Usuario.EditouAvatar())
+                    {
+                        respostaUploadAvatar = await UsuarioRepository.UploadAvatar();
+                    }
+                    App.UsuarioVM.Usuario.NomeArquivoAvatar = respostaUploadAvatar.nomeArquivo;
 
-            return status;
+                    try
+                    {
+                        var usuarioAtualizado = await UsuarioRepository.Atualizar();
+
+                        if (usuarioAtualizado.UsuarioId == -1)
+                        {
+                            return RespostaStatus.JaExiste;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        return RespostaStatus.ErroGenerico;
+                    }
+                }
+
+                return RespostaStatus.Sucesso;
+            }
+            catch (Exception ex)
+            {
+                return RespostaStatus.ErroGenerico;
+            }
         }
 
         public async Task<Tuple<RespostaStatus,UsuarioModel>> CadastrarELogar(string email, string senha)

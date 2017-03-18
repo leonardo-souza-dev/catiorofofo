@@ -50,28 +50,42 @@ namespace App4
 
         public void PrintProperties(object obj, int indent)
         {
-            if (obj == null) return;
-            string indentString = new string(' ', indent);
-            Type objType = obj.GetType();
-            var properties = objType.GetRuntimeProperties();
-            Debug.WriteLine("{0}*{1}", indentString, objType.Name);
-            foreach (PropertyInfo property in properties)
+            try
             {
-                object propValue = property.GetValue(obj, null);
+                if (obj == null) return;
+                string indentString = new string(' ', indent);
+                Type objType = obj.GetType();
+                var properties = objType.GetRuntimeProperties();
+                Debug.WriteLine("{0}*{1}", indentString, objType.Name);
+                foreach (PropertyInfo property in properties)
+                {
+                    object propValue = null;
+                    try
+                    {
+                        propValue = property.GetValue(obj, null);
+                    }
+                    catch
+                    {
+                        continue;
+                    }
 
-                if (propValue.GetType() == typeof(string) || propValue.GetType() == typeof(int)
-                    || propValue.GetType() == typeof(decimal) || propValue.GetType() == typeof(float)
-                    || propValue.GetType() == typeof(byte) || propValue.GetType() == typeof(long)
-                    || propValue.GetType() == typeof(char) || propValue.GetType() == typeof(bool)
-                    || propValue.GetType() == typeof(short) || propValue.GetType() == typeof(sbyte)
-                    || propValue.GetType() == typeof(uint) || propValue.GetType() == typeof(Guid))
-                {
-                    Debug.WriteLine("{0}*{1}: {2}", indentString, property.Name, propValue);
+                    if (propValue != null && (propValue.GetType() == typeof(string) || propValue.GetType() == typeof(int) || propValue.GetType() == typeof(decimal) || propValue.GetType() == typeof(float)
+                        || propValue.GetType() == typeof(byte) || propValue.GetType() == typeof(long) || propValue.GetType() == typeof(char) || propValue.GetType() == typeof(bool)
+                        || propValue.GetType() == typeof(short) || propValue.GetType() == typeof(sbyte) || propValue.GetType() == typeof(uint) || propValue.GetType() == typeof(Guid)))
+                    {
+                        Debug.WriteLine("{0}*{1}: {2}", indentString, property.Name, propValue);
+                    }
+                    else
+                    {
+                        PrintProperties(propValue, indent * 2);
+                    }
                 }
-                else
-                {
-                    PrintProperties(propValue, indent * 2);
-                }
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
             }
         }
     }

@@ -24,50 +24,38 @@ namespace App4.Repository
             return t;
         }
 
-        public static async Task<RespostaAtualizarUsuario> Atualizar()
+        public static async Task<RespostaUploadAvatar> UploadAvatar()
         {
-            if (App.UsuarioVM.Usuario.EditouAvatar())
+            var urlUpload = App.Config.ObterUrlBaseWebApi() + "api/uploadavatar";
+            byte[] byteArray = App.UsuarioVM.Usuario.ObterByteArrayAvatar();
+            var requestContent = new MultipartFormDataContent();
+            var imageContent = new ByteArrayContent(byteArray);
+            imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
+            requestContent.Add(imageContent, "av", App.UsuarioVM.Usuario.UsuarioId.ToString().PadLeft(6, '0') + ".jpg");
+            requestContent.Add(new StringContent(App.UsuarioVM.Usuario.UsuarioId.ToString()), "usuarioId");
+
+            var client = new HttpClient();
+            var response = await client.PostAsync(urlUpload, requestContent);//upload da foto do usuario
+            var stream = await response.Content.ReadAsStreamAsync();
+            var ser = new DataContractJsonSerializer(typeof(RespostaUploadAvatar));
+            stream.Position = 0;
+
+            var respostaUpload = (RespostaUploadAvatar)ser.ReadObject(stream);//retornando nome do arquivo uploadado
+
+            return respostaUpload;
+        }
+
+        public static async Task<UsuarioModel> Atualizar()
+        {
+            var request = new
             {
-                //upload da foto
-                var urlUpload = App.Config.ObterUrlBaseWebApi() + "api/uploadavatar";
-                byte[] byteArray = App.UsuarioVM.Usuario.ObterByteArrayAvatar();
+                nomeUsuario = App.UsuarioVM.Usuario.NomeUsuario,
+                usuarioId = App.UsuarioVM.Usuario.UsuarioId,
+                email = App.UsuarioVM.Usuario.Email
+            };
+            var resposta = await Resposta<UsuarioModel>(request, "atualizarusuario");
 
-                var requestContent = new MultipartFormDataContent();
-                var imageContent = new ByteArrayContent(byteArray);
-                imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
-                requestContent.Add(imageContent, "av", App.UsuarioVM.Usuario.UsuarioId.ToString().PadLeft(6, '0') + ".jpg");
-                requestContent.Add(new StringContent(App.UsuarioVM.Usuario.UsuarioId.ToString()), "usuarioId");
-
-                var client = new HttpClient();
-                var response = await client.PostAsync(urlUpload, requestContent);
-                var stream = await response.Content.ReadAsStreamAsync();
-                var ser = new DataContractJsonSerializer(typeof(RespostaUpload));
-                stream.Position = 0;
-                var respostaUpload = (RespostaUpload)ser.ReadObject(stream);
-                var request = new
-                {
-                    nomeUsuario = App.UsuarioVM.Usuario.NomeUsuario,
-                    usuarioId = App.UsuarioVM.Usuario.UsuarioId,
-                    email = App.UsuarioVM.Usuario.Email,
-                    nomeArquivoAvatar = respostaUpload.nomeArquivo
-                };
-                var resposta = await Resposta<RespostaAtualizarUsuario>(request, "atualizarusuario");
-
-                App.UsuarioVM.Usuario.NomeArquivoAvatar = respostaUpload.nomeArquivo;
-                return resposta;
-            }
-            else
-            {
-                var request = new
-                {
-                    nomeUsuario = App.UsuarioVM.Usuario.NomeUsuario,
-                    usuarioId = App.UsuarioVM.Usuario.UsuarioId,
-                    email = App.UsuarioVM.Usuario.Email
-                };
-                var resposta = await Resposta<RespostaAtualizarUsuario>(request, "atualizarusuario");
-                return resposta;
-            }
-
+            return resposta;            
         }
 
         public static async Task<RespostaCadastro> Cadastro(string emailDigitado, string senhaDigitada, string nomeUsuarioDigitado)

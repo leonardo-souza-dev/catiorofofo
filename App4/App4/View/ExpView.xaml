@@ -4,14 +4,14 @@
              x:Class="App4.View.Page1" Title="catioro fofo">
     <StackLayout Padding="0" BackgroundColor="White" Margin="0" Orientation="Vertical" >
         <Label Text="explorar" TextColor="#333333" FontSize="Large" FontAttributes="Bold" HorizontalOptions="Center" Margin="0,4"/>
-        <ListView x:Name="lstPosts" ItemsSource="{Binding Posts}" HasUnevenRows="True" >
+        <ListView ItemsSource="{Binding Posts}" HasUnevenRows="True" >
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
                         <StackLayout Padding="0" Spacing="0" BackgroundColor="White" Orientation="Vertical" 
                                      HorizontalOptions="FillAndExpand" Margin="0">
                             <StackLayout Padding="0" Spacing="0" BackgroundColor="White" Orientation="Horizontal" Margin="0">
-                                <Image Source="{Binding Usuario.NomeArquivoAvatar}" Margin="4" WidthRequest="36" HeightRequest="36"  />
+                                <Image Source="{Binding NomeArquivoAvatar}" Margin="4" WidthRequest="36" HeightRequest="36"  />
                                 <Label Text="{Binding QuemPostou}" FontSize="12" Margin="0,2" TextColor="#343434"/>
                             </StackLayout>
                             <Image Source="{Binding FotoUrl}" Margin="0" BackgroundColor="Aqua" Aspect="AspectFit"  

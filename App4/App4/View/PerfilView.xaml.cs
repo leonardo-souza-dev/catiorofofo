@@ -36,6 +36,13 @@ namespace App4.View
 
         protected override void OnAppearing()
         {
+
+            nomeUsuarioEntry.IsEnabled = false;
+            nomeUsuarioEntry.IsVisible = true;
+
+            emailEntry.IsEnabled = false;
+            emailEntry.IsVisible = true;
+
             base.OnAppearing();
         }
 
@@ -73,12 +80,18 @@ namespace App4.View
 
         protected void EditarClicked(object sender, EventArgs e)
         {
+            App.UsuarioVM.TempEmail = App.UsuarioVM.Usuario.Email;
+            App.UsuarioVM.TempNomeArquivoAvatar = App.UsuarioVM.Usuario.NomeArquivoAvatar;
+            App.UsuarioVM.TempNomeUsuario = App.UsuarioVM.Usuario.NomeUsuario;
+
             modoEdicao = true;
             NomeUsuarioValorInicial = nomeUsuarioEntry.Text;
 
-            App.UsuarioVM.Usuario.NomeUsuarioEntry = true;
-            emailEntry.IsEnabled = true;
             nomeUsuarioEntry.IsEnabled = true;
+            nomeUsuarioEntry.IsVisible = true;
+
+            emailEntry.IsEnabled = true;
+            emailEntry.IsVisible = true;
 
             cancelarButton.IsVisible = true;
             cancelarButton.IsEnabled = true;
@@ -110,7 +123,6 @@ namespace App4.View
 
         protected async void SalvarClicked(object sender, EventArgs e)
         {
-
             nomeUsuarioEntry.IsEnabled = false;
             emailEntry.IsEnabled = false;
 

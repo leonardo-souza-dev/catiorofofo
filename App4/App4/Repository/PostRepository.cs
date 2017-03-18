@@ -109,9 +109,9 @@ namespace App4.Repository
             var client = new HttpClient();
             var response2 = await client.PostAsync(urlUpload, requestContent);
             var stream = await response2.Content.ReadAsStreamAsync();
-            var ser = new DataContractJsonSerializer(typeof(RespostaUpload));
+            var ser = new DataContractJsonSerializer(typeof(RespostaUploadAvatar));
             stream.Position = 0;
-            var resposta = (RespostaUpload)ser.ReadObject(stream);
+            var resposta = (RespostaUploadAvatar)ser.ReadObject(stream);
 
             //PostModel postFinal = new PostModel() { Legenda = post.Legenda, NomeArquivo = resposta.nomeArquivo, UsuarioId = post.UsuarioId };
             post.NomeArquivo = resposta.nomeArquivo;

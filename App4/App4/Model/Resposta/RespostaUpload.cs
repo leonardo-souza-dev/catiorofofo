@@ -3,7 +3,7 @@
 namespace App4.Model
 {
     [DataContract]
-    public class RespostaUpload
+    public class RespostaUploadAvatar
     {
         [DataMember]
         internal bool sucesso;
