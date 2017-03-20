@@ -30,7 +30,7 @@ namespace App4.View
 
             CrossMedia.Current.Initialize();
 
-            App.UsuarioVM.Usuario.NomeUsuarioEntry = false;
+            //App.UsuarioVM.Usuario.NomeUsuarioEntry = false;
             BindingContext = App.UsuarioVM;
         }
 
@@ -64,7 +64,8 @@ namespace App4.View
                 if (File == null)
                     return;
 
-                EditouAvatar = true;
+                App.UsuarioVM.EditouAvatar = true;
+
                 avatarImage.Source = ImageSource.FromStream(ObterStream);
             }
         }
@@ -135,12 +136,9 @@ namespace App4.View
             editarButton.IsVisible = true;
             editarButton.IsEnabled = true;
 
-            if (EditouAvatar)
-            {
-                App.UsuarioVM.Usuario.SetarAvatarStream(Stream);
-            }
-
+            App.UsuarioVM.Usuario.SetarAvatarStream(Stream);
             var resultado = await App.UsuarioVM.AtualizarCadastro();
+
             switch (resultado)
             {
                 case RespostaStatus.Sucesso:

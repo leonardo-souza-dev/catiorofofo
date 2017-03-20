@@ -3,6 +3,7 @@ using App4.Model.Resposta;
 using App4.Repository;
 using System;
 using System.ComponentModel;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace App4.ViewModel
@@ -26,17 +27,18 @@ namespace App4.ViewModel
         public string TempNomeArquivoAvatar;
         public string TempNomeUsuario;
 
-        public string Email             { get { return usuario.Email; }             set { email = value;       OnPropertyChanged("Email"); } }
-        public string NomeArquivoAvatar { get { return usuario.NomeArquivoAvatar; } set { avatarUrl = value;   OnPropertyChanged("AvatarUrl"); } }
-        public string NomeUsuario       { get { return usuario.NomeUsuario; }       set { nomeUsuario = value; OnPropertyChanged("NomeUsuario"); } }
+        public string Email             { get { return usuario.Email; }             set { usuario.Email = value;             OnPropertyChanged("Email"); } }
+        public string NomeArquivoAvatar { get { return usuario.NomeArquivoAvatar; } set { usuario.NomeArquivoAvatar = value; OnPropertyChanged("AvatarUrl"); } }
+        public string NomeUsuario       { get { return usuario.NomeUsuario; }       set { usuario.NomeUsuario = value;       OnPropertyChanged("NomeUsuario"); } }
 
         public string AvatarUrl { get { return App.Config.ObterUrlBaseWebApi() + "api/foto?na=" + NomeArquivoAvatar; } }
 
 
         public bool NomeUsuarioEntryIsEnabled { get { return nomeUsuarioEntryIsEnabled; } set { nomeUsuarioEntryIsEnabled = value; OnPropertyChanged("NomeUsuarioEntryIsEnabled"); } }
-        
-        
+
+
         public UsuarioModel Usuario { get { return usuario; } set { usuario = value; } }
+        public bool EditouAvatar { get; set; }
 
         #endregion
 
@@ -65,23 +67,23 @@ namespace App4.ViewModel
 
         public async Task<RespostaStatus> AtualizarCadastro()
         {
-            bool mudou = Usuario.Email != TempEmail || Usuario.NomeUsuario != TempNomeUsuario || Usuario.NomeArquivoAvatar != TempNomeArquivoAvatar;
+            bool mudou = Usuario.Email != TempEmail || Usuario.NomeUsuario != TempNomeUsuario || Usuario.NomeArquivoAvatar != TempNomeArquivoAvatar || EditouAvatar;
             try
             {
                 if (mudou)
                 { 
                     RespostaUploadAvatar respostaUploadAvatar = null;
-                    if (App.UsuarioVM.Usuario.EditouAvatar())
+                    if (EditouAvatar)
                     {
                         respostaUploadAvatar = await UsuarioRepository.UploadAvatar();
+                        App.UsuarioVM.Usuario.NomeArquivoAvatar = respostaUploadAvatar.nomeArquivo;
                     }
-                    App.UsuarioVM.Usuario.NomeArquivoAvatar = respostaUploadAvatar.nomeArquivo;
 
                     try
                     {
                         var usuarioAtualizado = await UsuarioRepository.Atualizar();
 
-                        if (usuarioAtualizado.UsuarioId == -1)
+                        if (usuarioAtualizado.UsuarioId == -1 && !EditouAvatar)
                         {
                             return RespostaStatus.JaExiste;
                         }
@@ -99,6 +101,7 @@ namespace App4.ViewModel
                 return RespostaStatus.ErroGenerico;
             }
         }
+
 
         public async Task<Tuple<RespostaStatus,UsuarioModel>> CadastrarELogar(string email, string senha)
         {

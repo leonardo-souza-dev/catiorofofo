@@ -51,7 +51,8 @@ namespace App4.Repository
             {
                 nomeUsuario = App.UsuarioVM.Usuario.NomeUsuario,
                 usuarioId = App.UsuarioVM.Usuario.UsuarioId,
-                email = App.UsuarioVM.Usuario.Email
+                email = App.UsuarioVM.Usuario.Email,
+                nomeArquivoAvatar = App.UsuarioVM.Usuario.NomeArquivoAvatar
             };
             var resposta = await Resposta<UsuarioModel>(request, "atualizarusuario");
 
