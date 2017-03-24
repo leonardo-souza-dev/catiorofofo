@@ -35,7 +35,7 @@ namespace App4.Repository
             requestContent.Add(new StringContent(App.UsuarioVM.Usuario.UsuarioId.ToString()), "usuarioId");
 
             var client = new HttpClient();
-            var response = await client.PostAsync(urlUpload, requestContent);//upload da foto do usuario
+            var response = client.PostAsync(urlUpload, requestContent).Result;//upload da foto do usuario
             var stream = await response.Content.ReadAsStreamAsync();
             var ser = new DataContractJsonSerializer(typeof(RespostaUploadAvatar));
             stream.Position = 0;

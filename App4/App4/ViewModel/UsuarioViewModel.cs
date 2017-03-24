@@ -37,7 +37,18 @@ namespace App4.ViewModel
         public bool NomeUsuarioEntryIsEnabled { get { return nomeUsuarioEntryIsEnabled; } set { nomeUsuarioEntryIsEnabled = value; OnPropertyChanged("NomeUsuarioEntryIsEnabled"); } }
 
 
-        public UsuarioModel Usuario { get { return usuario; } set { usuario = value; } }
+        public UsuarioModel Usuario
+        {
+            get
+            {
+                return usuario;
+            }
+            set
+            {
+                usuario = value;
+                OnPropertyChanged("Usuario");
+            }
+        }
         public bool EditouAvatar { get; set; }
 
         #endregion
@@ -75,7 +86,7 @@ namespace App4.ViewModel
                     RespostaUploadAvatar respostaUploadAvatar = null;
                     if (EditouAvatar)
                     {
-                        respostaUploadAvatar = await UsuarioRepository.UploadAvatar();
+                        respostaUploadAvatar = UsuarioRepository.UploadAvatar().Result;
                         App.UsuarioVM.Usuario.NomeArquivoAvatar = respostaUploadAvatar.nomeArquivo;
                     }
 

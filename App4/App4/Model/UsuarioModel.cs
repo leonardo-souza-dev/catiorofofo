@@ -32,7 +32,18 @@ namespace App4.Model
         public int UsuarioId { get; set; }
 
         [DataMember(Name = "nomeArquivoAvatar")]
-        public string NomeArquivoAvatar { get { return nomeArquivoAvatar; } set { nomeArquivoAvatar = value;OnPropertyChanged("NomeArquivoAvatar"); }}
+        public string NomeArquivoAvatar
+        {
+            get
+            {
+                return nomeArquivoAvatar;
+            }
+            set
+            {
+                nomeArquivoAvatar = value;
+                OnPropertyChanged("NomeArquivoAvatar");
+            }
+        }
 
         [DataMember(Name = "email")]
         public string Email { get; set; }

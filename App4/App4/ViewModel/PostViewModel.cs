@@ -40,7 +40,7 @@ namespace App4.ViewModel
                             post.CurtidaHabilitada = false;
                         }
                     }
-                    post.NomeArquivoAvatar = post.Usuario.NomeArquivoAvatar;
+                    /////////////////post.NomeArquivoAvatar = post.Usuario.NomeArquivoAvatar;
                     Posts.Insert(index, post);
                 }
             }

@@ -58,7 +58,7 @@ namespace App4.Model
             }
             set
             {
-                nomeArquivoAvatar = value;
+                this.Usuario.NomeArquivoAvatar = value;
                 OnPropertyChanged("NomeArquivoAvatar");
             }
         }
