@@ -1,35 +1,39 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="App4.View.Page1" Title="catioro fofo">
-    <StackLayout Padding="0" BackgroundColor="White" Margin="0" Orientation="Vertical" >
-        <Label Text="explorar" TextColor="#333333" FontSize="Large" FontAttributes="Bold" HorizontalOptions="Center" Margin="0,4"/>
-        <ListView ItemsSource="{Binding Posts}" HasUnevenRows="True" >
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <StackLayout Padding="0" Spacing="0" BackgroundColor="White" Orientation="Vertical" 
-                                     HorizontalOptions="FillAndExpand" Margin="0">
-                            <StackLayout Padding="0" Spacing="0" BackgroundColor="White" Orientation="Horizontal" Margin="0">
-                                <Image Source="{Binding NomeArquivoAvatar}" Margin="4" WidthRequest="36" HeightRequest="36"  />
-                                <Label Text="{Binding QuemPostou}" FontSize="12" Margin="0,2" TextColor="#343434"/>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="App4.View.Page1" 
+             Title="catioro fofo">
+    <ContentPage.Content>
+        <StackLayout Padding="0" BackgroundColor="White" Margin="0" Orientation="Vertical" >
+            <Label Text="explorar" TextColor="#333333" FontSize="Large" FontAttributes="Bold" HorizontalOptions="Center" Margin="0,4"/>
+            <ListView x:Name="lista" ItemsSource="{Binding Posts}" HasUnevenRows="True" >
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout Padding="0" Spacing="0" BackgroundColor="White" Orientation="Vertical" HorizontalOptions="FillAndExpand" Margin="0">
+
+
+                                <StackLayout Padding="0" Spacing="0" BackgroundColor="White" Orientation="Horizontal" Margin="0">
+                                    <Image Source="{Binding NomeArquivoAvatar}" Margin="4" WidthRequest="36" HeightRequest="36"  />
+                                    <Label Text="{Binding QuemPostou}" FontSize="12" Margin="0,2" TextColor="#343434"/>
+                                </StackLayout>
+                                
+                                <StackLayout BindingContext="Usuario" Padding="0" Spacing="0" BackgroundColor="White" Orientation="Horizontal" Margin="0">
+                                    <Image Source="{Binding Usuario.NomeArquivoAvatar}" Margin="4" WidthRequest="36" HeightRequest="36"  />
+                                    <Label Text="{Binding Usuario.NomeUsuario}" FontSize="12" Margin="0,2" TextColor="#343434"/>
+                                </StackLayout>
+
+                                <Image Source="{Binding FotoUrl}" Margin="0" BackgroundColor="Aqua" Aspect="AspectFit" VerticalOptions="CenterAndExpand"/>
+                                <Label Text="{Binding Legenda}" FontSize="18" Margin="0,4" HorizontalOptions="CenterAndExpand" TextColor="#343434" BackgroundColor="White"/>
+                                <StackLayout Padding="0" Margin="0,0,0,4" Spacing="0" BackgroundColor="White" HeightRequest="36" HorizontalOptions="CenterAndExpand" VerticalOptions="Center" Orientation="Horizontal">
+                                    <Button Text="{Binding CurtidaTexto}" FontSize="10" TextColor="Black" Margin="0" BackgroundColor="Transparent" BorderColor="Transparent" HorizontalOptions="Start" VerticalOptions="Center" Clicked="CurtirButtonClicked" />
+                                    <Label Text="{Binding NumCurtidas}" FontSize="10" BackgroundColor="Transparent" Margin="0" TextColor="Black" VerticalOptions="Center" HorizontalOptions="Start"/>
+                                </StackLayout>
                             </StackLayout>
-                            <Image Source="{Binding FotoUrl}" Margin="0" BackgroundColor="Aqua" Aspect="AspectFit"  
-                                   VerticalOptions="CenterAndExpand"/>
-                            <Label Text="{Binding Legenda}" FontSize="18" Margin="0,4" HorizontalOptions="CenterAndExpand" 
-                                   TextColor="#343434" BackgroundColor="White"/>
-                            <StackLayout Padding="0" Margin="0,0,0,4" Spacing="0" BackgroundColor="White" HeightRequest="36"
-                                         HorizontalOptions="CenterAndExpand" VerticalOptions="Center" Orientation="Horizontal">
-                                <Button FontSize="10" TextColor="Black" Text="{Binding CurtidaTexto}" 
-                                        Margin="0" BackgroundColor="Transparent" BorderColor="Transparent" 
-                                        HorizontalOptions="Start" VerticalOptions="Center" Clicked="CurtirButtonClicked" />
-                                <Label FontSize="10" Text="{Binding NumCurtidas}" BackgroundColor="Transparent" Margin="0" 
-                                       TextColor="Black" VerticalOptions="Center" HorizontalOptions="Start"/>
-                            </StackLayout>
-                        </StackLayout>
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-    </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
 </ContentPage>

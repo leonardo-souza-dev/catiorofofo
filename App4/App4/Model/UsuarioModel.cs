@@ -1,16 +1,5 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.IO;
-using System.Threading.Tasks;
-using App4.Model;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Runtime.Serialization.Json;
-using Newtonsoft.Json;
-using System.Text;
-using System.Diagnostics;
-using App4.Model.Resposta;
 using System.Runtime.Serialization;
 
 namespace App4.Model
@@ -18,15 +7,27 @@ namespace App4.Model
     [DataContract]
     public class UsuarioModel : INotifyPropertyChanged
     {
-        #region Campos
+
+        [DataMember(Name = "nomeUsuario")]
+        public string NomeUsuario
+        {
+            get
+            {
+                return nomeUsuario;
+            }
+            set
+            {
+                nomeUsuario = value;
+                OnPropertyChanged("NomeUsuario");
+            }
+        }
+        private string nomeUsuario;
 
         private string nomeArquivoAvatar;
         private Stream AvatarStream { get; set; }
 
-        #endregion
 
 
-        #region Propriedades
 
         [DataMember(Name = "usuarioId")]
         public int UsuarioId { get; set; }
@@ -48,16 +49,26 @@ namespace App4.Model
         [DataMember(Name = "email")]
         public string Email { get; set; }
 
-        [DataMember(Name = "nomeUsuario")]
-        public string NomeUsuario { get; set; }
 
-        public string AvatarUrl { get { return App.Config.ObterUrlBaseWebApi() + "api/foto?na=" + NomeArquivoAvatar; } }
+        public string AvatarUrl
+        {
+            get
+            {
+                return App.Config.ObterUrlBaseWebApi() + "api/foto?na=" + NomeArquivoAvatar;
+            }
+            set
+            {
+                avatarUrl = value;
+                OnPropertyChanged("AvatarUrl");
+            }
+        }
+        private string avatarUrl;
+
+
         public bool NomeUsuarioEntry { get; set; }
 
-        #endregion
 
 
-        #region Metodos
 
         public byte[] ObterByteArrayAvatar()
         {
@@ -79,7 +90,5 @@ namespace App4.Model
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string name) { PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name)); }
-
-        #endregion
     }
 }

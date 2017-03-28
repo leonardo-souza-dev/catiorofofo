@@ -39,7 +39,11 @@ namespace App4.View
             //temp
             EmailEntry.Text = "qwe";
             SenhaEntry.Text = "qwe";
+
+            LoginBotao_Clicked(null, null);
         }
+
+
 
         private StackLayout ObterConteudo()
         {

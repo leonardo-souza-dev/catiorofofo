@@ -11,7 +11,7 @@ namespace App4
     public class ConfiguracaoApp
     {
         bool DebugarAndroid = false;
-        public bool UsarCloud { get { return false; }  }
+        public bool UsarCloud { get { return true; }  }
 
         public string ObterUrlBaseWebApi()
         {

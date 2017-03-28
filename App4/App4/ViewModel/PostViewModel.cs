@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 using System.Linq;
 using App4.Model.Resposta;
 using System.IO;
+using System.ComponentModel;
 
 namespace App4.ViewModel
 {
-    public class PostViewModel
+    public class PostViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<PostModel> Posts { get; set; } = new ObservableCollection<PostModel>();
+        private ObservableCollection<PostModel> _posts = new ObservableCollection<PostModel>();
+        public ObservableCollection<PostModel> Posts { get { return _posts; } set { _posts = value;OnPropertyChanged("Posts"); } }
 
         public async void CarregarPosts()
         {
@@ -19,8 +21,8 @@ namespace App4.ViewModel
 
             listaPosts = await PostRepository.ObterPosts();
 
-            DebugHelper d = new DebugHelper();
-            d.Print(listaPosts);
+            //DebugHelper d = new DebugHelper();
+            //d.Print(listaPosts);
 
             for (int index = 0; index < listaPosts.Count; index++)
             {
@@ -40,7 +42,7 @@ namespace App4.ViewModel
                             post.CurtidaHabilitada = false;
                         }
                     }
-                    /////////////////post.NomeArquivoAvatar = post.Usuario.NomeArquivoAvatar;
+                    post.NomeArquivoAvatar = post.Usuario.NomeArquivoAvatar;
                     Posts.Insert(index, post);
                 }
             }
@@ -139,5 +141,8 @@ namespace App4.ViewModel
                 return RespostaStatus.ErroGenerico;
             }
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string name) { PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name)); }
     }
 }

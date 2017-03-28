@@ -155,6 +155,11 @@ namespace App4.ViewModel
             return this.Usuario != null ? true : false;
         }
 
+        public void SetAvatar(string asd)
+        {
+            //this.Usuario.avatarUrl = asd;
+        }
+
         public async Task<RespostaStatus> EsqueciSenha(string email)
         {
             var resposta = await UsuarioRepository.EsqueciSenha(email);

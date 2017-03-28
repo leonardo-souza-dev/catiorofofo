@@ -13,51 +13,18 @@ namespace App4.Repository
 {
     public static class PostRepository
     {
-        private static Guid idTemp;
-        //private static List<PostModel> ListaPosts;
-
         public static async Task<List<PostModel>> ObterPosts()
         {
-            idTemp = Guid.NewGuid();
-
             var respostaPosts = await Resposta<List<PostModel>>(null, "obterposts");
 
-            /*
-            ListaPosts = new List<PostModel>();
-
-            foreach (var respostaPost in respostaPosts)
-            {
-                List<CurtidaModel> curtidas = new List<CurtidaModel>();
-
-                UsuarioModel usuario = new UsuarioModel();
-                usuario.NomeArquivoAvatar = respostaPost.NomeArquivoAvatar;
-                usuario.UsuarioId = respostaPost.Usuario.UsuarioId;
-                usuario.Email = respostaPost.Usuario.Email;
-                usuario.NomeUsuario = respostaPost.Usuario.NomeUsuario;
-
-
-                PostModel post = new PostModel()
-                {
-                    PostId = respostaPost.PostId,
-                    Legenda = respostaPost.Legenda,
-                    NomeArquivo = respostaPost.NomeArquivo,
-                    Curtidas = curtidas,
-                    Usuario = usuario
-                };
-                foreach (var c in respostaPost.Curtidas)
-                {
-                    curtidas.Add(new CurtidaModel { UsuarioId = c.UsuarioId, PostId = c.PostId });
-                }
-                ListaPosts.Add(post);
-            }
-            return ListaPosts;*/
-            Debug.WriteLine(" ***** DEBUG ***** ");
+            Debug.WriteLine("<DEBUG>");
             foreach (var item in respostaPosts)
             {
                 Debug.WriteLine(item.PostId);
                 Debug.WriteLine(item.Usuario.UsuarioId);
                 Debug.WriteLine(item.Usuario.AvatarUrl);
             }
+            Debug.WriteLine("</DEBUG>");
             return respostaPosts;
         }
 

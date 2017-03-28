@@ -67,6 +67,10 @@ namespace App4.View
                 App.UsuarioVM.EditouAvatar = true;
 
                 avatarImage.Source = ImageSource.FromStream(ObterStream);
+
+                //App.UsuarioVM.AtualizarCadastro();
+
+                //App.UsuarioVM.SetAvatar("");
             }
         }
 

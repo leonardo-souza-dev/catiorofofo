@@ -8,32 +8,10 @@ namespace App4.Model
     [DataContract]
     public class PostModel : INotifyPropertyChanged
     {
-        #region Campos
-
-        private UsuarioModel usuario;
-        private string nomeArquivoAvatar;
-
-        #endregion
-
-
-        #region Propriedades
-
-        #region Binds
-
-        [DataMember(Name = "postId")]
-        public int PostId { get; set; }
 
         [DataMember(Name = "legenda")]
         public string Legenda { get; set; }
 
-        [DataMember(Name = "nomeArquivo")]
-        public string NomeArquivo { get; set; }
-
-        //[DataMember(Name = "usuarioId")]
-        //public int UsuarioId { get; set; }
-
-        [DataMember(Name = "curtidas")]
-        public List<CurtidaModel> Curtidas { get; set; }
 
         [DataMember(Name = "usuario")]
         public UsuarioModel Usuario
@@ -48,6 +26,48 @@ namespace App4.Model
                 OnPropertyChanged("Usuario");
             }
         }
+        private UsuarioModel usuario;
+
+        [DataMember(Name = "nomeArquivo")]
+        public string NomeArquivo
+        {
+            get
+            {
+                return nomeArquivo;
+            }
+            set
+            {
+                nomeArquivo = value;
+                OnPropertyChanged("NomeArquivo");
+                
+            }
+        }
+        private string nomeArquivo;
+
+
+
+
+
+
+
+
+
+        private string nomeArquivoAvatar;
+
+
+
+
+        
+
+
+        [DataMember(Name = "postId")]
+        public int PostId { get; set; }
+
+        //[DataMember(Name = "usuarioId")]
+        //public int UsuarioId { get; set; }
+
+        [DataMember(Name = "curtidas")]
+        public List<CurtidaModel> Curtidas { get; set; }
 
 
         public string NomeArquivoAvatar
@@ -63,15 +83,8 @@ namespace App4.Model
             }
         }
 
-        /*public string AvatarUrl
-        {
-            get
-            {
-                return App.Config.ObterUrlBaseWebApi() + "api/foto?na=" + Usuario.NomeArquivoAvatar;
-            }
-        }*/
 
-        #endregion
+
 
         private Stream FotoStream { get; set; }
         public bool CurtidaHabilitada { get; set; } = true;
@@ -79,8 +92,6 @@ namespace App4.Model
         public int NumCurtidas { get { return Curtidas.Count; } }
         public string FotoUrl { get { return App.Config.ObterUrlBaseWebApi() + "api/foto?na=" + NomeArquivo; } }
         public string QuemPostou { get { return this.Usuario.NomeUsuario; } }
-
-        #endregion
 
         #region Metodos
 
