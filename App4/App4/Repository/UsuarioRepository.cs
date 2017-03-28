@@ -24,10 +24,10 @@ namespace App4.Repository
             return t;
         }
 
-        public static async Task<RespostaUploadAvatar> UploadAvatar()
+        public static async Task<RespostaUploadAvatar> UploadAvatar(byte[] bytes)
         {
             var urlUpload = App.Config.ObterUrlBaseWebApi() + "api/uploadavatar";
-            byte[] byteArray = App.UsuarioVM.Usuario.ObterByteArrayAvatar();
+            byte[] byteArray = bytes;
             var requestContent = new MultipartFormDataContent();
             var imageContent = new ByteArrayContent(byteArray);
             imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");

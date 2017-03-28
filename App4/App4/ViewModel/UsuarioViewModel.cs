@@ -10,8 +10,6 @@ namespace App4.ViewModel
 {
     public class UsuarioViewModel : INotifyPropertyChanged
     {
-        #region Campos
-
         private string avatarUrl;
         private string nomeUsuario;
         private bool nomeUsuarioEntryIsEnabled;
@@ -19,7 +17,6 @@ namespace App4.ViewModel
         private UsuarioModel usuario;
 
 
-        #endregion
 
         #region Propriedades
 
@@ -31,7 +28,7 @@ namespace App4.ViewModel
         public string NomeArquivoAvatar { get { return usuario.NomeArquivoAvatar; } set { usuario.NomeArquivoAvatar = value; OnPropertyChanged("AvatarUrl"); } }
         public string NomeUsuario       { get { return usuario.NomeUsuario; }       set { usuario.NomeUsuario = value;       OnPropertyChanged("NomeUsuario"); } }
 
-        public string AvatarUrl { get { return App.Config.ObterUrlBaseWebApi() + "api/foto?na=" + NomeArquivoAvatar; } }
+        public string AvatarUrl { get { return App.Config.ObterUrlAvatar(NomeArquivoAvatar); } }
 
 
         public bool NomeUsuarioEntryIsEnabled { get { return nomeUsuarioEntryIsEnabled; } set { nomeUsuarioEntryIsEnabled = value; OnPropertyChanged("NomeUsuarioEntryIsEnabled"); } }
@@ -76,18 +73,24 @@ namespace App4.ViewModel
             return status;
         }
 
-        public async Task<RespostaStatus> AtualizarCadastro()
+        public async Task<string> UploadAvatar(byte[] bytes)
         {
-            bool mudou = Usuario.Email != TempEmail || Usuario.NomeUsuario != TempNomeUsuario || Usuario.NomeArquivoAvatar != TempNomeArquivoAvatar || EditouAvatar;
+            var resposta = await UsuarioRepository.UploadAvatar(bytes);
+            return App.Config.ObterUrlAvatar(resposta.nomeArquivo);
+        }
+
+        public async Task<RespostaStatus> AtualizarCadastro(byte[] bytes)
+        {
             try
             {
+                bool mudou = Usuario.Email != TempEmail || Usuario.NomeUsuario != TempNomeUsuario || Usuario.NomeArquivoAvatar != TempNomeArquivoAvatar || EditouAvatar;
+
                 if (mudou)
                 { 
-                    RespostaUploadAvatar respostaUploadAvatar = null;
                     if (EditouAvatar)
                     {
-                        respostaUploadAvatar = UsuarioRepository.UploadAvatar().Result;
-                        App.UsuarioVM.Usuario.NomeArquivoAvatar = respostaUploadAvatar.nomeArquivo;
+                        var nomeArquivo = App.UsuarioVM.UploadAvatar(bytes).Result;
+                        App.UsuarioVM.Usuario.AvatarUrl = nomeArquivo;
                     }
 
                     try

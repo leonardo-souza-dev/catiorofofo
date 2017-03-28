@@ -13,6 +13,11 @@ namespace App4
         bool DebugarAndroid = false;
         public bool UsarCloud { get { return true; }  }
 
+        public string ObterUrlAvatar(string nomeArquivo)
+        {
+            return this.ObterUrlBaseWebApi() + "api/foto?na=" + nomeArquivo;
+        }
+
         public string ObterUrlBaseWebApi()
         {
 

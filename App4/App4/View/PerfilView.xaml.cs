@@ -68,7 +68,7 @@ namespace App4.View
 
                 avatarImage.Source = ImageSource.FromStream(ObterStream);
 
-                //App.UsuarioVM.AtualizarCadastro();
+                //App.UsuarioVM.Usuario.ObterByteArrayAvatar()
 
                 //App.UsuarioVM.SetAvatar("");
             }
@@ -83,6 +83,19 @@ namespace App4.View
             return stream;
         }
 
+        public static byte[] ReadFully(Stream input)
+        {
+            byte[] buffer = new byte[16 * 1024];
+            using (MemoryStream ms = new MemoryStream())
+            {
+                int read;
+                while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    ms.Write(buffer, 0, read);
+                }
+                return ms.ToArray();
+            }
+        }
         protected void EditarClicked(object sender, EventArgs e)
         {
             App.UsuarioVM.TempEmail = App.UsuarioVM.Usuario.Email;
@@ -141,7 +154,9 @@ namespace App4.View
             editarButton.IsEnabled = true;
 
             App.UsuarioVM.Usuario.SetarAvatarStream(Stream);
-            var resultado = await App.UsuarioVM.AtualizarCadastro();
+
+            var bytes = ReadFully(Stream);
+            var resultado = await App.UsuarioVM.AtualizarCadastro(bytes);
 
             switch (resultado)
             {
